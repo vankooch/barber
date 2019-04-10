@@ -6,11 +6,14 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <CodeAnalysisRuleSet>../../default.ruleset</CodeAnalysisRuleSet>
     <AssemblyName>barber</AssemblyName>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/vankooch/barber</PackageProjectUrl>
     <PackageTags>code generation;mustache;templating</PackageTags>
     <PackAsTool>true</PackAsTool>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/vankooch/barber</RepositoryUrl>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Company />
   </PropertyGroup>
 
