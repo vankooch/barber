@@ -1,0 +1,29 @@
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { MainSettingsService } from "./main-settings.service";
+{{#References}}
+import { {{Name}} } from "{{File}}";
+{{/References}}
+
+@Injectable({
+  providedIn: "root"
+})
+export class {{Name}}Service {
+  private baseUrl: string = "";
+  private version: string = "1";
+
+  constructor(private http: HttpClient, mainSettings: MainSettingsService) {
+    this.baseUrl = mainSettings.baseUrl;
+    this.version = mainSettings.version;
+  }
+  {{#Paths}}
+
+  {{Name}}({{ParametersFunction}}): Observable<{{ReturnType}}> {
+    return this.http.{{Type}}<{{ReturnType}}>(
+      this.baseUrl + `{{Url}}`{{#Body}},
+      model{{/Body}}
+    );
+  }
+  {{/Paths}}
+}

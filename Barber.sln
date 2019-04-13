@@ -20,6 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Barber.Core", "src\Barber.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Barber.Cli", "app\Barber.Cli\Barber.Cli.csproj", "{2FDF2C95-43C0-4CFA-ACC9-4929B1D2AEC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Barber.OpenApi", "src\Barber.OpenApi\Barber.OpenApi.csproj", "{804EE8EA-B01D-46B0-908C-75B233C758D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,18 @@ Global
 		{2FDF2C95-43C0-4CFA-ACC9-4929B1D2AEC9}.Release|x64.Build.0 = Release|Any CPU
 		{2FDF2C95-43C0-4CFA-ACC9-4929B1D2AEC9}.Release|x86.ActiveCfg = Release|Any CPU
 		{2FDF2C95-43C0-4CFA-ACC9-4929B1D2AEC9}.Release|x86.Build.0 = Release|Any CPU
+		{804EE8EA-B01D-46B0-908C-75B233C758D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{804EE8EA-B01D-46B0-908C-75B233C758D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{804EE8EA-B01D-46B0-908C-75B233C758D3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{804EE8EA-B01D-46B0-908C-75B233C758D3}.Debug|x64.Build.0 = Debug|Any CPU
+		{804EE8EA-B01D-46B0-908C-75B233C758D3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{804EE8EA-B01D-46B0-908C-75B233C758D3}.Debug|x86.Build.0 = Debug|Any CPU
+		{804EE8EA-B01D-46B0-908C-75B233C758D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{804EE8EA-B01D-46B0-908C-75B233C758D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{804EE8EA-B01D-46B0-908C-75B233C758D3}.Release|x64.ActiveCfg = Release|Any CPU
+		{804EE8EA-B01D-46B0-908C-75B233C758D3}.Release|x64.Build.0 = Release|Any CPU
+		{804EE8EA-B01D-46B0-908C-75B233C758D3}.Release|x86.ActiveCfg = Release|Any CPU
+		{804EE8EA-B01D-46B0-908C-75B233C758D3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +75,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{FFD59F50-DF18-45FE-8533-7BBD1F80456A} = {2AF97DC0-E4BE-4C22-9406-55ED3ED7FCC5}
 		{2FDF2C95-43C0-4CFA-ACC9-4929B1D2AEC9} = {E0EB0A12-22DD-40FB-A855-7505AFB79DB9}
+		{804EE8EA-B01D-46B0-908C-75B233C758D3} = {2AF97DC0-E4BE-4C22-9406-55ED3ED7FCC5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BC7DEB06-43BE-40EA-90C7-FB55FB799E5F}

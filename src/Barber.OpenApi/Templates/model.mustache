@@ -1,0 +1,15 @@
+﻿{{#References}}
+import { {{Name}} } from "{{File}}";
+{{/References}}
+
+export class {{Name}} {
+    {{#Properties}}
+    public {{Name}}{{#Nullable}}?{{/Nullable}}: {{Type}};
+    {{/Properties}}
+
+    constructor() {
+        {{#Properties}}
+        this.{{Name}} = {{{DefaultValue}}};
+        {{/Properties}}
+    }
+}
