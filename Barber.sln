@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{611BF28D-8649-42AB-B345-243E84BA69F8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.gitignore = .gitignore
 		common.props = common.props
 		default.ruleset = default.ruleset
 		LICENSE = LICENSE
@@ -20,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Barber.Core", "src\Barber.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Barber.Cli", "app\Barber.Cli\Barber.Cli.csproj", "{2FDF2C95-43C0-4CFA-ACC9-4929B1D2AEC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Barber.OpenApi", "src\Barber.OpenApi\Barber.OpenApi.csproj", "{804EE8EA-B01D-46B0-908C-75B233C758D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Barber.OpenApi", "src\Barber.OpenApi\Barber.OpenApi.csproj", "{804EE8EA-B01D-46B0-908C-75B233C758D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

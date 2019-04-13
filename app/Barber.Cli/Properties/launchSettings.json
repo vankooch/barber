@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Barber.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "openapi -s Community.Models -f ../../../barber-openapi.json"
+    }
+  }
+}
