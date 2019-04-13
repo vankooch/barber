@@ -8,13 +8,15 @@
     <AssemblyName>barber</AssemblyName>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/vankooch/barber</PackageProjectUrl>
-    <PackageTags>code generation;mustache;templating</PackageTags>
+    <PackageTags>code generation;mustache;templating;openapi;typescript:angular</PackageTags>
     <PackAsTool>true</PackAsTool>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/vankooch/barber</RepositoryUrl>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company />
+    <NeutralLanguage>en</NeutralLanguage>
+    <Description>Barber is cli-tool for generating files based on mustache templates. In addition it can read and process OpenAPI 3 specifications and generate code based on templates. [github](https://github.com/vankooch/barber)</Description>
   </PropertyGroup>
 
   <ItemGroup>
