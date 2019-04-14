@@ -12,6 +12,7 @@
                 AllowArgumentSeparator = true
             };
 
+            app.Command("mustache", Commands.Mustache.Register);
             app.Command("render", Commands.Mustache.Register);
             app.Command("openapi", Commands.OpenApi.Register);
 

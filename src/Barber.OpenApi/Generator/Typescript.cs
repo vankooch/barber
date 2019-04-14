@@ -50,6 +50,11 @@
 
                 case "string" when property.Format == "date-time":
                     restult = "string | Date";
+                    if (this._settings.UseLuxon)
+                    {
+                        restult = "string | DateTime";
+                    }
+
                     break;
 
                 case "string":
@@ -94,6 +99,11 @@
                     return $"new {property.Reference?.Id}()";
 
                 case "string" when property.Format == "date-time":
+                    if (this._settings.UseLuxon)
+                    {
+                        return "new DateTime()";
+                    }
+
                     return "new Date()";
 
                 case "string":
