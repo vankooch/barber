@@ -6,7 +6,7 @@
     using McMaster.Extensions.CommandLineUtils;
     using Newtonsoft.Json;
 
-    public static class Mustache
+    public static class RenderCommand
     {
         public static void Register(CommandLineApplication config)
         {

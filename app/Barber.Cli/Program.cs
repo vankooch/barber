@@ -12,9 +12,27 @@
                 AllowArgumentSeparator = true
             };
 
-            app.Command("mustache", Commands.Mustache.Register);
-            app.Command("render", Commands.Mustache.Register);
-            app.Command("openapi", Commands.OpenApi.Register);
+            app.Command("render", Commands.RenderCommand.Register);
+            app.Command("mustache", Commands.RenderCommand.Register);
+
+            app.Command("openapi", (cmd) =>
+            {
+                // Subcommands
+                cmd.Command("init", Commands.OpenApi.InitilaizeCommand.Register);
+                cmd.Command("list", Commands.OpenApi.ListCommand.Register);
+
+                // Main
+                Commands.OpenApi.GenerateCommand.Register(cmd);
+            });
+
+            app.Command("o", (cmd) =>
+            {
+                // Subcommands
+                cmd.Command("l", Commands.OpenApi.ListCommand.Register);
+
+                // Main
+                Commands.OpenApi.GenerateCommand.Register(cmd);
+            });
 
             try
             {
