@@ -151,3 +151,5 @@ Log/**
 app/Barber.Cli/barber-openapi.json
 app/Barber.Cli/src
 app/Barber.Cli/src/**
+app/Barber.Cli/Templates
+app/Barber.Cli/Templates/**
