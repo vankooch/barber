@@ -1,7 +1,7 @@
 <Project>
 	<PropertyGroup>
 		<Authors>Kiarash Ghiaseddin</Authors>
-		<Version>2.2.0</Version>
+		<Version>2.2.1</Version>
 		<LangVersion>latest</LangVersion>
 		<Copyright>Copyright 2019</Copyright>
 	</PropertyGroup>

@@ -25,11 +25,11 @@
                 case "array":
                     if (!string.IsNullOrEmpty(property.Items?.Reference?.Id))
                     {
-                        restult = this._settings.Array.Type.Replace("TYPE", property.Items.Reference.Id + "[]");
+                        restult = this._settings.Array.Type.Replace("TYPE", property.Items.Reference.Id);
                     }
                     else
                     {
-                        restult = this._settings.Array.Type.Replace("TYPE", this.ConvertType(property.Items) + "[]");
+                        restult = this._settings.Array.Type.Replace("TYPE", this.ConvertType(property.Items));
                     }
 
                     hasNull = true;
