@@ -56,10 +56,48 @@
         /// </summary>
         public List<IGenerator> Generators { get; set; } = new List<IGenerator>();
 
+        public KeyValuePair<string, SchemaModel>[] Models
+        {
+            get
+            {
+                return this.Settings
+                    .Steps
+                    .Where(e => e.GeneratorType == GeneratorType.Schema && e.Result != null)
+                    .SelectMany(e => e.Result)
+                    .OrderBy(e => e.Key)
+                    .Select(e => new KeyValuePair<string, SchemaModel>(e.Key, e.Value as SchemaModel))
+                    .ToArray();
+            }
+        }
+
+        public Dictionary<string, PathModel> Paths
+        {
+            get
+            {
+                return this.Settings
+                    .Steps
+                    .Where(e => e.GeneratorType == GeneratorType.Path && e.Result != null)
+                    .SelectMany(e => e.Result)
+                    .OrderBy(e => e.Key)
+                    .ToDictionary(e => e.Key, e => e.Value as PathModel);
+            }
+        }
+
         /// <summary>
         /// Settings
         /// </summary>
         public Settings.SettingsModel Settings { get; set; }
+
+        /// <summary>
+        /// Convert
+        /// </summary>
+        public void Convert()
+        {
+            foreach (var step in this.Settings.Steps)
+            {
+                this.Convert(step);
+            }
+        }
 
         /// <summary>
         /// Run convert for given step
@@ -102,6 +140,7 @@
                     }
 
                     step.Result = result;
+                    step.GeneratorType = GeneratorType.Schema;
                     break;
 
                 case GeneratorType.Path:
@@ -113,6 +152,7 @@
                     }
 
                     step.Result = result;
+                    step.GeneratorType = GeneratorType.Path;
                     break;
 
                 default:
@@ -354,6 +394,29 @@
             }
 
             return list;
+        }
+
+        public PropertyModel[] GetProperties()
+        {
+            var models = this.Models;
+            var properties = new List<PropertyModel>();
+            if (this.Models?.Length > 0)
+            {
+                foreach (var model in models)
+                {
+                    if (model.Value.Properties == null || model.Value.Properties.Length <= 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (var property in model.Value.Properties)
+                    {
+                        properties.Add(property);
+                    }
+                }
+            }
+
+            return properties.ToArray();
         }
 
         /// <summary>

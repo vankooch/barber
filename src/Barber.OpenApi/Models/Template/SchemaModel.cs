@@ -11,6 +11,14 @@
 
         public FileModel File { get; set; } = null;
 
+        public bool HasForm
+        {
+            get
+            {
+                return this.PropertiesFiltered?.Length > 0;
+            }
+        }
+
         public PropertyModel[] Properties { get; set; } = null;
 
         public PropertyModel[] PropertiesFiltered { get; set; } = null;

@@ -40,6 +40,7 @@
                 Nullable = this._generator.IsNullable(property.Value),
                 Reference = this._generator.GetReference(property.Value),
                 Required = schema.Value.Required.Any(e => e == property.Key),
+                RootSchema = schema.Key,
                 Schema = property.Value,
             };
 

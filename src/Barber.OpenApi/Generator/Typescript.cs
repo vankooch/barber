@@ -25,22 +25,22 @@
                 case "array":
                     if (!string.IsNullOrEmpty(property.Items?.Reference?.Id))
                     {
-                        restult = property.Items.Reference.Id + "[]";
+                        restult = this._settings.Array.Type.Replace("TYPE", property.Items.Reference.Id + "[]");
                     }
                     else
                     {
-                        restult = this.ConvertType(property.Items) + "[]";
+                        restult = this._settings.Array.Type.Replace("TYPE", this.ConvertType(property.Items) + "[]");
                     }
 
                     hasNull = true;
                     break;
 
-                case "integer" when property.Format == "int64" && this._settings.UseBigInt:
+                case "integer" when property.Format == "int64" && this._settings.Integer.UseBigInt:
                     restult = "bigint";
                     break;
 
                 case "integer":
-                    restult = "number";
+                    restult = this._settings.Integer.Type;
                     break;
 
                 case "object":
@@ -49,16 +49,11 @@
                     break;
 
                 case "string" when property.Format == "date-time":
-                    restult = "string | Date";
-                    if (this._settings.UseLuxon)
-                    {
-                        restult = "string | DateTime";
-                    }
-
+                    restult = this._settings.DateTime.Type;
                     break;
 
                 case "string":
-                    restult = "string";
+                    restult = this._settings.String.Type;
                     isNullType = false;
                     break;
 
@@ -87,27 +82,22 @@
             switch (property.Type)
             {
                 case "array":
-                    return "[]";
+                    return this._settings.Array.Default.Replace("TYPE", string.Empty);
 
-                case "integer" when property.Format == "int64" && this._settings.UseBigInt:
+                case "integer" when property.Format == "int64" && this._settings.Integer.UseBigInt:
                     return "0n";
 
                 case "integer":
-                    return "0";
+                    return this._settings.Integer.Default;
 
                 case "object":
                     return $"new {property.Reference?.Id}()";
 
                 case "string" when property.Format == "date-time":
-                    if (this._settings.UseLuxon)
-                    {
-                        return "new DateTime()";
-                    }
-
-                    return "new Date()";
+                    return this._settings.DateTime.Default;
 
                 case "string":
-                    return "undefined";
+                    return this._settings.String.Default;
 
                 default:
                     return "undefined";

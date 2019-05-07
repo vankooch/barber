@@ -1,6 +1,7 @@
 ﻿namespace Barber.OpenApi.Settings
 {
     using System.Collections.Generic;
+    using Barber.OpenApi.Generator;
     using Barber.OpenApi.Models;
     using Newtonsoft.Json;
 
@@ -22,6 +23,9 @@
         /// Name of generator to use
         /// </summary>
         public string Generator { get; set; }
+
+        [JsonIgnore]
+        public GeneratorType GeneratorType { get; set; } = GeneratorType.Path;
 
         /// <summary>
         /// Name of paths / schema's to include

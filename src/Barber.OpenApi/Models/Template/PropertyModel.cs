@@ -11,8 +11,6 @@
 
         public string DefaultValue { get; set; }
 
-        public string HtmlType { get; set; }
-
         public string Name { get; set; }
 
         public bool Nullable { get; set; } = false;
@@ -20,6 +18,8 @@
         public string Reference { get; set; } = string.Empty;
 
         public bool Required { get; set; } = false;
+
+        public string RootSchema { get; set; }
 
         public OpenApiSchema Schema { get; set; }
 

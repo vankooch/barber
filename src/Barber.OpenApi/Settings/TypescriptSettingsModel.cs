@@ -7,14 +7,23 @@
         }
 
         /// <summary>
-        /// Starting with Typescript 3.2 there is support for BigInt
+        /// String converting settings
         /// </summary>
-        public bool UseBigInt { get; set; } = false;
+        public Types.ArraySettings Array { get; set; } = new Types.ArraySettings();
 
         /// <summary>
-        /// Use luxon instead of Date.
-        /// https://moment.github.io/luxon/
+        /// DateTime converting settings
         /// </summary>
-        public bool UseLuxon { get; set; } = false;
+        public Types.DateTimeSettings DateTime { get; set; } = new Types.DateTimeSettings();
+
+        /// <summary>
+        /// Integer converting settings
+        /// </summary>
+        public Types.IntegerSettings Integer { get; set; } = new Types.IntegerSettings();
+
+        /// <summary>
+        /// String converting settings
+        /// </summary>
+        public Types.StringSettings String { get; set; } = new Types.StringSettings();
     }
 }
