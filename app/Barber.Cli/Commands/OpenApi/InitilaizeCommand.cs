@@ -40,7 +40,7 @@
                                 Name = "Models",
                                 Destination = "codegen-models",
                                 Generator = "TypescriptModel",
-                                Template = "model.mustache"
+                                Template = "model.mustache",
                             },
                             new StepModel()
                             {
@@ -48,9 +48,9 @@
                                 Destination = "codegen-services",
                                 Generator = "TypescriptService",
                                 Template = "service.mustache",
-                                Resolve = "Models"
-                            }
-                    }
+                                Resolve = "Models",
+                            },
+                    },
                 };
 
                 File.WriteAllText(file, SettingsModel.ToJson(settings));

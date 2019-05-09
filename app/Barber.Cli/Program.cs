@@ -9,7 +9,7 @@
         {
             var app = new CommandLineApplication(throwOnUnexpectedArg: false)
             {
-                AllowArgumentSeparator = true
+                AllowArgumentSeparator = true,
             };
 
             app.Command("render", Commands.RenderCommand.Register);

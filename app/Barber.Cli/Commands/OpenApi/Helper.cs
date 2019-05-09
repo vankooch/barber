@@ -29,15 +29,13 @@
         {
             var processor = new Processor(new Typescript(settings), settings);
             processor.Generators.Add(new TypescriptModel(settings));
-            processor.Generators.Add(new TypescriptService(settings));
+            processor.Generators.Add(new TypescriptService());
 
             return processor;
         }
 
         public static void WriteTable(string name, ConsoleTable table)
         {
-            ////LogHelper.AlignCenter(name);
-            ////LogHelper.DivisionLine('-', false);
             table.Options.EnableCount = true;
             table.Write(Format.MarkDown);
             Console.WriteLine();

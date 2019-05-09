@@ -31,8 +31,8 @@
                 {
                     new ReferenceModel()
                     {
-                        Key = key
-                    }
+                        Key = key,
+                    },
                 };
 
                 return;

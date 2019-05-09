@@ -9,19 +9,8 @@
     public class TypescriptService : IGenerator, IGeneratorPaths
     {
         private readonly IGeneratorTypes _generator;
-        private readonly Settings.TypescriptSettingsModel _settings;
 
-        public TypescriptService()
-        {
-            this._settings = new Settings.TypescriptSettingsModel();
-            this._generator = new Typescript();
-        }
-
-        public TypescriptService(Settings.SettingsModel settings)
-        {
-            this._settings = settings.Typescript;
-            this._generator = new Typescript(settings);
-        }
+        public TypescriptService() => this._generator = new Typescript();
 
         /// <inheritdoc />
         public string Name => nameof(TypescriptService);
@@ -40,7 +29,7 @@
         {
             Name = parameter.Name,
             Type = this._generator.ConvertType(parameter.Schema),
-            Required = parameter.Required
+            Required = parameter.Required,
         };
 
         /// <inheritdoc />
@@ -75,7 +64,7 @@
                         Name = $"{tag.Substring(0, 1).ToUpper()}{tag.Substring(1)}Service.ts",
                         Path = string.Empty,
                     },
-                    Paths = match.ToArray()
+                    Paths = match.ToArray(),
                 };
             }
 

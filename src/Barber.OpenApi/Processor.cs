@@ -36,10 +36,7 @@
         /// </summary>
         /// <param name="settings">Use settings</param>
         public Processor(IGeneratorTypes generator, Settings.SettingsModel settings)
-            : this(generator)
-        {
-            this.Settings = settings;
-        }
+            : this(generator) => this.Settings = settings;
 
         /// <summary>
         /// Open API Model
@@ -111,7 +108,7 @@
                 return;
             }
 
-            PropertyModel[] filter(string name, PropertyModel[] list)
+            PropertyModel[] Filter(string name, PropertyModel[] list)
             {
                 var filterResult = new PropertyModel[] { };
                 if (this.Settings.SkipProperties?.Length > 0)
@@ -132,7 +129,7 @@
             switch (generator.Type)
             {
                 case GeneratorType.Schema:
-                    var schemas = this.ConvertSchemas(generator as IGeneratorSchema, step.Destination, filter, step.ItemsSkips, step.ItemsIncludes);
+                    var schemas = this.ConvertSchemas(generator as IGeneratorSchema, step.Destination, Filter, step.ItemsSkips, step.ItemsIncludes);
                     result = new Dictionary<string, IRenderModel>(schemas.Count);
                     foreach (var item in schemas)
                     {

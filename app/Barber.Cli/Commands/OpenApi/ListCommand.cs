@@ -161,7 +161,7 @@
                     ns.Items.Add(new ItemModel(item.Key, item.Key.ToUpper())
                     {
                         ContextFemale = "Female",
-                        ContextMale = "Male"
+                        ContextMale = "Male",
                     });
 
                     count++;

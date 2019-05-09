@@ -3,6 +3,6 @@
     public enum GeneratorType
     {
         Schema,
-        Path
+        Path,
     }
 }
