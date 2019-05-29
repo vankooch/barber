@@ -1,14 +1,16 @@
-﻿namespace Barber.Core
+﻿namespace Barber.Cli.Commands
 {
+    using System;
     using System.Collections.Generic;
     using System.Dynamic;
     using System.Linq;
+    using ConsoleTables;
 
-    public static class ArgumentHelper
+    public static class CommonHelper
     {
-        public static object Parse(IEnumerable<string> args)
+        public static object? Parse(IEnumerable<string> args)
         {
-            if (args == null || args.Count() == 0)
+            if (args == null || args?.Count() == 0)
             {
                 return null;
             }
@@ -29,6 +31,13 @@
             }
 
             return model;
+        }
+
+        public static void WriteTableToConsole(this ConsoleTable table)
+        {
+            table.Options.EnableCount = true;
+            table.Write(Format.MarkDown);
+            Console.WriteLine();
         }
     }
 }

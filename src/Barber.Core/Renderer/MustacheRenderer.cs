@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
     using Stubble.Core.Builders;
 
-    public class Mustache : IRenderer
+    public class MustacheRenderer : IRenderer
     {
         public async Task<string> Render(string template, object model)
         {

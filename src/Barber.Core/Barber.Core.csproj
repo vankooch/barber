@@ -2,17 +2,26 @@
   <Import Project="../../common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
     <CodeAnalysisRuleSet>../../default.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Stubble.Compilation" Version="1.6.3" />
-    <PackageReference Include="Stubble.Core" Version="1.6.3" />
+    <PackageReference Include="Microsoft.OpenApi" Version="1.2.3" />
+    <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.2.3" />
+    <PackageReference Include="Stubble.Compilation" Version="1.9.3" />
+    <PackageReference Include="Stubble.Core" Version="1.9.3" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Templates\interface-single.mustache">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

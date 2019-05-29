@@ -37,7 +37,7 @@
         string GetReferencePath(string relativePath);
 
         /// <summary>
-        /// Check if is null able
+        /// Check if is nullable
         /// </summary>
         /// <param name="property">OpenApi property</param>
         /// <returns></returns>

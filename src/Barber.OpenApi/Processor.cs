@@ -8,7 +8,7 @@
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
-    using Barber.Core;
+    using Barber.Core.Renderer;
     using Barber.OpenApi.Generator;
     using Barber.OpenApi.Models;
     using Barber.OpenApi.Models.Template;
@@ -479,7 +479,7 @@
 
             if (renderer == null)
             {
-                renderer = new Core.Renderer.Mustache();
+                renderer = new Core.Renderer.MustacheRenderer();
             }
 
             foreach (var item in schemaModels)

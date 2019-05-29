@@ -2,7 +2,7 @@
   "profiles": {
     "Barber.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "openapi -s Community.Models -f ../../../barber-openapi.json"
+      "commandLineArgs": "openapi -p C:\\Users\\Kiarash\\Documents\\GitHub\\barber\\app\\Barber.Cli\\barber.json"
     }
   }
 }

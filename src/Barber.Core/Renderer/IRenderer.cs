@@ -1,4 +1,4 @@
-﻿namespace Barber.Core
+﻿namespace Barber.Core.Renderer
 {
     using System.Threading.Tasks;
 

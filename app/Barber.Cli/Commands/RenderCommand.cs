@@ -2,7 +2,6 @@
 {
     using System;
     using System.IO;
-    using Barber.Core;
     using McMaster.Extensions.CommandLineUtils;
     using Newtonsoft.Json;
 
@@ -68,7 +67,7 @@
                 }
                 else
                 {
-                    model = ArgumentHelper.Parse(config.RemainingArguments);
+                    model = CommonHelper.Parse(config.RemainingArguments);
                 }
 
                 if (verboseOption.HasValue())
@@ -78,7 +77,7 @@
                 }
 
                 var sw = LogHelper.TaskStart("Processing templates");
-                var renderer = new Core.Renderer.Mustache();
+                var renderer = new Core.Renderer.MustacheRenderer();
                 var result = await renderer.Render(template, model);
                 LogHelper.TaskStop(sw, true);
 

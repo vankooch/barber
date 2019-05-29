@@ -7,7 +7,6 @@
     using Barber.OpenApi;
     using Barber.OpenApi.Generator;
     using Barber.OpenApi.Settings;
-    using ConsoleTables;
     using McMaster.Extensions.CommandLineUtils;
 
     public static class Helper
@@ -32,13 +31,6 @@
             processor.Generators.Add(new TypescriptService());
 
             return processor;
-        }
-
-        public static void WriteTable(string name, ConsoleTable table)
-        {
-            table.Options.EnableCount = true;
-            table.Write(Format.MarkDown);
-            Console.WriteLine();
         }
 
         public static SettingsModel ReadConfiguration(CommandOption fileOption, CommandOption urlOption)
