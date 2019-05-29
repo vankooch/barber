@@ -1,7 +1,7 @@
 <Project>
 	<PropertyGroup>
     <Authors>Kiarash Ghiaseddin</Authors>
-    <Version>2.2.2</Version>
+    <Version>2.3.0</Version>
     <LangVersion>latest</LangVersion>
     <Copyright>Copyright 2019</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
