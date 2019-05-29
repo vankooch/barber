@@ -37,11 +37,13 @@
                 Name = property.Key,
                 Type = this._generator.ConvertType(property.Value),
                 DefaultValue = this._generator.GetDefaultValue(property.Value),
+                Description = property.Value.Description,
                 Nullable = this._generator.IsNullable(property.Value),
                 Reference = this._generator.GetReference(property.Value),
                 Required = schema.Value.Required.Any(e => e == property.Key),
                 RootSchema = schema.Key,
                 Schema = property.Value,
+                Title = property.Value.Title,
             };
 
         /// <inheritdoc />

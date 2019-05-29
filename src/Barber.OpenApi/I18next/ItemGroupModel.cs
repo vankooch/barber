@@ -1,8 +1,6 @@
 ﻿namespace Barber.OpenApi.I18next
 {
     using System.Collections.Generic;
-    using System.Linq;
-    using Newtonsoft.Json;
 
     public class ItemModel
     {
@@ -31,6 +29,8 @@
             get => this.GetSuffixValue(Constants.CONTEXT_MALE);
             set => this.SetSuffixValue(Constants.CONTEXT_MALE, value);
         }
+
+        public IDictionary<string, string> Data => this._data;
 
         public string Interpolate
         {
@@ -69,8 +69,6 @@
             get => this.GetSuffixValue(Constants.PLURAL_SIMPLE_PLURAL);
             set => this.SetSuffixValue(Constants.PLURAL_SIMPLE_PLURAL, value);
         }
-
-        public IDictionary<string, string> Data => this._data;
 
         public string GetSuffixValue(string suffix)
         {

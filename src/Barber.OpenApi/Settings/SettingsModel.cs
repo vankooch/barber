@@ -72,6 +72,11 @@
         public StepModel[] Steps { get; set; }
 
         /// <summary>
+        /// I18next
+        /// </summary>
+        public I18nModel[] I18n { get; set; }
+
+        /// <summary>
         /// Template Root Path to templates, can be relative from assembly root
         /// </summary>
         public string TemplateRoot { get; set; } = "Templates";
@@ -91,25 +96,13 @@
         /// </summary>
         /// <param name="json">JSON Text</param>
         /// <returns></returns>
-        public static SettingsModel FromJson(string json)
-        {
-            return JsonConvert.DeserializeObject<SettingsModel>(json);
-        }
+        public static SettingsModel FromJson(string json) => JsonConvert.DeserializeObject<SettingsModel>(json);
 
         /// <summary>
         /// Create JSON Object
         /// </summary>
         /// <param name="model">Settings Model</param>
         /// <returns></returns>
-        public static string ToJson(SettingsModel model)
-        {
-            return JsonConvert.SerializeObject(model, Formatting.Indented);
-        }
-
-        /// <summary>
-        /// Create JSON Object
-        /// </summary>
-        /// <returns></returns>
-        public string ToJson() => ToJson(this);
+        public static string ToJson(SettingsModel model) => JsonConvert.SerializeObject(model, Formatting.Indented);
     }
 }

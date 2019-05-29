@@ -1,15 +1,10 @@
 ﻿namespace Barber.Cli.Commands.OpenApi
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Barber.Cli.Models;
-    using Barber.OpenApi.Generator;
-    using Barber.OpenApi.I18next;
-    using Barber.OpenApi.Models.Template;
     using ConsoleTables;
     using McMaster.Extensions.CommandLineUtils;
-    using Newtonsoft.Json;
 
     public class ListCommand
     {
@@ -152,18 +147,11 @@
                     }
                 }
 
-                var ns = new NamespaceModel();
                 var table = new ConsoleTable("#", "Name", "Schema");
                 var count = 0;
                 foreach (var item in properties.OrderBy(e => e.Key))
                 {
                     table.AddRow(count, item.Key, string.Join(", ", item.Data));
-                    ns.Items.Add(new ItemModel(item.Key, item.Key.ToUpper())
-                    {
-                        ContextFemale = "Female",
-                        ContextMale = "Male",
-                    });
-
                     count++;
                 }
 

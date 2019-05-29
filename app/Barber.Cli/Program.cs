@@ -20,6 +20,7 @@
                 // Subcommands
                 cmd.Command("init", Commands.OpenApi.InitilaizeCommand.Register);
                 cmd.Command("list", Commands.OpenApi.ListCommand.Register);
+                cmd.Command("i18n", Commands.OpenApi.I18nCommand.Schema);
 
                 // Main
                 Commands.OpenApi.GenerateCommand.Register(cmd);
@@ -29,6 +30,7 @@
             {
                 // Subcommands
                 cmd.Command("l", Commands.OpenApi.ListCommand.Register);
+                cmd.Command("i", Commands.OpenApi.I18nCommand.Schema);
 
                 // Main
                 Commands.OpenApi.GenerateCommand.Register(cmd);

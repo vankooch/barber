@@ -14,6 +14,7 @@
     using Barber.OpenApi.Models.Template;
     using Microsoft.OpenApi.Models;
     using Microsoft.OpenApi.Readers;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// Main processor for code generation
@@ -393,36 +394,40 @@
             return list;
         }
 
-        public PropertyModel[] GetProperties()
+        /// <summary>
+        /// Generate I18next resources
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation Token</param>
+        /// <returns></returns>
+        public async Task I18n(CancellationToken cancellationToken = default)
         {
-            var models = this.Models;
-            var properties = new List<PropertyModel>();
-            if (this.Models?.Length > 0)
+            if (this.Settings?.I18n?.Length > 0)
             {
-                foreach (var model in models)
+                foreach (var item in this.Settings.I18n)
                 {
-                    if (model.Value.Properties == null || model.Value.Properties.Length <= 0)
+                    await this.Read(this.Settings.Url, item.Language, cancellationToken);
+                    var translation = I18next.Generator.ReadSchemas(this.Api);
+
+                    var dir = Path.GetDirectoryName(item.Destination);
+                    if (!Directory.Exists(dir))
                     {
-                        continue;
+                        Directory.CreateDirectory(dir);
                     }
 
-                    foreach (var property in model.Value.Properties)
-                    {
-                        properties.Add(property);
-                    }
+                    var path = Path.Combine(dir, $"{item.Name}-{item.Language}.json");
+                    File.WriteAllText(path, JsonConvert.SerializeObject(translation.Data, Formatting.Indented));
                 }
             }
-
-            return properties.ToArray();
         }
 
         /// <summary>
         /// Read OpenAPI JSON from URL / File
         /// </summary>
         /// <param name="url">URL / File path</param>
+        /// <param name="language">Language set in header when requesting specification</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
-        public async Task Read(string url, CancellationToken cancellationToken = default)
+        public async Task Read(string url, string language = "en-US", CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(url) || string.IsNullOrWhiteSpace(url))
             {
@@ -433,6 +438,7 @@
             if (url.Substring(0, 4) == "http")
             {
                 var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add("Accept-Language", language);
                 stream = await httpClient.GetStreamAsync(new Uri(url));
             }
             else

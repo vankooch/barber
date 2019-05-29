@@ -28,5 +28,17 @@
         }
 
         public List<ItemModel> Items { get; private set; } = new List<ItemModel>();
+
+        public string Language { get; set; }
+
+        public string Name { get; set; }
+
+        public void Add(string key, string value)
+        {
+            if (!this.Items.Any(e => e.Name == key))
+            {
+                this.Items.Add(new ItemModel(key, value));
+            }
+        }
     }
 }
