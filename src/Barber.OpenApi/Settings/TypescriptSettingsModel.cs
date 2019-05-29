@@ -12,6 +12,11 @@
         public Types.ArraySettings Array { get; set; } = new Types.ArraySettings();
 
         /// <summary>
+        /// Boolean converting settings
+        /// </summary>
+        public Types.BooleanSettings Boolean { get; set; } = new Types.BooleanSettings();
+
+        /// <summary>
         /// DateTime converting settings
         /// </summary>
         public Types.DateTimeSettings DateTime { get; set; } = new Types.DateTimeSettings();

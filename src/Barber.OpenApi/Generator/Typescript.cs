@@ -43,9 +43,9 @@
                     restult = this._settings.Integer.Type;
                     break;
 
-                case "object":
-                    restult = property.Reference?.Id;
-                    hasNull = true;
+                case "boolean":
+                    restult = this._settings.Boolean.Type;
+                    isNullType = false;
                     break;
 
                 case "string" when property.Format == "date-time":
@@ -55,6 +55,11 @@
                 case "string":
                     restult = this._settings.String.Type;
                     isNullType = false;
+                    break;
+
+                case "object":
+                    restult = property.Reference?.Id;
+                    hasNull = true;
                     break;
 
                 default:
@@ -90,14 +95,17 @@
                 case "integer":
                     return this._settings.Integer.Default;
 
-                case "object":
-                    return $"new {property.Reference?.Id}()";
+                case "boolean":
+                    return this._settings.Boolean.Default;
 
                 case "string" when property.Format == "date-time":
                     return this._settings.DateTime.Default;
 
                 case "string":
                     return this._settings.String.Default;
+
+                case "object":
+                    return $"new {property.Reference?.Id}()";
 
                 default:
                     return "undefined";
@@ -141,6 +149,7 @@
             switch (property.Type)
             {
                 case "array":
+                case "boolean":
                 case "integer":
                 case "object":
                 case "string":
