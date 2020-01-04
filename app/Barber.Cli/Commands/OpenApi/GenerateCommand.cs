@@ -21,7 +21,7 @@
                 "Dry run without writing to disk",
                 CommandOptionType.NoValue);
 
-            config.OnExecute(async () =>
+            config.OnExecuteAsync(async cancellationToken =>
             {
                 // Setup
                 var sw = new Stopwatch();

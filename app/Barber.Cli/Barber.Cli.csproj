@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <CodeAnalysisRuleSet>../../default.ruleset</CodeAnalysisRuleSet>
     <AssemblyName>barber</AssemblyName>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -17,7 +17,8 @@
     <Company />
     <NeutralLanguage>en</NeutralLanguage>
     <Description>Barber is cli-tool for generating files based on mustache templates. In addition it can read and process OpenAPI 3 specifications and generate code based on templates.</Description>
-    <PackageIconUrl>https://raw.githubusercontent.com/vankooch/barber/master/assets/barber.png</PackageIconUrl>
+    <PackageIcon>barber.png</PackageIcon>
+    <Version>2.6.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,17 +27,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConsoleTables" Version="2.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.3.4" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.4" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+    <PackageReference Include="ConsoleTables" Version="2.4.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="barber.png" Pack="true" PackagePath=""/>
   </ItemGroup>
 
 </Project>

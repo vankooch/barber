@@ -20,9 +20,6 @@
         /// </summary>
         /// <param name="operation">OpenApi Operation</param>
         /// <param name="context">Context</param>
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
-        {
-            operation.Summary = context.MethodInfo.Name;
-        }
+        public void Apply(OpenApiOperation operation, OperationFilterContext context) => operation.Summary = context.MethodInfo.Name;
     }
 }

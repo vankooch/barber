@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Stubble.Compilation" Version="1.2.7" />
-    <PackageReference Include="Stubble.Core" Version="1.2.7" />
+    <PackageReference Include="Stubble.Compilation" Version="1.6.3" />
+    <PackageReference Include="Stubble.Core" Version="1.6.3" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

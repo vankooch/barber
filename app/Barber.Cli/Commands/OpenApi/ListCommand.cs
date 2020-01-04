@@ -16,7 +16,7 @@
 
             var (fileOption, urlOption) = Helper.GetCommonOptions(config);
 
-            config.OnExecute(async () =>
+            config.OnExecuteAsync(async cancellationToken =>
             {
                 var settings = Helper.ReadConfiguration(fileOption, urlOption);
                 var processor = Helper.GetProcessor(settings);
@@ -64,7 +64,7 @@
 
             var (fileOption, urlOption) = Helper.GetCommonOptions(config);
 
-            config.OnExecute(async () =>
+            config.OnExecuteAsync(async cancellationToken =>
             {
                 var settings = Helper.ReadConfiguration(fileOption, urlOption);
                 var processor = Helper.GetProcessor(settings);
@@ -95,7 +95,7 @@
 
             var (fileOption, urlOption) = Helper.GetCommonOptions(config);
 
-            config.OnExecute(async () =>
+            config.OnExecuteAsync(async cancellationToken =>
             {
                 var settings = Helper.ReadConfiguration(fileOption, urlOption);
                 var processor = Helper.GetProcessor(settings);
@@ -169,7 +169,7 @@
 
             var (fileOption, urlOption) = Helper.GetCommonOptions(config);
 
-            config.OnExecute(async () =>
+            config.OnExecuteAsync(async cancellationToken =>
             {
                 var settings = Helper.ReadConfiguration(fileOption, urlOption);
                 var processor = Helper.GetProcessor(settings);

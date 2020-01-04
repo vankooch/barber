@@ -31,7 +31,7 @@
                 "Display verbose output",
                 CommandOptionType.NoValue);
 
-            config.OnExecute(async () =>
+            config.OnExecuteAsync(async cancellationToken =>
             {
                 if (!templateOption.HasValue())
                 {
@@ -99,7 +99,7 @@
                 }
 
                 sw = LogHelper.TaskStart("Writing file");
-                await File.WriteAllTextAsync(destination, result);
+                await File.WriteAllTextAsync(destination, result, cancellationToken);
                 LogHelper.TaskStop(sw, true);
 
                 return 0;
