@@ -2,7 +2,7 @@
   "profiles": {
     "Barber.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "openapi -s Community.Models -f ../../../barber-openapi.json"
+      "commandLineArgs": "coap discover -n GW-44916029B021 -a GW-44916029B021"
     }
   }
 }

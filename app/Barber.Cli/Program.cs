@@ -15,6 +15,13 @@
             app.Command("render", Commands.RenderCommand.Register);
             app.Command("mustache", Commands.RenderCommand.Register);
 
+            app.Command("coap", (cmd) =>
+            {
+                // Subcommands
+                cmd.Command("psk", Commands.CoAP.PskCreateCommand.Register);
+                cmd.Command("discover", Commands.CoAP.DiscoverCommand.Register);
+            });
+
             app.Command("openapi", (cmd) =>
             {
                 // Subcommands
