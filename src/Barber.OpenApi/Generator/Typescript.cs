@@ -1,5 +1,6 @@
 ﻿namespace Barber.OpenApi.Generator
 {
+    using System;
     using System.IO;
     using Microsoft.OpenApi.Models;
 
@@ -12,30 +13,41 @@
 
         public Typescript() => this._settings = new Settings.TypescriptSettingsModel();
 
-        public Typescript(Settings.SettingsModel settings) => this._settings = settings.Typescript;
+        public Typescript(Settings.SettingsModel settings)
+        {
+            if (settings != null)
+            {
+                this._settings = settings.Typescript;
+            }
+        }
 
         /// <inheritdoc />
-        public string ConvertType(OpenApiSchema property, bool setNull = true)
+        public string ConvertType(OpenApiSchema propertyItem, bool setNull = true)
         {
-            var restult = string.Empty;
+            if (propertyItem == null)
+            {
+                throw new ArgumentNullException(nameof(propertyItem));
+            }
+
+            string restult;
             var isNullType = true;
             var hasNull = false;
-            switch (property.Type)
+            switch (propertyItem.Type)
             {
                 case "array":
-                    if (!string.IsNullOrEmpty(property.Items?.Reference?.Id))
+                    if (!string.IsNullOrEmpty(propertyItem.Items?.Reference?.Id))
                     {
-                        restult = this._settings.Array.Type.Replace("TYPE", property.Items.Reference.Id);
+                        restult = this._settings.Array.Type.Replace("TYPE", propertyItem.Items.Reference.Id);
                     }
                     else
                     {
-                        restult = this._settings.Array.Type.Replace("TYPE", this.ConvertType(property.Items));
+                        restult = this._settings.Array.Type.Replace("TYPE", this.ConvertType(propertyItem.Items));
                     }
 
                     hasNull = true;
                     break;
 
-                case "integer" when property.Format == "int64" && this._settings.Integer.UseBigInt:
+                case "integer" when propertyItem.Format == "int64" && this._settings.Integer.UseBigInt:
                     restult = "bigint";
                     break;
 
@@ -48,7 +60,7 @@
                     isNullType = false;
                     break;
 
-                case "string" when property.Format == "date-time":
+                case "string" when propertyItem.Format == "date-time":
                     restult = this._settings.DateTime.Type;
                     break;
 
@@ -58,17 +70,17 @@
                     break;
 
                 case "object":
-                    restult = property.Reference?.Id;
+                    restult = propertyItem.Reference?.Id;
                     hasNull = true;
                     break;
 
                 default:
-                    restult = property.Type;
+                    restult = propertyItem.Type;
                     isNullType = false;
                     break;
             }
 
-            if (setNull && (property.Nullable || hasNull))
+            if (setNull && (propertyItem.Nullable || hasNull))
             {
                 restult += " | " + (isNullType ? "null" : "undefined");
             }
@@ -77,76 +89,70 @@
         }
 
         /// <inheritdoc />
-        public string GetDefaultValue(OpenApiSchema property)
+        public string GetDefaultValue(OpenApiSchema propertyItem)
         {
-            if (property.Nullable)
+            if (propertyItem == null )
+            {
+                throw new ArgumentNullException(nameof(propertyItem));
+            }
+
+            if (propertyItem.Nullable)
             {
                 return "null";
             }
 
-            switch (property.Type)
+            return propertyItem.Type switch
             {
-                case "array":
-                    return this._settings.Array.Default.Replace("TYPE", string.Empty);
-
-                case "integer" when property.Format == "int64" && this._settings.Integer.UseBigInt:
-                    return "0n";
-
-                case "integer":
-                    return this._settings.Integer.Default;
-
-                case "boolean":
-                    return this._settings.Boolean.Default;
-
-                case "string" when property.Format == "date-time":
-                    return this._settings.DateTime.Default;
-
-                case "string":
-                    return this._settings.String.Default;
-
-                case "object":
-                    return $"new {property.Reference?.Id}()";
-
-                default:
-                    return "undefined";
-            }
+                "array" => this._settings.Array.Default.Replace("TYPE", string.Empty),
+                "integer" when propertyItem.Format == "int64" && this._settings.Integer.UseBigInt => "0n",
+                "integer" => this._settings.Integer.Default,
+                "boolean" => this._settings.Boolean.Default,
+                "string" when propertyItem.Format == "date-time" => this._settings.DateTime.Default,
+                "string" => this._settings.String.Default,
+                "object" => $"new {propertyItem.Reference?.Id}()",
+                _ => "undefined",
+            };
         }
 
         /// <inheritdoc />
-        public string GetReference(OpenApiSchema property)
+        public string GetReference(OpenApiSchema propertyItem)
         {
-            switch (property?.Type)
+            if (propertyItem == null)
             {
-                case "array" when !string.IsNullOrEmpty(property.Items?.Reference?.Id):
-
-                    return property.Items.Reference?.Id;
-
-                case "object":
-                    return property.Reference?.Id;
-
-                default:
-                    return string.Empty;
+                throw new ArgumentNullException(nameof(propertyItem));
             }
+
+            return propertyItem.Type switch
+            {
+                "array" when !string.IsNullOrEmpty(propertyItem.Items?.Reference?.Id) => propertyItem.Items.Reference?.Id,
+                "object" => propertyItem.Reference?.Id,
+                _ => string.Empty,
+            };
         }
 
         /// <inheritdoc />
         public string GetReferencePath(string relativePath)
         {
             var ext = Path.GetExtension(relativePath);
-            var file = relativePath.Substring(0, relativePath.Length - ext.Length);
+            var file = relativePath?.Substring(0, relativePath.Length - ext.Length);
 
             return $"./{file.Replace("\\", "/")}";
         }
 
         /// <inheritdoc />
-        public bool IsNullable(OpenApiSchema property)
+        public bool IsNullable(OpenApiSchema propertyItem)
         {
-            if (property.Nullable)
+            if (propertyItem == null)
+            {
+                throw new ArgumentNullException(nameof(propertyItem));
+            }
+
+            if (propertyItem.Nullable)
             {
                 return true;
             }
 
-            switch (property.Type)
+            switch (propertyItem.Type)
             {
                 case "array":
                 case "boolean":

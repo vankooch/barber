@@ -1,4 +1,4 @@
-﻿namespace Barber.Cli.Commands.CoAP
+﻿namespace Barber.IoT.Cli.Commands.CoAP
 {
     using System;
     using System.IO;
@@ -18,7 +18,7 @@
 
             if (string.IsNullOrWhiteSpace(applicationName))
             {
-                applicationName = "Barber.Cli";
+                applicationName = "Barber.IoT.Cli";
             }
 
             var psk = controller.GenerateAppSecret(gatewaySecrect, applicationName);
@@ -67,7 +67,7 @@
 
             if (string.IsNullOrWhiteSpace(applicationName))
             {
-                applicationName = "Barber.Cli";
+                applicationName = "Barber.IoT.Cli";
             }
 
             if (!Directory.Exists(path))

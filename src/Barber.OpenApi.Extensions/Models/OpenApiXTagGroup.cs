@@ -31,11 +31,16 @@
         /// <summary>
         /// Tags names to group
         /// </summary>
-        public List<string> Tags { get; set; } = new List<string>();
+        public List<string> Tags { get; } = new List<string>();
 
         /// <inheritdoc />
         public void Write(IOpenApiWriter writer, OpenApiSpecVersion specVersion)
         {
+            if (writer == null)
+            {
+                return;
+            }
+
             writer.WriteStartObject();
             writer.WriteProperty("name", this.Name);
             writer.WritePropertyName("tags");

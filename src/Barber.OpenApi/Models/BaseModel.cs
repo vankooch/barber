@@ -1,5 +1,6 @@
 ﻿namespace Barber.OpenApi.Models
 {
+    using System.Collections.Generic;
     using System.Linq;
     using Barber.OpenApi.Models.Template;
 
@@ -11,7 +12,7 @@
 
         public string Name { get; set; }
 
-        public ReferenceModel[] References { get; set; }
+        public IReadOnlyList<ReferenceModel> References { get; set; }
 
         public void AddReference(string key, bool checkName = false)
         {
@@ -25,7 +26,7 @@
                 return;
             }
 
-            if (this.References == null || this.References.Length == 0)
+            if (this.References == null || this.References.Count == 0)
             {
                 this.References = new ReferenceModel[]
                 {

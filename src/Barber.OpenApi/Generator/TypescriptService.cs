@@ -27,8 +27,8 @@
         /// <inheritdoc />
         public PropertyModel GetParameter(OpenApiParameter parameter) => new PropertyModel()
         {
-            Name = parameter.Name,
-            Type = this._generator.ConvertType(parameter.Schema),
+            Name = parameter?.Name,
+            Type = this._generator.ConvertType(parameter?.Schema),
             Required = parameter.Required,
         };
 
@@ -39,14 +39,14 @@
         {
             // Name
             var name = operation.Value.OperationId.Replace(operation.Value.Tags.First().Name, string.Empty);
-            name = name.Substring(0, 1).ToLower() + name.Substring(1);
+            name = name.Substring(0, 1).ToLowerInvariant() + name.Substring(1);
 
             return new PathModel()
             {
                 Name = name,
                 Path = path.Key,
                 Tags = operation.Value.Tags.Select(e => e.Name).ToArray(),
-                Type = operation.Key.ToString().ToLower(),
+                Type = operation.Key.ToString().ToLowerInvariant(),
             };
         }
 
@@ -61,7 +61,7 @@
                     Name = tag,
                     File = new Models.FileModel()
                     {
-                        Name = $"{tag.Substring(0, 1).ToUpper()}{tag.Substring(1)}Service.ts",
+                        Name = $"{tag?.Substring(0, 1).ToUpperInvariant()}{tag?.Substring(1)}Service.ts",
                         Path = string.Empty,
                     },
                     Paths = match.ToArray(),

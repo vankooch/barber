@@ -1,6 +1,7 @@
-﻿namespace Barber.Cli.Commands.CoAP
+﻿namespace Barber.IoT.Cli.Commands.CoAP
 {
     using System;
+    using Barber.Cli.Helper;
     using McMaster.Extensions.CommandLineUtils;
     using Tomidix.NetStandard.Tradfri;
 
@@ -30,18 +31,18 @@
 
             config.OnExecute(() =>
             {
-                var path = CommonHelpers.GetString(pathOption, "C:\\Projects");
-                var gatewayName = CommonHelpers.GetStringRead(gatewayNameOption, "Gateway Name");
-                var gatewayAddress = CommonHelpers.GetStringRead(gatewayNameOption, "Gateway Address");
-                var gatewaySecret = CommonHelpers.GetStringRead(gatewayNameOption, "Gateway Secret");
+                var path = CommandOptionHelper.Text(pathOption, "C:\\Projects");
+                var gatewayName = CommandOptionHelper.TextAskIfEmpty(gatewayNameOption, "Gateway Name");
+                var gatewayAddress = CommandOptionHelper.TextAskIfEmpty(gatewayNameOption, "Gateway Address");
+                var gatewaySecret = CommandOptionHelper.TextAskIfEmpty(gatewayNameOption, "Gateway Secret");
 
-                var sw = LogHelper.TaskStart("Creating PSK");
+                var sw = Styler.TaskStart("Creating PSK");
                 var psk = Helper.GeneratePsk(new TradfriController(gatewayName, gatewayAddress), gatewaySecret, "barber");
-                LogHelper.TaskStop(sw, true);
+                Styler.TaskEnd(sw, true);
 
-                sw = LogHelper.TaskStart("Write PSK");
+                sw = Styler.TaskStart("Write PSK");
                 var fileName = Helper.PskWrite(path, gatewayName, psk, "barber");
-                LogHelper.TaskStop(sw, true);
+                Styler.TaskEnd(sw, true);
 
                 Console.WriteLine($"PSK: {psk}");
                 Console.WriteLine($"File: {fileName}");

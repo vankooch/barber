@@ -30,12 +30,12 @@
         /// <summary>
         /// Name of paths / schema's to include
         /// </summary>
-        public string[] ItemsIncludes { get; set; }
+        public IReadOnlyList<string> ItemsIncludes { get; set; }
 
         /// <summary>
         /// List of paths / schema's to skip
         /// </summary>
-        public string[] ItemsSkips { get; set; }
+        public IReadOnlyList<string> ItemsSkips { get; set; }
 
         /// <summary>
         /// Step name
@@ -48,7 +48,7 @@
         public string Resolve { get; set; }
 
         [JsonIgnore]
-        public IDictionary<string, IRenderModel> Result { get; set; }
+        public IDictionary<string, IRenderModel> ResultItems { get; internal set; } = new Dictionary<string, IRenderModel>();
 
         /// <summary>
         /// Path to template files used for processing

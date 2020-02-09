@@ -1,5 +1,6 @@
 ﻿namespace Barber.OpenApi.Models.Template
 {
+    using System.Collections.Generic;
     using Barber.OpenApi.Models;
 
     public class ServiceModel : IRenderModel
@@ -12,8 +13,8 @@
 
         public string Name { get; set; }
 
-        public PathModel[] Paths { get; set; }
+        public IReadOnlyList<PathModel> Paths { get; set; }
 
-        public ReferenceModel[] References { get; set; }
+        public IReadOnlyList<ReferenceModel> References { get; set; }
     }
 }

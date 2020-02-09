@@ -1,6 +1,8 @@
 ﻿namespace Barber.Cli.Commands.OpenApi
 {
     using System.Diagnostics;
+    using Barber.Cli.Helper;
+    using Barber.OpenApi;
     using McMaster.Extensions.CommandLineUtils;
 
     public class GenerateCommand
@@ -31,7 +33,7 @@
                 // Read OpenAPI file
                 await Helper.ReadOpenApi(processor, settings);
 
-                if (settings.Steps == null || settings.Steps.Length == 0)
+                if (settings.Steps == null || settings.Steps.Count == 0)
                 {
                     return 0;
                 }
@@ -39,15 +41,15 @@
                 // Process Steps
                 foreach (var step in settings.Steps)
                 {
-                    sw = LogHelper.TaskStart($"Convert Step: {step.Name}");
+                    sw = Styler.TaskStart($"Convert Step: {step.Name}");
                     processor.Convert(step);
-                    LogHelper.TaskStop(sw, true, step.Result?.Count);
+                    Styler.TaskEnd(sw, true);
                 }
 
                 // Update References
-                sw = LogHelper.TaskStart($"Update references");
+                sw = Styler.TaskStart($"Update references");
                 await processor.Update();
-                LogHelper.TaskStop(sw, true);
+                Styler.TaskEnd(sw, true);
 
                 if (!dryOption.HasValue())
                 {
@@ -62,9 +64,9 @@
                             continue;
                         }
 
-                        sw = LogHelper.TaskStart($"Write Step: {step.Name}");
-                        processor.Write(step.Result);
-                        LogHelper.TaskStop(sw, true, step.Result.Count);
+                        sw = Styler.TaskStart($"Write Step: {step.Name}");
+                        Processor.Write(step.ResultItems);
+                        Styler.TaskEnd(sw, true);
                     }
                 }
 

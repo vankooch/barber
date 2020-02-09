@@ -8,6 +8,11 @@
     {
         public void Configure(EntityTypeBuilder<Device> builder)
         {
+            if (builder == null)
+            {
+                return;
+            }
+
             _ = builder.ToTable(BarberIoTContextConfiguartion.TABLE_IOT_DEVICE, BarberIoTContextConfiguartion.SCHEMA_IOT);
 
             _ = builder.HasKey(u => u.Id);

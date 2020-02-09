@@ -19,8 +19,11 @@
 
         public TypescriptModel(Settings.SettingsModel settings)
         {
-            this._settings = settings.Typescript;
-            this._generator = new Typescript(settings);
+            if (settings != null)
+            {
+                this._settings = settings.Typescript;
+                this._generator = new Typescript(settings);
+            }
         }
 
         /// <inheritdoc />

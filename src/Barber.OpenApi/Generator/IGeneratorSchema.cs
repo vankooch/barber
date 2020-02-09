@@ -13,9 +13,9 @@
         /// Convert a OpenApi schema property to intermediate Property Model
         /// </summary>
         /// <param name="schema">Root OpenApi schema</param>
-        /// <param name="property">OpenApi property</param>
+        /// <param name="propertyItem">OpenApi property</param>
         /// <returns></returns>
-        PropertyModel GetProperty(KeyValuePair<string, OpenApiSchema> schema, KeyValuePair<string, OpenApiSchema> property);
+        PropertyModel GetProperty(KeyValuePair<string, OpenApiSchema> schema, KeyValuePair<string, OpenApiSchema> propertyItem);
 
         /// <summary>
         /// Convert a OpenApi schema to intermediate Schema Model

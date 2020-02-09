@@ -116,7 +116,7 @@
         }
 
         /// <inheritdoc />
-        public virtual async Task<TUser> FindByNameAsync(string userName)
+        public virtual Task<TUser> FindByNameAsync(string userName)
         {
             this.ThrowIfDisposed();
             if (userName == null)
@@ -126,18 +126,18 @@
 
             userName = this.NormalizeName(userName);
 
-            return await this.Store.FindByNameAsync(userName, this.CancellationToken);
+            return this.Store.FindByNameAsync(userName, this.CancellationToken);
         }
 
         /// <inheritdoc />
-        public virtual async Task<string> GetUserIdAsync(TUser user)
+        public virtual Task<string> GetUserIdAsync(TUser user)
         {
             this.ThrowIfDisposed();
-            return await this.Store.GetUserIdAsync(user, this.CancellationToken);
+            return this.Store.GetUserIdAsync(user, this.CancellationToken);
         }
 
         /// <inheritdoc />
-        public virtual async Task<string> GetUserNameAsync(TUser user)
+        public virtual Task<string> GetUserNameAsync(TUser user)
         {
             this.ThrowIfDisposed();
             if (user == null)
@@ -145,7 +145,7 @@
                 throw new ArgumentNullException(nameof(user));
             }
 
-            return await this.Store.GetUserNameAsync(user, this.CancellationToken);
+            return this.Store.GetUserNameAsync(user, this.CancellationToken);
         }
 
         #region CRUD
@@ -154,7 +154,7 @@
         public async Task<IdentityResult> CreateAsync(TUser user)
         {
             this.ThrowIfDisposed();
-            var result = await this.ValidateUserAsync(user);
+            var result = await this.ValidateUserAsync(user).ConfigureAwait(true);
             if (!result.Succeeded)
             {
                 return result;
@@ -162,12 +162,12 @@
 
             if (this.Options.Lockout.AllowedForNewUsers && this.SupportsUserLockout)
             {
-                await this.GetUserLockoutStore().SetLockoutEnabledAsync(user, true, this.CancellationToken);
+                await this.GetUserLockoutStore().SetLockoutEnabledAsync(user, true, this.CancellationToken).ConfigureAwait(true);
             }
 
-            await this.UpdateNormalizedUserNameAsync(user);
+            await this.UpdateNormalizedUserNameAsync(user).ConfigureAwait(true);
 
-            return await this.Store.CreateAsync(user, this.CancellationToken);
+            return await this.Store.CreateAsync(user, this.CancellationToken).ConfigureAwait(true);
         }
 
         /// <inheritdoc />
@@ -187,14 +187,14 @@
             if (this.SupportsUserPassword)
             {
                 var passwordStore = this.GetPasswordStore();
-                var result = await this.UpdatePasswordHash(passwordStore, user, password);
+                var result = await this.UpdatePasswordHash(passwordStore, user, password).ConfigureAwait(true);
                 if (!result.Succeeded)
                 {
                     return result;
                 }
             }
 
-            return await this.CreateAsync(user);
+            return await this.CreateAsync(user).ConfigureAwait(true);
         }
 
         /// <inheritdoc />
@@ -235,7 +235,7 @@
             }
 
             var passwordStore = this.GetPasswordStore();
-            var hash = await passwordStore.GetPasswordHashAsync(user, this.CancellationToken);
+            var hash = await passwordStore.GetPasswordHashAsync(user, this.CancellationToken).ConfigureAwait(true);
             if (hash != null)
             {
                 ////Logger.LogWarning(1, "User {userId} already has a password.", await this.GetUserIdAsync(user));
@@ -246,13 +246,13 @@
                 });
             }
 
-            var result = await this.UpdatePasswordHash(passwordStore, user, password);
+            var result = await this.UpdatePasswordHash(passwordStore, user, password).ConfigureAwait(true);
             if (!result.Succeeded)
             {
                 return result;
             }
 
-            return await this.UpdateUserAsync(user);
+            return await this.UpdateUserAsync(user).ConfigureAwait(true);
         }
 
         /// <inheritdoc />
@@ -265,15 +265,15 @@
             }
 
             var passwordStore = this.GetPasswordStore();
-            if (await this.VerifyPasswordAsync(passwordStore, user, currentPassword) != PasswordVerificationResult.Failed)
+            if (await this.VerifyPasswordAsync(passwordStore, user, currentPassword).ConfigureAwait(true) != PasswordVerificationResult.Failed)
             {
-                var result = await this.UpdatePasswordHash(passwordStore, user, newPassword);
+                var result = await this.UpdatePasswordHash(passwordStore, user, newPassword).ConfigureAwait(true);
                 if (!result.Succeeded)
                 {
                     return result;
                 }
 
-                return await this.UpdateUserAsync(user);
+                return await this.UpdateUserAsync(user).ConfigureAwait(true);
             }
 
             ////Logger.LogWarning(2, "Change password failed for user {userId}.", await this.GetUserIdAsync(user));
@@ -294,11 +294,11 @@
             }
 
             var passwordStore = this.GetPasswordStore();
-            var result = await this.VerifyPasswordAsync(passwordStore, user, password);
+            var result = await this.VerifyPasswordAsync(passwordStore, user, password).ConfigureAwait(true);
             if (result == PasswordVerificationResult.SuccessRehashNeeded)
             {
-                await this.UpdatePasswordHash(passwordStore, user, password, validatePassword: false);
-                await this.UpdateUserAsync(user);
+                await this.UpdatePasswordHash(passwordStore, user, password, validatePassword: false).ConfigureAwait(true);
+                await this.UpdateUserAsync(user).ConfigureAwait(true);
             }
 
             var success = result != PasswordVerificationResult.Failed;
@@ -333,8 +333,8 @@
             }
 
             var passwordStore = this.GetPasswordStore();
-            await this.UpdatePasswordHash(passwordStore, user, null, validatePassword: false);
-            return await this.UpdateUserAsync(user);
+            await this.UpdatePasswordHash(passwordStore, user, null, validatePassword: false).ConfigureAwait(true);
+            return await this.UpdateUserAsync(user).ConfigureAwait(true);
         }
 
         #endregion Password
@@ -358,19 +358,20 @@
 
             // If this puts the user over the threshold for lockout, lock them out and reset the access failed count
             var store = this.GetUserLockoutStore();
-            var count = await store.IncrementAccessFailedCountAsync(user, this.CancellationToken);
+            var count = await store.IncrementAccessFailedCountAsync(user, this.CancellationToken).ConfigureAwait(true);
             if (count < this.Options.Lockout.MaxFailedAccessAttempts)
             {
-                return await this.UpdateUserAsync(user);
+                return await this.UpdateUserAsync(user).ConfigureAwait(true);
             }
 
             ////Logger.LogWarning(12, "User {userId} is locked out.", await this.GetUserIdAsync(user));
             await store.SetLockoutEndDateAsync(
                 user,
                 DateTimeOffset.UtcNow.Add(this.Options.Lockout.DefaultLockoutTimeSpan),
-                this.CancellationToken);
-            await store.ResetAccessFailedCountAsync(user, this.CancellationToken);
-            return await this.UpdateUserAsync(user);
+                this.CancellationToken).ConfigureAwait(true);
+            await store.ResetAccessFailedCountAsync(user, this.CancellationToken).ConfigureAwait(true);
+
+            return await this.UpdateUserAsync(user).ConfigureAwait(true);
         }
 
         /// <summary>
@@ -388,7 +389,8 @@
             }
 
             var store = this.GetUserLockoutStore();
-            return await store.GetAccessFailedCountAsync(user, this.CancellationToken);
+
+            return await store.GetAccessFailedCountAsync(user, this.CancellationToken).ConfigureAwait(true);
         }
 
         /// <summary>
@@ -409,12 +411,12 @@
             }
 
             var store = this.GetUserLockoutStore();
-            if (!await store.GetLockoutEnabledAsync(user, this.CancellationToken))
+            if (!await store.GetLockoutEnabledAsync(user, this.CancellationToken).ConfigureAwait(true))
             {
                 return false;
             }
 
-            var lockoutTime = await store.GetLockoutEndDateAsync(user, this.CancellationToken);
+            var lockoutTime = await store.GetLockoutEndDateAsync(user, this.CancellationToken).ConfigureAwait(true);
             return lockoutTime >= DateTimeOffset.UtcNow;
         }
 
@@ -431,14 +433,15 @@
                 throw new ArgumentNullException(nameof(user));
             }
 
-            if (await this.GetAccessFailedCountAsync(user) == 0)
+            if (await this.GetAccessFailedCountAsync(user).ConfigureAwait(true) == 0)
             {
                 return IdentityResult.Success;
             }
 
             var store = this.GetUserLockoutStore();
-            await store.ResetAccessFailedCountAsync(user, this.CancellationToken);
-            return await this.UpdateUserAsync(user);
+            await store.ResetAccessFailedCountAsync(user, this.CancellationToken).ConfigureAwait(true);
+
+            return await this.UpdateUserAsync(user).ConfigureAwait(true);
         }
 
         /// <summary>
@@ -459,8 +462,9 @@
             }
 
             var store = this.GetUserLockoutStore();
-            await store.SetLockoutEnabledAsync(user, enabled, this.CancellationToken);
-            return await this.UpdateUserAsync(user);
+            await store.SetLockoutEnabledAsync(user, enabled, this.CancellationToken).ConfigureAwait(true);
+
+            return await this.UpdateUserAsync(user).ConfigureAwait(true);
         }
 
         /// <summary>
@@ -478,7 +482,7 @@
             }
 
             var store = this.GetUserLockoutStore();
-            if (!await store.GetLockoutEnabledAsync(user, this.CancellationToken))
+            if (!await store.GetLockoutEnabledAsync(user, this.CancellationToken).ConfigureAwait(true))
             {
                 ////Logger.LogWarning(11, "Lockout for user {userId} failed because lockout is not enabled for this user.", await this.GetUserIdAsync(user));
                 return IdentityResult.Failed(new IdentityError
@@ -488,8 +492,8 @@
                 });
             }
 
-            await store.SetLockoutEndDateAsync(user, lockoutEnd, this.CancellationToken);
-            return await this.UpdateUserAsync(user);
+            await store.SetLockoutEndDateAsync(user, lockoutEnd, this.CancellationToken).ConfigureAwait(true);
+            return await this.UpdateUserAsync(user).ConfigureAwait(true);
         }
 
         #endregion Lock Out
@@ -532,8 +536,9 @@
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
         protected virtual async Task UpdateNormalizedUserNameAsync(TUser user)
         {
-            var normalizedName = this.NormalizeName(await this.GetUserNameAsync(user));
-            await this.Store.SetNormalizedUserNameAsync(user, normalizedName, this.CancellationToken);
+            var normalizedName = this.NormalizeName(await this.GetUserNameAsync(user).ConfigureAwait(true));
+
+            await this.Store.SetNormalizedUserNameAsync(user, normalizedName, this.CancellationToken).ConfigureAwait(true);
         }
 
         /// <summary>
@@ -543,14 +548,15 @@
         /// <returns>Whether the operation was successful.</returns>
         protected virtual async Task<IdentityResult> UpdateUserAsync(TUser user)
         {
-            var result = await this.ValidateUserAsync(user);
+            var result = await this.ValidateUserAsync(user).ConfigureAwait(true);
             if (!result.Succeeded)
             {
                 return result;
             }
 
-            await this.UpdateNormalizedUserNameAsync(user);
-            return await this.Store.UpdateAsync(user, this.CancellationToken);
+            await this.UpdateNormalizedUserNameAsync(user).ConfigureAwait(true);
+
+            return await this.Store.UpdateAsync(user, this.CancellationToken).ConfigureAwait(true);
         }
 
         /// <summary>
@@ -566,7 +572,7 @@
             var isValid = true;
             foreach (var v in this.PasswordValidators)
             {
-                var result = await v.ValidateAsync(this, user, password);
+                var result = await v.ValidateAsync(this, user, password).ConfigureAwait(true);
                 if (!result.Succeeded)
                 {
                     if (result.Errors.Any())
@@ -598,7 +604,7 @@
             var errors = new List<IdentityError>();
             foreach (var v in this.UserValidators)
             {
-                var result = await v.ValidateAsync(this, user);
+                var result = await v.ValidateAsync(this, user).ConfigureAwait(true);
                 if (!result.Succeeded)
                 {
                     errors.AddRange(result.Errors);
@@ -626,7 +632,12 @@
         /// </returns>
         protected virtual async Task<PasswordVerificationResult> VerifyPasswordAsync(IDevicePasswordStore<TUser> store, TUser user, string password)
         {
-            var hash = await store.GetPasswordHashAsync(user, this.CancellationToken);
+            if (store == null)
+            {
+                return PasswordVerificationResult.Failed;
+            }
+
+            var hash = await store.GetPasswordHashAsync(user, this.CancellationToken).ConfigureAwait(true);
             if (hash == null)
             {
                 return PasswordVerificationResult.Failed;
@@ -663,7 +674,7 @@
         {
             if (validatePassword)
             {
-                var validate = await this.ValidatePasswordAsync(user, newPassword);
+                var validate = await this.ValidatePasswordAsync(user, newPassword).ConfigureAwait(true);
                 if (!validate.Succeeded)
                 {
                     return validate;
@@ -671,7 +682,8 @@
             }
 
             var hash = newPassword != null ? this.PasswordHasher.HashPassword(user, newPassword) : null;
-            await passwordStore.SetPasswordHashAsync(user, hash, this.CancellationToken);
+            await passwordStore.SetPasswordHashAsync(user, hash, this.CancellationToken).ConfigureAwait(true);
+
             return IdentityResult.Success;
         }
     }

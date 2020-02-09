@@ -1,5 +1,6 @@
 ﻿namespace Barber.OpenApi.Models.Template
 {
+    using System.Collections.Generic;
     using Barber.OpenApi.Models;
 
     public class PathModel : BaseModel
@@ -10,13 +11,13 @@
 
         public string Body { get; set; } = null;
 
-        public PropertyModel[] Parameters { get; set; }
+        public IReadOnlyList<PropertyModel> Parameters { get; set; }
 
         public string ParametersFunction
         {
             get
             {
-                if (this.Parameters == null || this.Parameters.Length == 0)
+                if (this.Parameters == null || this.Parameters.Count == 0)
                 {
                     if (!string.IsNullOrEmpty(this.Body))
                     {
@@ -45,7 +46,7 @@
 
         public string ReturnType { get; set; }
 
-        public string[] Tags { get; set; }
+        public IReadOnlyList<string> Tags { get; set; }
 
         public string Type { get; set; }
 
@@ -56,7 +57,7 @@
                 var text = this.Path;
                 text = text.Replace("{version}", "${this.version}");
 
-                if (this.Parameters == null || this.Parameters.Length == 0)
+                if (this.Parameters == null || this.Parameters.Count == 0)
                 {
                     return text;
                 }

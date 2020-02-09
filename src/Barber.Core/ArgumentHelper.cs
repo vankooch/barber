@@ -8,7 +8,7 @@
     {
         public static object Parse(IEnumerable<string> args)
         {
-            if (args == null || args.Count() == 0)
+            if (args == null || !args.Any())
             {
                 return null;
             }

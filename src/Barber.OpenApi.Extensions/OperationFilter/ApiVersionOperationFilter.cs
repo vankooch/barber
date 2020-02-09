@@ -38,6 +38,11 @@
         /// <param name="context">Context</param>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
+            if (operation == null)
+            {
+                return;
+            }
+
             var apiVersion = operation
                 .Parameters
                 .FirstOrDefault(e => e.Name == "version" && e.In == ParameterLocation.Path && e.Required);

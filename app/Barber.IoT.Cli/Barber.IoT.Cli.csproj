@@ -8,7 +8,7 @@
     <AssemblyName>barber</AssemblyName>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/vankooch/barber</PackageProjectUrl>
-    <PackageTags>code generation;mustache;templating;openapi;typescript:angular</PackageTags>
+    <PackageTags>IoT Tryouts</PackageTags>
     <PackAsTool>true</PackAsTool>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/vankooch/barber</RepositoryUrl>
@@ -16,19 +16,12 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company />
     <NeutralLanguage>en</NeutralLanguage>
-    <Description>Barber is cli-tool for generating files based on mustache templates. In addition it can read and process OpenAPI 3 specifications and generate code based on templates.</Description>
-    <PackageIcon>barber.png</PackageIcon>
+    <Description>Try Outs</Description>
     <Version>2.6.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Barber.Cli.Helper\Barber.Cli.Helper.csproj" />
-    <ProjectReference Include="..\..\src\Barber.Core\Barber.Core.csproj" />
-    <ProjectReference Include="..\..\src\Barber.OpenApi\Barber.OpenApi.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="ConsoleTables" Version="2.4.0" />
+    <PackageReference Include="SimpleInjector" Version="4.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.5.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.1" />
@@ -39,10 +32,30 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="System.Text.Json" Version="4.7.0" />
+    <PackageReference Include="Tomidix.CSharpTradFriLibrary" Version="1.2.2.35" />
+    <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.2.26">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="barber.png" Pack="true" PackagePath="" />
+    <None Include="barber.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Barber.Cli.Helper\Barber.Cli.Helper.csproj" />
+    <ProjectReference Include="..\..\src\Barber.IoT.Authentication.EntityFrameworkCore\Barber.IoT.Authentication.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\src\Barber.IoT.Authentication\Barber.IoT.Authentication.csproj" />
+    <ProjectReference Include="..\..\src\Barber.IoT.Context\Barber.IoT.Context.csproj" />
+    <ProjectReference Include="..\..\src\Barber.IoT.Data\Barber.IoT.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

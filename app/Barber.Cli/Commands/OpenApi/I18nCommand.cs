@@ -1,5 +1,6 @@
 ﻿namespace Barber.Cli.Commands.OpenApi
 {
+    using Barber.Cli.Helper;
     using McMaster.Extensions.CommandLineUtils;
 
     public class I18nCommand
@@ -17,15 +18,15 @@
                 var settings = Helper.ReadConfiguration(fileOption, urlOption);
                 var processor = Helper.GetProcessor(settings);
 
-                LogHelper.AlignCenter("I18next Resource Generator");
-                LogHelper.DivisionLine('-');
+                Styler.AlignCenter("I18next Resource Generator");
+                Styler.DivisionLine('-');
 
-                System.Console.WriteLine($"Languages: {settings.I18n.Length}");
+                System.Console.WriteLine($"Languages: {settings.I18n.Count}");
 
                 // Generate translations
-                var sw = LogHelper.TaskStart($"Generating resources");
+                var sw = Styler.TaskStart($"Generating resources");
                 await processor.I18n();
-                LogHelper.TaskStop(sw, true);
+                Styler.TaskEnd(sw, true);
 
                 return 0;
             });

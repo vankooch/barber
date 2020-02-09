@@ -1,5 +1,6 @@
 ﻿namespace Barber.OpenApi.Settings
 {
+    using System.Collections.Generic;
     using Newtonsoft.Json;
 
     public class SettingsModel
@@ -29,12 +30,17 @@
         public bool HasApiVersion { get; set; } = true;
 
         /// <summary>
+        /// I18next
+        /// </summary>
+        public IReadOnlyList<I18nModel> I18n { get; set; }
+
+        /// <summary>
         /// Which Response Codes are use to set Return Types
         /// </summary>
         /// <remarks>
         /// Codes are matched in given order. First match will win.
         /// </remarks>
-        public string[] ResponseCodes { get; set; } = new string[] { "200", "201" };
+        public IReadOnlyList<string> ResponseCodes { get; set; } = new string[] { "200", "201" };
 
         /// <summary>
         /// Which body Media Type is used for setting the Return Type
@@ -49,32 +55,27 @@
         /// <summary>
         /// Schema specific configuration
         /// </summary>
-        public SchemaItemModel[] SchemaConfig { get; set; }
+        public IReadOnlyList<SchemaItemModel> SchemaConfig { get; set; }
 
         /// <summary>
         /// Properties which are filtered out
         /// </summary>
-        public string[] SkipProperties { get; set; }
+        public IReadOnlyList<string> SkipProperties { get; set; }
 
         /// <summary>
         /// Schema's to Skip
         /// </summary>
-        public string[] SkipSchemas { get; set; }
+        public IReadOnlyList<string> SkipSchemas { get; set; }
 
         /// <summary>
         /// Tag to Skip
         /// </summary>
-        public string[] SkipTags { get; set; }
+        public IReadOnlyList<string> SkipTags { get; set; }
 
         /// <summary>
         /// Steps
         /// </summary>
-        public StepModel[] Steps { get; set; }
-
-        /// <summary>
-        /// I18next
-        /// </summary>
-        public I18nModel[] I18n { get; set; }
+        public IReadOnlyList<StepModel> Steps { get; set; }
 
         /// <summary>
         /// Template Root Path to templates, can be relative from assembly root

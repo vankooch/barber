@@ -45,6 +45,11 @@
         /// <inheritdoc />
         public void Write(IOpenApiWriter writer, OpenApiSpecVersion specVersion)
         {
+            if (writer == null)
+            {
+                return;
+            }
+
             writer.WriteStartObject();
             writer.WriteProperty("url", this.Url);
 

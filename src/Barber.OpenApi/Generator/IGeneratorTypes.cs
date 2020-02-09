@@ -10,24 +10,24 @@
         /// <summary>
         /// Convert OpenApi type
         /// </summary>
-        /// <param name="property">OpenApi property</param>
+        /// <param name="propertyItem">OpenApi property</param>
         /// <param name="setNull">Is null able</param>
         /// <returns></returns>
-        string ConvertType(OpenApiSchema property, bool setNull = true);
+        string ConvertType(OpenApiSchema propertyItem, bool setNull = true);
 
         /// <summary>
         /// Get default value based on property
         /// </summary>
-        /// <param name="property">OpenApi property</param>
+        /// <param name="propertyItem">OpenApi property</param>
         /// <returns></returns>
-        string GetDefaultValue(OpenApiSchema property);
+        string GetDefaultValue(OpenApiSchema propertyItem);
 
         /// <summary>
         /// Get reference string
         /// </summary>
-        /// <param name="property">OpenApi property</param>
+        /// <param name="propertyItem">OpenApi property</param>
         /// <returns></returns>
-        string GetReference(OpenApiSchema property);
+        string GetReference(OpenApiSchema propertyItem);
 
         /// <summary>
         /// Get reference path string
@@ -39,8 +39,8 @@
         /// <summary>
         /// Check if is null able
         /// </summary>
-        /// <param name="property">OpenApi property</param>
+        /// <param name="propertyItem">OpenApi property</param>
         /// <returns></returns>
-        bool IsNullable(OpenApiSchema property);
+        bool IsNullable(OpenApiSchema propertyItem);
     }
 }

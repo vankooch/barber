@@ -1,5 +1,6 @@
 ﻿namespace Barber.OpenApi.Models
 {
+    using System.Collections.Generic;
     using Barber.OpenApi.Models.Template;
 
     /// <summary>
@@ -20,6 +21,6 @@
         /// <summary>
         /// Used references
         /// </summary>
-        ReferenceModel[] References { get; set; }
+        IReadOnlyList<ReferenceModel> References { get; set; }
     }
 }

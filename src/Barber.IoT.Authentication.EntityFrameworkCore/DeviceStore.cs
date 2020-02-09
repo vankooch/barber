@@ -82,7 +82,7 @@
             }
 
             this.Context.Add(user);
-            await this.SaveChanges(cancellationToken);
+            await this.SaveChanges(cancellationToken).ConfigureAwait(true);
             return IdentityResult.Success;
         }
 
@@ -99,7 +99,7 @@
             this.Context.Remove(user);
             try
             {
-                await this.SaveChanges(cancellationToken);
+                await this.SaveChanges(cancellationToken).ConfigureAwait(true);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -187,7 +187,7 @@
             this.Context.Update(user);
             try
             {
-                await this.SaveChanges(cancellationToken);
+                await this.SaveChanges(cancellationToken).ConfigureAwait(false);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -219,6 +219,11 @@
 
         public Task<bool> HasPasswordAsync(TUser user, CancellationToken cancellationToken)
         {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
             cancellationToken.ThrowIfCancellationRequested();
             return Task.FromResult(user.PasswordHash != null);
         }
@@ -332,7 +337,11 @@
         #endregion Lockout
 
         /// <inheritdoc />
-        public void Dispose() => this._disposed = true;
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>Saves the current store.</summary>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
@@ -348,6 +357,18 @@
             if (this._disposed)
             {
                 throw new ObjectDisposedException(this.GetType().Name);
+            }
+        }
+
+        /// <summary>
+        /// Releases the unmanaged resources used by the role manager and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing && !this._disposed)
+            {
+                this._disposed = true;
             }
         }
     }

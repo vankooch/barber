@@ -22,6 +22,11 @@
         /// <param name="context">Context</param>
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
+            if (operation == null)
+            {
+                return;
+            }
+
             operation.Responses.Add("500", new OpenApiResponse { Description = "Internal Server Error" });
         }
     }

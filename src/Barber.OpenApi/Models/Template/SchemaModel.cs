@@ -1,5 +1,6 @@
 ﻿namespace Barber.OpenApi.Models.Template
 {
+    using System.Collections.Generic;
     using Barber.OpenApi.Models;
     using Microsoft.OpenApi.Models;
 
@@ -15,13 +16,13 @@
         {
             get
             {
-                return this.PropertiesFiltered?.Length > 0;
+                return this.PropertiesFiltered?.Count > 0;
             }
         }
 
-        public PropertyModel[] Properties { get; set; } = null;
+        public IReadOnlyList<PropertyModel> Properties { get; set; } = null;
 
-        public PropertyModel[] PropertiesFiltered { get; set; } = null;
+        public IReadOnlyList<PropertyModel> PropertiesFiltered { get; set; } = null;
 
         public OpenApiSchema Schema { get; set; }
     }

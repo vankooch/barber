@@ -4,6 +4,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Threading.Tasks;
+    using Barber.Cli.Helper;
     using Barber.OpenApi;
     using Barber.OpenApi.Generator;
     using Barber.OpenApi.Settings;
@@ -70,14 +71,14 @@
             var sw = new Stopwatch();
             if (showLog)
             {
-                sw = LogHelper.TaskStart($"Reading from {settings.Url}");
+                sw = Styler.TaskStart($"Reading from {settings.Url}");
             }
 
             await processor.Read(settings.Url);
 
             if (showLog)
             {
-                LogHelper.TaskStop(sw, true);
+                Styler.TaskEnd(sw, true);
             }
         }
     }

@@ -2,6 +2,7 @@
 {
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Globalization;
     using System.Linq;
     using Microsoft.OpenApi.Models;
     using Newtonsoft.Json;
@@ -26,6 +27,11 @@
         /// <param name="context">SchemaFilterContext</param>
         public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
+            if (schema == null || schema.Properties == null || context == null)
+            {
+                return;
+            }
+
             if (schema.Properties?.Count > 0)
             {
                 var propertyInfos = context.Type.GetProperties();
@@ -38,7 +44,7 @@
 
                 foreach (var item in schema.Properties)
                 {
-                    var name = item.Key[0].ToString().ToUpper() + item.Key.Substring(1);
+                    var name = item.Key[0].ToString(CultureInfo.CurrentCulture).ToUpperInvariant() + item.Key.Substring(1);
                     var propertyMatch = propertyInfos.FirstOrDefault(e => e.Name == name);
                     if (propertyMatch == null)
                     {
@@ -52,14 +58,14 @@
                     if (propertyMatch != null)
                     {
                         var attibutes = propertyMatch.GetCustomAttributes(typeof(DisplayNameAttribute), true);
-                        if (attibutes?.Count() > 0)
+                        if (attibutes?.Length > 0)
                         {
                             var attibute = attibutes.First() as DisplayNameAttribute;
                             item.Value.Title = attibute?.DisplayName;
                         }
 
                         attibutes = propertyMatch.GetCustomAttributes(typeof(DisplayAttribute), true);
-                        if (attibutes?.Count() > 0)
+                        if (attibutes?.Length > 0)
                         {
                             if (!(attibutes.First() is DisplayAttribute attibute))
                             {

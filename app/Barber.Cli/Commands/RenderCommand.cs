@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using Barber.Cli.Helper;
     using Barber.Core;
     using McMaster.Extensions.CommandLineUtils;
     using Newtonsoft.Json;
@@ -35,7 +36,7 @@
             {
                 if (!templateOption.HasValue())
                 {
-                    LogHelper.Error("Please set a template file");
+                    Styler.Error("Please set a template file");
 
                     return 1;
                 }
@@ -47,7 +48,7 @@
 
                     if (!File.Exists(template))
                     {
-                        LogHelper.Error($"Could not find template file in: {template}");
+                        Styler.Error($"Could not find template file in: {template}");
 
                         return 1;
                     }
@@ -59,7 +60,7 @@
                     var file = jsonOption.Value().Trim();
                     if (!File.Exists(file))
                     {
-                        LogHelper.Error($"Could not find JSON file in: {template}");
+                        Styler.Error($"Could not find JSON file in: {template}");
 
                         return 1;
                     }
@@ -77,10 +78,10 @@
                     Console.WriteLine(model);
                 }
 
-                var sw = LogHelper.TaskStart("Processing templates");
+                var sw = Styler.TaskStart("Processing templates");
                 var renderer = new Core.Renderer.Mustache();
                 var result = await renderer.Render(template, model);
-                LogHelper.TaskStop(sw, true);
+                Styler.TaskEnd(sw, true);
 
                 var destination = string.Empty;
                 if (!destinationOption.HasValue())
@@ -98,9 +99,9 @@
                     Directory.CreateDirectory(destinationPath);
                 }
 
-                sw = LogHelper.TaskStart("Writing file");
+                sw = Styler.TaskStart("Writing file");
                 await File.WriteAllTextAsync(destination, result, cancellationToken);
-                LogHelper.TaskStop(sw, true);
+                Styler.TaskEnd(sw, true);
 
                 return 0;
             });

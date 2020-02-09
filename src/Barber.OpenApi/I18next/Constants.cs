@@ -60,14 +60,19 @@
 
         public static bool IsGroupItem(string key)
         {
-            if (key.EndsWith(CONTEXT_FEMALE)
-                    || key.EndsWith(CONTEXT_MALE)
-                    || key.EndsWith(INTERPOLATE)
-                    || key.EndsWith(INTERPOLATE_UNESCAPED)
-                    || key.EndsWith(INTERPOLATE_WITH_FORMATTING)
-                    || key.EndsWith(NESTING)
-                    || key.EndsWith(PLURAL_SIMPLE)
-                    || key.EndsWith(PLURAL_SIMPLE_PLURAL))
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return false;
+            }
+
+            if (key.EndsWith(CONTEXT_FEMALE, System.StringComparison.InvariantCulture)
+                    || key.EndsWith(CONTEXT_MALE, System.StringComparison.InvariantCulture)
+                    || key.EndsWith(INTERPOLATE, System.StringComparison.InvariantCulture)
+                    || key.EndsWith(INTERPOLATE_UNESCAPED, System.StringComparison.InvariantCulture)
+                    || key.EndsWith(INTERPOLATE_WITH_FORMATTING, System.StringComparison.InvariantCulture)
+                    || key.EndsWith(NESTING, System.StringComparison.InvariantCulture)
+                    || key.EndsWith(PLURAL_SIMPLE, System.StringComparison.InvariantCulture)
+                    || key.EndsWith(PLURAL_SIMPLE_PLURAL, System.StringComparison.InvariantCulture))
             {
                 return true;
             }
@@ -77,6 +82,11 @@
 
         public static bool IsGroupItem(string key, string itemKey)
         {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return false;
+            }
+
             if (key == itemKey + CONTEXT_FEMALE
                     || key == itemKey + CONTEXT_MALE
                     || key == itemKey + INTERPOLATE

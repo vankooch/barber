@@ -1,12 +1,14 @@
 ﻿namespace Barber.Cli
 {
     using System;
+    using Barber.Cli.Helper;
     using McMaster.Extensions.CommandLineUtils;
 
     public class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
+            Console.ResetColor();
             var app = new CommandLineApplication(throwOnUnexpectedArg: false)
             {
                 AllowArgumentSeparator = true,
@@ -14,13 +16,6 @@
 
             app.Command("render", Commands.RenderCommand.Register);
             app.Command("mustache", Commands.RenderCommand.Register);
-
-            app.Command("coap", (cmd) =>
-            {
-                // Subcommands
-                cmd.Command("psk", Commands.CoAP.PskCreateCommand.Register);
-                cmd.Command("discover", Commands.CoAP.DiscoverCommand.Register);
-            });
 
             app.Command("openapi", (cmd) =>
             {
@@ -47,12 +42,16 @@
             {
                 app.HelpOption("-? | -h | --help");
                 app.Execute(args);
+
+                return 0;
             }
             catch (Exception ex)
             {
                 Console.Write(Environment.NewLine);
-                LogHelper.Error(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+                Styler.Error(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
                 Console.Write(Environment.NewLine);
+
+                return 1;
             }
         }
     }

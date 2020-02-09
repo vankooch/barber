@@ -110,7 +110,7 @@
                 var properties = new List<ItemDataModel<List<string>>>();
                 foreach (var model in models)
                 {
-                    if (model.Value.Properties == null || model.Value.Properties.Length <= 0)
+                    if (model.Value.Properties == null || model.Value.Properties.Count <= 0)
                     {
                         continue;
                     }

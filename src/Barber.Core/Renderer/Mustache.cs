@@ -10,13 +10,11 @@
         public async Task<string> Render(string template, object model)
         {
             var stubble = new StubbleBuilder().Build();
-            using (var streamReader = new StreamReader(template, Encoding.UTF8))
-            {
-                var content = await streamReader.ReadToEndAsync();
-                var output = await stubble.RenderAsync(content, model);
+            using var streamReader = new StreamReader(template, Encoding.UTF8);
+            var content = await streamReader.ReadToEndAsync().ConfigureAwait(false);
+            var output = await stubble.RenderAsync(content, model).ConfigureAwait(false);
 
-                return output;
-            }
+            return output;
         }
     }
 }

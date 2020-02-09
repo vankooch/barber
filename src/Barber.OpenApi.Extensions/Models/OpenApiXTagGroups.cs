@@ -20,11 +20,16 @@
         /// <summary>
         /// Tags names to group
         /// </summary>
-        public List<OpenApiXTagGroup> List { get; set; } = new List<OpenApiXTagGroup>();
+        public List<OpenApiXTagGroup> List { get; } = new List<OpenApiXTagGroup>();
 
         /// <inheritdoc />
         public void Write(IOpenApiWriter writer, OpenApiSpecVersion specVersion)
         {
+            if (writer == null)
+            {
+                return;
+            }
+
             writer.WriteStartArray();
             foreach (var item in this.List)
             {
