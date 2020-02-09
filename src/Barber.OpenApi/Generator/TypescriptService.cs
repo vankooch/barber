@@ -19,46 +19,59 @@
         public GeneratorType Type => GeneratorType.Path;
 
         /// <inheritdoc />
-        public string GetMediaType(KeyValuePair<string, OpenApiMediaType> mediaType)
+        public string? GetMediaType(KeyValuePair<string, OpenApiMediaType>? mediaType) => this._generator.ConvertType(mediaType?.Value.Schema, false) ?? string.Empty;
+
+        /// <inheritdoc />
+        public PropertyModel? GetParameter(OpenApiParameter? parameter)
         {
-            return this._generator.ConvertType(mediaType.Value.Schema, false);
+            if (parameter == null)
+            {
+                return null;
+            }
+
+            return new PropertyModel()
+            {
+                Name = parameter?.Name ?? string.Empty,
+                Type = this._generator.ConvertType(parameter?.Schema) ?? string.Empty,
+                Required = parameter?.Required ?? false,
+            };
         }
 
         /// <inheritdoc />
-        public PropertyModel GetParameter(OpenApiParameter parameter) => new PropertyModel()
+        public PathModel? GetPath(
+            KeyValuePair<string, OpenApiPathItem>? path,
+            KeyValuePair<OperationType, OpenApiOperation>? operation)
         {
-            Name = parameter?.Name,
-            Type = this._generator.ConvertType(parameter?.Schema),
-            Required = parameter.Required,
-        };
+            if (path == null
+                || operation == null
+                || !path.HasValue
+                || !operation.HasValue)
+            {
+                return null;
+            }
 
-        /// <inheritdoc />
-        public PathModel GetPath(
-            KeyValuePair<string, OpenApiPathItem> path,
-            KeyValuePair<OperationType, OpenApiOperation> operation)
-        {
             // Name
-            var name = operation.Value.OperationId.Replace(operation.Value.Tags.First().Name, string.Empty);
+            var name = operation.Value.Value.OperationId.Replace(operation.Value.Value.Tags.First().Name, string.Empty);
             name = name.Substring(0, 1).ToLowerInvariant() + name.Substring(1);
 
             return new PathModel()
             {
                 Name = name,
-                Path = path.Key,
-                Tags = operation.Value.Tags.Select(e => e.Name).ToArray(),
-                Type = operation.Key.ToString().ToLowerInvariant(),
+                Path = path.Value.Key,
+                Tags = operation.Value.Value.Tags.Select(e => e.Name).ToArray(),
+                Type = operation.Value.Key.ToString().ToLowerInvariant(),
             };
         }
 
         /// <inheritdoc />
-        public ServiceModel GetService(string tag, IEnumerable<PathModel> paths)
+        public ServiceModel? GetService(string? tag, IEnumerable<PathModel>? paths)
         {
-            var match = paths.Where(e => e.Tags.Any(a => a == tag));
+            var match = paths?.Where(e => e.Tags.Any(a => a == tag));
             if (match?.Count() > 0)
             {
                 return new ServiceModel()
                 {
-                    Name = tag,
+                    Name = tag ?? string.Empty,
                     File = new Models.FileModel()
                     {
                         Name = $"{tag?.Substring(0, 1).ToUpperInvariant()}{tag?.Substring(1)}Service.ts",

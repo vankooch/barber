@@ -8,13 +8,11 @@
     /// <inheritdoc />
     public class TypescriptModel : IGenerator, IGeneratorSchema
     {
-        private readonly IGeneratorTypes _generator;
-        private readonly Settings.TypescriptSettingsModel _settings;
+        private readonly IGeneratorTypes _generator = new Typescript();
+        private readonly Settings.TypescriptSettingsModel _settings = new Settings.TypescriptSettingsModel();
 
         public TypescriptModel()
         {
-            this._settings = new Settings.TypescriptSettingsModel();
-            this._generator = new Typescript();
         }
 
         public TypescriptModel(Settings.SettingsModel settings)
@@ -38,11 +36,11 @@
             KeyValuePair<string, OpenApiSchema> property) => new PropertyModel()
             {
                 Name = property.Key,
-                Type = this._generator.ConvertType(property.Value),
-                DefaultValue = this._generator.GetDefaultValue(property.Value),
+                Type = this._generator.ConvertType(property.Value) ?? string.Empty,
+                DefaultValue = this._generator.GetDefaultValue(property.Value) ?? string.Empty,
                 Description = property.Value.Description,
                 Nullable = this._generator.IsNullable(property.Value),
-                Reference = this._generator.GetReference(property.Value),
+                Reference = this._generator.GetReference(property.Value) ?? string.Empty,
                 Required = schema.Value.Required.Any(e => e == property.Key),
                 RootSchema = schema.Key,
                 Schema = property.Value,

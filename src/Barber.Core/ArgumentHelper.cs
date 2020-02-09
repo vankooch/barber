@@ -6,7 +6,7 @@
 
     public static class ArgumentHelper
     {
-        public static object Parse(IEnumerable<string> args)
+        public static object? Parse(IEnumerable<string> args)
         {
             if (args == null || !args.Any())
             {

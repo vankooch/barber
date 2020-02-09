@@ -9,11 +9,11 @@
         {
         }
 
-        public string DefaultValue { get; set; }
+        public string? DefaultValue { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public bool Nullable { get; set; } = false;
 
@@ -21,9 +21,9 @@
 
         public bool Required { get; set; } = false;
 
-        public string RootSchema { get; set; }
+        public string? RootSchema { get; set; }
 
-        public OpenApiSchema Schema { get; set; }
+        public OpenApiSchema? Schema { get; set; }
 
         public string SchemaString
         {
@@ -42,8 +42,8 @@
             }
         }
 
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
-        public string Type { get; set; }
+        public string? Type { get; set; }
     }
 }

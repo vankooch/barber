@@ -1,4 +1,5 @@
-﻿namespace Barber.OpenApi.Settings
+﻿#pragma warning disable CA1720 // Identifier contains type name
+namespace Barber.OpenApi.Settings
 {
     public class TypescriptSettingsModel
     {
@@ -32,3 +33,4 @@
         public Types.StringSettings String { get; set; } = new Types.StringSettings();
     }
 }
+#pragma warning restore CA1720 // Identifier contains type name

@@ -5,7 +5,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <CodeAnalysisRuleSet>../../default.ruleset</CodeAnalysisRuleSet>
-    <AssemblyName>barber</AssemblyName>
+    <AssemblyName>barber.iot</AssemblyName>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/vankooch/barber</PackageProjectUrl>
     <PackageTags>IoT Tryouts</PackageTags>
@@ -17,17 +17,21 @@
     <Company />
     <NeutralLanguage>en</NeutralLanguage>
     <Description>Try Outs</Description>
-    <Version>2.6.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SimpleInjector" Version="4.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.5.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SimpleInjector" Version="4.9.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -41,10 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="barber.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Barber.Cli.Helper\Barber.Cli.Helper.csproj" />
     <ProjectReference Include="..\..\src\Barber.IoT.Authentication.EntityFrameworkCore\Barber.IoT.Authentication.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\Barber.IoT.Authentication\Barber.IoT.Authentication.csproj" />
@@ -53,7 +53,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="appsettings.Debug.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appsettings.json</DependentUpon>
+    </None>
     <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TransformOnBuild>true</TransformOnBuild>
+    </None>
+    <None Update="appsettings.Release.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appsettings.json</DependentUpon>
+    </None>
+    <None Update="barber.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

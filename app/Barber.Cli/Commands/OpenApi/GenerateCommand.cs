@@ -54,7 +54,7 @@
                 if (!dryOption.HasValue())
                 {
                     var singleStep = stepOption.HasValue();
-                    var singleStepName = singleStep ? stepOption.Value().Trim().ToLower() : string.Empty;
+                    var singleStepName = singleStep ? stepOption.Value()!.Trim().ToLower() : string.Empty;
 
                     // Write Steps
                     foreach (var step in settings.Steps)

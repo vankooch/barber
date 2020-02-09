@@ -26,7 +26,7 @@
         /// <summary>
         /// Group Name
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Tags names to group

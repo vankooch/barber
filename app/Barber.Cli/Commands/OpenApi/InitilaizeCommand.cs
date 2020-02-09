@@ -21,7 +21,7 @@
                 var file = Constants.OPENAPI_SETTINGS_NAME;
                 if (fileOption.HasValue())
                 {
-                    file = fileOption.Value().Trim();
+                    file = fileOption.Value()!.Trim();
                 }
 
                 file = Path.Combine(Directory.GetCurrentDirectory(), file);

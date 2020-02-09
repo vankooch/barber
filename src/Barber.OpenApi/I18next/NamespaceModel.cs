@@ -29,9 +29,9 @@
 
         public List<ItemModel> Items { get; private set; } = new List<ItemModel>();
 
-        public string Language { get; set; }
+        public string? Language { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public void Add(string key, string value)
         {

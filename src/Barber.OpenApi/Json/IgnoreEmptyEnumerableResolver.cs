@@ -14,7 +14,7 @@
             {
                 property.ShouldSerialize = instance =>
                 {
-                    IEnumerable enumerable = null;
+                    IEnumerable? enumerable = null;
 
                     // this value could be in a public field or public property
                     switch (member.MemberType)

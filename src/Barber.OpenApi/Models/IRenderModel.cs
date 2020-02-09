@@ -16,7 +16,7 @@
         /// <summary>
         /// File model
         /// </summary>
-        FileModel File { get; set; }
+        FileModel? File { get; set; }
 
         /// <summary>
         /// Used references

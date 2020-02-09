@@ -10,20 +10,14 @@
         {
         }
 
-        public FileModel File { get; set; } = null;
+        public FileModel? File { get; set; } = null;
 
-        public bool HasForm
-        {
-            get
-            {
-                return this.PropertiesFiltered?.Count > 0;
-            }
-        }
+        public bool HasForm => this.PropertiesFiltered?.Count > 0;
 
-        public IReadOnlyList<PropertyModel> Properties { get; set; } = null;
+        public IReadOnlyList<PropertyModel>? Properties { get; set; } = null;
 
-        public IReadOnlyList<PropertyModel> PropertiesFiltered { get; set; } = null;
+        public IReadOnlyList<PropertyModel>? PropertiesFiltered { get; set; } = null;
 
-        public OpenApiSchema Schema { get; set; }
+        public OpenApiSchema? Schema { get; set; }
     }
 }

@@ -566,8 +566,13 @@
         /// <param name="user">The user.</param>
         /// <param name="password">The password.</param>
         /// <returns>A <see cref="IdentityResult"/> representing whether validation was successful.</returns>
-        protected async Task<IdentityResult> ValidatePasswordAsync(TUser user, string password)
+        protected async Task<IdentityResult> ValidatePasswordAsync(TUser user, string? password)
         {
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                return IdentityResult.Failed();
+            }
+
             var errors = new List<IdentityError>();
             var isValid = true;
             foreach (var v in this.PasswordValidators)
@@ -669,7 +674,7 @@
         private async Task<IdentityResult> UpdatePasswordHash(
           IDevicePasswordStore<TUser> passwordStore,
           TUser user,
-          string newPassword,
+          string? newPassword,
           bool validatePassword = true)
         {
             if (validatePassword)

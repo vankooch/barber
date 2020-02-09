@@ -1,5 +1,6 @@
 ﻿namespace Barber.OpenApi.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Barber.OpenApi.Models.Template;
@@ -10,9 +11,9 @@
         {
         }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
-        public IReadOnlyList<ReferenceModel> References { get; set; }
+        public IReadOnlyList<ReferenceModel> References { get; set; } = Array.Empty<ReferenceModel>();
 
         public void AddReference(string key, bool checkName = false)
         {

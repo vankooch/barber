@@ -1,4 +1,5 @@
-﻿namespace Barber.IoT.Context
+﻿#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+namespace Barber.IoT.Context
 {
     using System;
     using Barber.IoT.Data.Model;
@@ -17,7 +18,7 @@
         {
         }
 
-        public virtual DbSet<Device> Devices { get; set; }
+        public virtual DbSet<Device> Devices { get; private set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,3 +61,4 @@
         }
     }
 }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.

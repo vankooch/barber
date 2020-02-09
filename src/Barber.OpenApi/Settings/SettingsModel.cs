@@ -1,5 +1,6 @@
 ﻿namespace Barber.OpenApi.Settings
 {
+    using System;
     using System.Collections.Generic;
     using Newtonsoft.Json;
 
@@ -32,7 +33,7 @@
         /// <summary>
         /// I18next
         /// </summary>
-        public IReadOnlyList<I18nModel> I18n { get; set; }
+        public IReadOnlyList<I18nModel> I18n { get; set; } = Array.Empty<I18nModel>();
 
         /// <summary>
         /// Which Response Codes are use to set Return Types
@@ -55,27 +56,27 @@
         /// <summary>
         /// Schema specific configuration
         /// </summary>
-        public IReadOnlyList<SchemaItemModel> SchemaConfig { get; set; }
+        public IReadOnlyList<SchemaItemModel> SchemaConfig { get; set; } = Array.Empty<SchemaItemModel>();
 
         /// <summary>
         /// Properties which are filtered out
         /// </summary>
-        public IReadOnlyList<string> SkipProperties { get; set; }
+        public IReadOnlyList<string> SkipProperties { get; set; } = Array.Empty<string>();
 
         /// <summary>
         /// Schema's to Skip
         /// </summary>
-        public IReadOnlyList<string> SkipSchemas { get; set; }
+        public IReadOnlyList<string> SkipSchemas { get; set; } = Array.Empty<string>();
 
         /// <summary>
         /// Tag to Skip
         /// </summary>
-        public IReadOnlyList<string> SkipTags { get; set; }
+        public IReadOnlyList<string> SkipTags { get; set; } = Array.Empty<string>();
 
         /// <summary>
         /// Steps
         /// </summary>
-        public IReadOnlyList<StepModel> Steps { get; set; }
+        public IReadOnlyList<StepModel> Steps { get; set; } = Array.Empty<StepModel>();
 
         /// <summary>
         /// Template Root Path to templates, can be relative from assembly root
@@ -90,7 +91,7 @@
         /// <summary>
         /// URL / Path to OpenAPI 3 File
         /// </summary>
-        public string Url { get; set; }
+        public string Url { get; set; } = string.Empty;
 
         /// <summary>
         /// Create model from settings

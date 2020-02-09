@@ -7,7 +7,7 @@
 
     public class Mustache : IRenderer
     {
-        public async Task<string> Render(string template, object model)
+        public async Task<string> Render(string template, object? model)
         {
             var stubble = new StubbleBuilder().Build();
             using var streamReader = new StreamReader(template, Encoding.UTF8);

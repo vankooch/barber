@@ -25,22 +25,22 @@
         /// <summary>
         /// Background Color. MUST be RGB color in [hexadecimal format]
         /// </summary>
-        public string BackgroundColor { get; set; }
+        public string? BackgroundColor { get; set; }
 
         /// <summary>
         /// Optional URL pointing to the contact page
         /// </summary>
-        public string Link { get; set; }
+        public string? Link { get; set; }
 
         /// <summary>
         /// Alternative text
         /// </summary>
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
         /// <summary>
         /// Logo Uri
         /// </summary>
-        public string Url { get; set; }
+        public string? Url { get; set; }
 
         /// <inheritdoc />
         public void Write(IOpenApiWriter writer, OpenApiSpecVersion specVersion)

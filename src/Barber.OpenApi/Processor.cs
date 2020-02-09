@@ -42,49 +42,40 @@
         /// <summary>
         /// Open API Model
         /// </summary>
-        public OpenApiDocument Api { get; set; }
+        public OpenApiDocument Api { get; set; } = new OpenApiDocument();
 
         /// <summary>
         /// Open API Diagnostic
         /// </summary>
-        public OpenApiDiagnostic Diagnostic { get; set; }
+        public OpenApiDiagnostic? Diagnostic { get; set; }
 
         /// <summary>
         /// Generators
         /// </summary>
         public List<IGenerator> Generators { get; } = new List<IGenerator>();
 
-        public IReadOnlyList<KeyValuePair<string, SchemaModel>> Models
-        {
-            get
-            {
-                return this.Settings
+        public IReadOnlyDictionary<string, SchemaModel?> Models
+            => this.Settings
                     .Steps
                     .Where(e => e.GeneratorType == GeneratorType.Schema && e.ResultItems != null)
                     .SelectMany(e => e.ResultItems)
                     .OrderBy(e => e.Key)
-                    .Select(e => new KeyValuePair<string, SchemaModel>(e.Key, e.Value as SchemaModel))
-                    .ToArray();
-            }
-        }
+                    .Where(e => e.Value is SchemaModel)
+                    .ToDictionary(e => e.Key, e => e.Value as SchemaModel);
 
-        public Dictionary<string, PathModel> Paths
-        {
-            get
-            {
-                return this.Settings
+        public IReadOnlyDictionary<string, PathModel?> Paths
+            => this.Settings
                     .Steps
                     .Where(e => e.GeneratorType == GeneratorType.Path && e.ResultItems != null)
                     .SelectMany(e => e.ResultItems)
+                    .Where(e => e.Value is PathModel)
                     .OrderBy(e => e.Key)
                     .ToDictionary(e => e.Key, e => e.Value as PathModel);
-            }
-        }
 
         /// <summary>
         /// Settings
         /// </summary>
-        public Settings.SettingsModel Settings { get; set; }
+        public Settings.SettingsModel Settings { get; set; } = new Settings.SettingsModel();
 
         /// <summary>
         /// Write files
@@ -166,26 +157,34 @@
             {
                 case GeneratorType.Schema:
                     var schemas = this.ConvertSchemas(generator as IGeneratorSchema, step.Destination, Filter, step.ItemsSkips, step.ItemsIncludes);
-                    result = new Dictionary<string, IRenderModel>(schemas.Count);
-                    foreach (var item in schemas)
+                    if (schemas != null)
                     {
-                        result.Add(item.Key, item.Value as IRenderModel);
+                        result = new Dictionary<string, IRenderModel>(schemas.Count);
+                        foreach (var item in schemas)
+                        {
+                            result.Add(item.Key, item.Value as IRenderModel);
+                        }
+
+                        step.ResultItems = result;
+                        step.GeneratorType = GeneratorType.Schema;
                     }
 
-                    step.ResultItems = result;
-                    step.GeneratorType = GeneratorType.Schema;
                     break;
 
                 case GeneratorType.Path:
                     var paths = this.ConvertPaths(generator as IGeneratorPaths, step.Destination, step.ItemsSkips, step.ItemsIncludes);
-                    result = new Dictionary<string, IRenderModel>(paths.Count);
-                    foreach (var item in paths)
+                    if (paths != null)
                     {
-                        result.Add(item.Key, item.Value as IRenderModel);
+                        result = new Dictionary<string, IRenderModel>(paths.Count);
+                        foreach (var item in paths)
+                        {
+                            result.Add(item.Key, item.Value as IRenderModel);
+                        }
+
+                        step.ResultItems = result;
+                        step.GeneratorType = GeneratorType.Path;
                     }
 
-                    step.ResultItems = result;
-                    step.GeneratorType = GeneratorType.Path;
                     break;
 
                 default:
@@ -203,11 +202,11 @@
         /// <param name="skip">Skip List</param>
         /// <param name="include">Include List</param>
         /// <returns></returns>
-        public IDictionary<string, ServiceModel> ConvertPaths(
-            IGeneratorPaths generator,
+        public IDictionary<string, ServiceModel>? ConvertPaths(
+            IGeneratorPaths? generator,
             string outputPath,
-            IEnumerable<string> skip = null,
-            IEnumerable<string> include = null)
+            IEnumerable<string>? skip = null,
+            IEnumerable<string>? include = null)
         {
             if (this.Api == null
                 || this.Api.Paths == null
@@ -264,7 +263,12 @@
 
                         if (!string.IsNullOrEmpty(requestBody.Key))
                         {
-                            pathModel.AddReference(this._generator.GetReference(requestBody.Value?.Schema));
+                            var loopRef = this._generator.GetReference(requestBody.Value?.Schema);
+                            if (loopRef != null)
+                            {
+                                pathModel.AddReference(loopRef);
+                            }
+
                             pathModel.Body = generator.GetMediaType(requestBody);
                         }
                     }
@@ -287,7 +291,12 @@
 
                                 if (!string.IsNullOrEmpty(requestBody.Key))
                                 {
-                                    pathModel.AddReference(this._generator.GetReference(requestBody.Value?.Schema));
+                                    var loopRef = this._generator.GetReference(requestBody.Value?.Schema);
+                                    if (loopRef != null)
+                                    {
+                                        pathModel.AddReference(loopRef);
+                                    }
+
                                     pathModel.ReturnType = generator.GetMediaType(requestBody);
                                 }
 
@@ -340,6 +349,11 @@
                     }
 
                     // Set Path
+                    if (add.File == null)
+                    {
+                        add.File = new FileModel();
+                    }
+
                     add.File.Path = GetOutputPath(outputPath, add.File.Name);
 
                     dict.Add(tag, add);
@@ -358,17 +372,18 @@
         /// <param name="skip">Skip List</param>
         /// <param name="include">Include List</param>
         /// <returns></returns>
-        public IDictionary<string, SchemaModel> ConvertSchemas(
-            IGeneratorSchema generator,
+        public IDictionary<string, SchemaModel>? ConvertSchemas(
+            IGeneratorSchema? generator,
             string outputPath,
             Func<string, IReadOnlyList<PropertyModel>, IReadOnlyList<PropertyModel>> propertyFilter,
-            IEnumerable<string> skip = null,
-            IEnumerable<string> include = null)
+            IEnumerable<string>? skip = null,
+            IEnumerable<string>? include = null)
         {
             if (this.Api == null
                 || this.Api.Components == null
                 || this.Api.Components.Schemas == null
-                || this.Api.Components.Schemas.Count == 0)
+                || this.Api.Components.Schemas.Count == 0
+                || generator == null)
             {
                 return null;
             }
@@ -422,6 +437,11 @@
                 }
 
                 // Set Path
+                if (schema.File == null)
+                {
+                    schema.File = new FileModel();
+                }
+
                 schema.File.Path = GetOutputPath(outputPath, schema.File.Name);
 
                 list.Add(item.Key, schema);
@@ -504,16 +524,16 @@
         /// <param name="renderer">Renderer to use</param>
         /// <param name="cancellationToken">Cancellation Token</param>
         /// <returns></returns>
-        public async Task<IDictionary<string, T>> Render<T>(
+        public async Task<IDictionary<string, T>?> Render<T>(
             IDictionary<string, T> schemaModels,
-            IRenderer renderer = null,
+            IRenderer? renderer = null,
             CancellationToken cancellationToken = default)
             where T : IRenderModel
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (schemaModels == null || !schemaModels.Any())
+            if (schemaModels == null || !schemaModels.Any() || renderer == null)
             {
-                return schemaModels;
+                return null;
             }
 
             if (renderer == null)
@@ -523,10 +543,13 @@
 
             foreach (var item in schemaModels)
             {
-                var template = GetTemplateFullPath(this.Settings.TemplateRoot, item.Value.File.Template);
                 if (item.Value.File != null)
                 {
-                    item.Value.File.Content = await renderer.Render(template, item.Value).ConfigureAwait(false);
+                    var template = GetTemplateFullPath(this.Settings.TemplateRoot, item.Value.File.Template);
+                    if (item.Value.File != null)
+                    {
+                        item.Value.File.Content = await renderer.Render(template, item.Value).ConfigureAwait(false);
+                    }
                 }
             }
 
@@ -572,10 +595,13 @@
 
                 foreach (var file in step.ResultItems)
                 {
-                    file.Value.File.Template = step.Template;
+                    if (file.Value.File != null)
+                    {
+                        file.Value.File.Template = step.Template;
+                    }
                 }
 
-                step.ResultItems = await this.Render(step.ResultItems).ConfigureAwait(false);
+                step.ResultItems = await this.Render(step.ResultItems).ConfigureAwait(false) ?? new Dictionary<string, IRenderModel>();
             }
 
             return;
@@ -614,7 +640,7 @@
                     if (match != null)
                     {
                         reference.Name = match.Name;
-                        reference.File = this._generator.GetReferencePath(GetPathDiff(item.Value.File.Path, match.File.Path));
+                        reference.File = this._generator.GetReferencePath(GetPathDiff(item.Value.File.Path, match.File?.Path ?? string.Empty));
                     }
                 }
             }
@@ -662,13 +688,13 @@
             return relative.OriginalString;
         }
 
-        private static string GetTemplateFullPath(string path, string file)
+        private static string GetTemplateFullPath(string? path, string? file)
         {
             string final;
-            if (!string.IsNullOrEmpty(path) && !string.IsNullOrWhiteSpace(path) && !Path.IsPathRooted(path))
+            if (!string.IsNullOrEmpty(path) && !string.IsNullOrEmpty(path) && !Path.IsPathRooted(path))
             {
                 // First check relative
-                final = GetOutputPath(path, file);
+                final = GetOutputPath(path!, file!);
                 if (!File.Exists(final))
                 {
                     // For templates we use assembly path as root

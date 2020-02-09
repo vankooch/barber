@@ -14,14 +14,14 @@
         /// </summary>
         /// <param name="response">OpenApi Media Type</param>
         /// <returns></returns>
-        string GetMediaType(KeyValuePair<string, OpenApiMediaType> response);
+        string? GetMediaType(KeyValuePair<string, OpenApiMediaType>? response);
 
         /// <summary>
         /// Convert a Parameter to into intermediate Property Model
         /// </summary>
         /// <param name="parameter">OpenApi parameter</param>
         /// <returns></returns>
-        PropertyModel GetParameter(OpenApiParameter parameter);
+        PropertyModel? GetParameter(OpenApiParameter? parameter);
 
         /// <summary>
         /// Convert a Path to into intermediate Path Model
@@ -29,7 +29,7 @@
         /// <param name="path">OpenApi path</param>
         /// <param name="operation">OpenApi operation</param>
         /// <returns></returns>
-        PathModel GetPath(KeyValuePair<string, OpenApiPathItem> path, KeyValuePair<OperationType, OpenApiOperation> operation);
+        PathModel? GetPath(KeyValuePair<string, OpenApiPathItem>? path, KeyValuePair<OperationType, OpenApiOperation>? operation);
 
         /// <summary>
         /// Convert a Service to into intermediate Path Service
@@ -37,6 +37,6 @@
         /// <param name="tag">Tag Name</param>
         /// <param name="paths">OpenApi path list</param>
         /// <returns></returns>
-        ServiceModel GetService(string tag, IEnumerable<PathModel> paths);
+        ServiceModel? GetService(string? tag, IEnumerable<PathModel>? paths);
     }
 }

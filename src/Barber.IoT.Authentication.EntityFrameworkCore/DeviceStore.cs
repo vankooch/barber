@@ -46,7 +46,7 @@
         /// <returns>An instance of <typeparamref name="TKey"/> representing the provided <paramref name="id"/>.</returns>
         public virtual TKey ConvertIdFromString(string id)
         {
-            if (id == null)
+            if (string.IsNullOrWhiteSpace(id))
             {
                 return default;
             }
@@ -61,9 +61,9 @@
         /// <returns>An <see cref="string"/> representation of the provided <paramref name="id"/>.</returns>
         public virtual string ConvertIdToString(TKey id)
         {
-            if (object.Equals(id, default(TKey)))
+            if (object.Equals(id, default))
             {
-                return null;
+                return string.Empty;
             }
 
             return id.ToString();
@@ -205,7 +205,7 @@
 
         #region Password
 
-        public Task<string> GetPasswordHashAsync(TUser user, CancellationToken cancellationToken)
+        public Task<string?> GetPasswordHashAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             this.ThrowIfDisposed();
@@ -228,7 +228,7 @@
             return Task.FromResult(user.PasswordHash != null);
         }
 
-        public Task SetPasswordHashAsync(TUser user, string passwordHash, CancellationToken cancellationToken)
+        public Task SetPasswordHashAsync(TUser user, string? passwordHash, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             this.ThrowIfDisposed();
@@ -343,6 +343,18 @@
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Releases the unmanaged resources used by the role manager and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing && !this._disposed)
+            {
+                this._disposed = true;
+            }
+        }
+
         /// <summary>Saves the current store.</summary>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
@@ -357,18 +369,6 @@
             if (this._disposed)
             {
                 throw new ObjectDisposedException(this.GetType().Name);
-            }
-        }
-
-        /// <summary>
-        /// Releases the unmanaged resources used by the role manager and optionally releases the managed resources.
-        /// </summary>
-        /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing && !this._disposed)
-            {
-                this._disposed = true;
             }
         }
     }

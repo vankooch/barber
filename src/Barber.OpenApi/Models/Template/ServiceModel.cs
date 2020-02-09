@@ -3,18 +3,14 @@
     using System.Collections.Generic;
     using Barber.OpenApi.Models;
 
-    public class ServiceModel : IRenderModel
+    public class ServiceModel : BaseModel, IRenderModel
     {
         public ServiceModel()
         {
         }
 
-        public FileModel File { get; set; } = null;
+        public FileModel? File { get; set; } = null;
 
-        public string Name { get; set; }
-
-        public IReadOnlyList<PathModel> Paths { get; set; }
-
-        public IReadOnlyList<ReferenceModel> References { get; set; }
+        public IReadOnlyList<PathModel>? Paths { get; set; }
     }
 }

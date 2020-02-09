@@ -110,13 +110,18 @@
                 var properties = new List<ItemDataModel<List<string>>>();
                 foreach (var model in models)
                 {
-                    if (model.Value.Properties == null || model.Value.Properties.Count <= 0)
+                    if (model.Value == null || model.Value.Properties == null || model.Value.Properties.Count <= 0)
                     {
                         continue;
                     }
 
                     foreach (var property in model.Value.Properties)
                     {
+                        if (string.IsNullOrWhiteSpace(property.Name))
+                        {
+                            continue;
+                        }
+
                         var match = properties
                             .FirstOrDefault(e => e.Key == property.Name);
                         if (match != null)
@@ -128,12 +133,12 @@
                         }
                         else
                         {
-                            if (property.Name.ToLower() == "id")
+                            if (property.Name?.ToLower() == "id")
                             {
                                 continue;
                             }
 
-                            if (property.Name.Length > 2)
+                            if (property.Name?.Length > 2)
                             {
                                 var lastPart = property.Name.Substring(property.Name.Length - 2);
                                 if (lastPart.ToLower() == "id")
@@ -142,7 +147,7 @@
                                 }
                             }
 
-                            properties.Add(new ItemDataModel<List<string>>(property.Name, new List<string>() { model.Key }));
+                            properties.Add(new ItemDataModel<List<string>>(property.Name!, new List<string>() { model.Key }));
                         }
                     }
                 }

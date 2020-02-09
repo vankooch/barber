@@ -4,6 +4,6 @@
 
     public interface IRenderer
     {
-        Task<string> Render(string templateString, object model);
+        Task<string> Render(string templateString, object? model);
     }
 }

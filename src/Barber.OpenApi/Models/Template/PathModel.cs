@@ -9,11 +9,11 @@
         {
         }
 
-        public string Body { get; set; } = null;
+        public string? Body { get; set; } = null;
 
-        public IReadOnlyList<PropertyModel> Parameters { get; set; }
+        public IReadOnlyList<PropertyModel>? Parameters { get; set; }
 
-        public string ParametersFunction
+        public string? ParametersFunction
         {
             get
             {
@@ -42,19 +42,24 @@
             }
         }
 
-        public string Path { get; set; }
+        public string? Path { get; set; }
 
-        public string ReturnType { get; set; }
+        public string? ReturnType { get; set; }
 
-        public IReadOnlyList<string> Tags { get; set; }
+        public IReadOnlyList<string>? Tags { get; set; }
 
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
-        public string Url
+        public string? Url
         {
             get
             {
-                var text = this.Path;
+                if (string.IsNullOrWhiteSpace(this.Path))
+                {
+                    return null;
+                }
+
+                var text = this.Path!;
                 text = text.Replace("{version}", "${this.version}");
 
                 if (this.Parameters == null || this.Parameters.Count == 0)

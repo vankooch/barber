@@ -9,9 +9,11 @@
     /// </summary>
     public class Typescript : IGeneratorTypes
     {
-        private readonly Settings.TypescriptSettingsModel _settings;
+        private readonly Settings.TypescriptSettingsModel _settings = new Settings.TypescriptSettingsModel();
 
-        public Typescript() => this._settings = new Settings.TypescriptSettingsModel();
+        public Typescript()
+        {
+        }
 
         public Typescript(Settings.SettingsModel settings)
         {
@@ -22,7 +24,7 @@
         }
 
         /// <inheritdoc />
-        public string ConvertType(OpenApiSchema propertyItem, bool setNull = true)
+        public string? ConvertType(OpenApiSchema? propertyItem, bool setNull = true)
         {
             if (propertyItem == null)
             {
@@ -37,7 +39,7 @@
                 case "array":
                     if (!string.IsNullOrEmpty(propertyItem.Items?.Reference?.Id))
                     {
-                        restult = this._settings.Array.Type.Replace("TYPE", propertyItem.Items.Reference.Id);
+                        restult = this._settings.Array.Type.Replace("TYPE", propertyItem.Items?.Reference?.Id);
                     }
                     else
                     {
@@ -70,7 +72,7 @@
                     break;
 
                 case "object":
-                    restult = propertyItem.Reference?.Id;
+                    restult = propertyItem.Reference.Id;
                     hasNull = true;
                     break;
 
@@ -89,9 +91,9 @@
         }
 
         /// <inheritdoc />
-        public string GetDefaultValue(OpenApiSchema propertyItem)
+        public string? GetDefaultValue(OpenApiSchema? propertyItem)
         {
-            if (propertyItem == null )
+            if (propertyItem == null)
             {
                 throw new ArgumentNullException(nameof(propertyItem));
             }
@@ -115,7 +117,7 @@
         }
 
         /// <inheritdoc />
-        public string GetReference(OpenApiSchema propertyItem)
+        public string? GetReference(OpenApiSchema? propertyItem)
         {
             if (propertyItem == null)
             {
@@ -124,23 +126,23 @@
 
             return propertyItem.Type switch
             {
-                "array" when !string.IsNullOrEmpty(propertyItem.Items?.Reference?.Id) => propertyItem.Items.Reference?.Id,
+                "array" when !string.IsNullOrEmpty(propertyItem.Items?.Reference?.Id) => propertyItem.Items?.Reference?.Id,
                 "object" => propertyItem.Reference?.Id,
                 _ => string.Empty,
             };
         }
 
         /// <inheritdoc />
-        public string GetReferencePath(string relativePath)
+        public string? GetReferencePath(string? relativePath)
         {
             var ext = Path.GetExtension(relativePath);
             var file = relativePath?.Substring(0, relativePath.Length - ext.Length);
 
-            return $"./{file.Replace("\\", "/")}";
+            return $"./{file?.Replace("\\", "/")}";
         }
 
         /// <inheritdoc />
-        public bool IsNullable(OpenApiSchema propertyItem)
+        public bool IsNullable(OpenApiSchema? propertyItem)
         {
             if (propertyItem == null)
             {

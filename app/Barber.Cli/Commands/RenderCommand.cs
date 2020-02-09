@@ -41,7 +41,7 @@
                     return 1;
                 }
 
-                var template = templateOption.Value().Trim();
+                var template = templateOption.Value()!.Trim();
                 if (!File.Exists(template))
                 {
                     template = Path.Combine(Directory.GetCurrentDirectory(), template);
@@ -54,10 +54,10 @@
                     }
                 }
 
-                object model = null;
+                object? model = null;
                 if (jsonOption.HasValue())
                 {
-                    var file = jsonOption.Value().Trim();
+                    var file = jsonOption.Value()!.Trim();
                     if (!File.Exists(file))
                     {
                         Styler.Error($"Could not find JSON file in: {template}");
@@ -90,7 +90,7 @@
                 }
                 else
                 {
-                    destination = destinationOption.Value().Trim();
+                    destination = destinationOption.Value()!.Trim();
                 }
 
                 var destinationPath = Path.GetDirectoryName(destination);

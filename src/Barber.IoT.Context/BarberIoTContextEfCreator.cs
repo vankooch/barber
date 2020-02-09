@@ -33,9 +33,13 @@
 
         public DbContextOptionsBuilder<BarberIoTContext> Options(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(this._configuartion.GetConnectionString("barber-main"));
+            optionsBuilder.UseSqlite(this._configuartion.GetConnectionString("barber-main"));
+            if (optionsBuilder is DbContextOptionsBuilder<BarberIoTContext> match)
+            {
+                return match;
+            }
 
-            return optionsBuilder as DbContextOptionsBuilder<BarberIoTContext>;
+            return new DbContextOptionsBuilder<BarberIoTContext>();
         }
     }
 }

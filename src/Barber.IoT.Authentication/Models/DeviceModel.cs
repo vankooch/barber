@@ -1,4 +1,5 @@
-﻿namespace Barber.IoT.Authentication.Models
+﻿#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+namespace Barber.IoT.Authentication.Models
 {
     using System;
 
@@ -41,22 +42,22 @@
         /// <summary>
         /// Device Name
         /// </summary>
-        public virtual string Name { get; set; }
+        public virtual string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the normalized device name.
         /// </summary>
-        public virtual string NormalizedName { get; set; }
+        public virtual string NormalizedName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets a salted and hashed representation of the password for this device.
         /// </summary>
-        public virtual string PasswordHash { get; set; }
+        public virtual string? PasswordHash { get; set; }
 
         /// <summary>
         /// A random value that must change whenever a devices credentials change (password changed, login removed)
         /// </summary>
-        public virtual string SecurityStamp { get; set; }
+        public virtual string? SecurityStamp { get; set; }
 
         /// <summary>
         /// Returns the name for this device.
@@ -65,3 +66,4 @@
             => this.Name;
     }
 }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.

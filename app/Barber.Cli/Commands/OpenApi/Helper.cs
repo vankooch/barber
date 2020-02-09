@@ -37,6 +37,7 @@
 
         public static void WriteTable(string name, ConsoleTable table)
         {
+            Console.WriteLine(name);
             table.Options.EnableCount = true;
             table.Write(Format.MarkDown);
             Console.WriteLine();
@@ -47,7 +48,7 @@
             var file = Constants.OPENAPI_SETTINGS_NAME;
             if (fileOption.HasValue())
             {
-                file = fileOption.Value();
+                file = fileOption.Value()!;
             }
 
             file = Path.Combine(Directory.GetCurrentDirectory(), file);
@@ -60,7 +61,7 @@
 
             if (urlOption.HasValue())
             {
-                settings.Url = urlOption.Value().Trim();
+                settings.Url = urlOption.Value()!.Trim();
             }
 
             return settings;

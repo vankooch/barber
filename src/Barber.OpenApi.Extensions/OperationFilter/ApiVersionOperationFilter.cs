@@ -17,7 +17,7 @@
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiVersionOperationFilter(int defaultVersion = 1, IEnumerable<int> versions = null)
+        public ApiVersionOperationFilter(int defaultVersion = 1, IEnumerable<int>? versions = null)
         {
             this._versionDefault = defaultVersion;
 
