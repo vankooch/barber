@@ -8,10 +8,7 @@ namespace Barber.IoT.Authentication.Test.Base
     {
         private readonly TestBootstrap _shared;
 
-        public TestCommon()
-        {
-            this._shared = new TestBootstrap();
-        }
+        public TestCommon() => this._shared = new TestBootstrap();
 
         public IConfigurationRoot Configuration => this._shared.Configuration;
 

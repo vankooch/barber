@@ -1,6 +1,5 @@
 ﻿using System;
 using Barber.IoT.Context;
-using Barber.IoT.Data.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SimpleInjector;
@@ -16,7 +15,7 @@ namespace Barber.IoT.Authentication.Test.Base
         public TestBootstrap()
         {
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.json", true)
                 .AddEnvironmentVariables();
 
             this._configuration = builder.Build();
@@ -25,7 +24,7 @@ namespace Barber.IoT.Authentication.Test.Base
         }
 
         public IConfigurationRoot Configuration => this._configuration;
-        
+
         public Container Container => this._container;
 
         public void Dispose() => this._container.Dispose();

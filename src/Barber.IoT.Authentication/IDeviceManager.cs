@@ -172,5 +172,63 @@
         Task<IdentityResult> RemovePasswordAsync(TUser user);
 
         #endregion Password
+
+        #region Lock Out
+
+        /// <summary>
+        /// Increments the access failed count for the user as an asynchronous operation.
+        /// If the failed access account is greater than or equal to the configured maximum number of attempts,
+        /// the user will be locked out for the configured lockout time span.
+        /// </summary>
+        /// <param name="user">The user whose failed access count to increment.</param>
+        /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the <see cref="IdentityResult"/> of the operation.</returns>
+        Task<IdentityResult> AccessFailedAsync(TUser user);
+
+        /// <summary>
+        /// Retrieves the current number of failed accesses for the given <paramref name="user"/>.
+        /// </summary>
+        /// <param name="user">The user whose access failed count should be retrieved for.</param>
+        /// <returns>The <see cref="Task"/> that contains the result the asynchronous operation, the current failed access count
+        /// for the user.</returns>
+        Task<int> GetAccessFailedCountAsync(TUser user);
+
+        /// <summary>
+        /// Returns a flag indicating whether the specified <paramref name="user"/> his locked out,
+        /// as an asynchronous operation.
+        /// </summary>
+        /// <param name="user">The user whose locked out status should be retrieved.</param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents the asynchronous operation, true if the specified <paramref name="user "/>
+        /// is locked out, otherwise false.
+        /// </returns>
+        Task<bool> IsLockedOutAsync(TUser user);
+
+        /// <summary>
+        /// Resets the access failed count for the specified <paramref name="user"/>.
+        /// </summary>
+        /// <param name="user">The user whose failed access count should be reset.</param>
+        /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the <see cref="IdentityResult"/> of the operation.</returns>
+        Task<IdentityResult> ResetAccessFailedCountAsync(TUser user);
+
+        /// <summary>
+        /// Sets a flag indicating whether the specified <paramref name="user"/> is locked out,
+        /// as an asynchronous operation.
+        /// </summary>
+        /// <param name="user">The user whose locked out status should be set.</param>
+        /// <param name="enabled">Flag indicating whether the user is locked out or not.</param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents the asynchronous operation, the <see cref="IdentityResult"/> of the operation
+        /// </returns>
+        Task<IdentityResult> SetLockoutEnabledAsync(TUser user, bool enabled);
+
+        /// <summary>
+        /// Locks out a user until the specified end date has passed. Setting a end date in the past immediately unlocks a user.
+        /// </summary>
+        /// <param name="user">The user whose lockout date should be set.</param>
+        /// <param name="lockoutEnd">The <see cref="DateTimeOffset"/> after which the <paramref name="user"/>'s lockout should end.</param>
+        /// <returns>The <see cref="Task"/> that represents the asynchronous operation, containing the <see cref="IdentityResult"/> of the operation.</returns>
+        Task<IdentityResult> SetLockoutEndDateAsync(TUser user, DateTimeOffset? lockoutEnd);
+
+        #endregion Lock Out
     }
 }
