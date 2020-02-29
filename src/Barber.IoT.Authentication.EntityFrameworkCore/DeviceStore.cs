@@ -1,7 +1,9 @@
 ﻿namespace Barber.IoT.Authentication.EntityFrameworkCore
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Barber.IoT.Authentication.Models;
@@ -205,6 +207,7 @@
 
         #region Password
 
+        /// <inheritdoc />
         public Task<string?> GetPasswordHashAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -217,6 +220,7 @@
             return Task.FromResult(user.PasswordHash);
         }
 
+        /// <inheritdoc />
         public Task<bool> HasPasswordAsync(TUser user, CancellationToken cancellationToken)
         {
             if (user == null)
@@ -228,6 +232,7 @@
             return Task.FromResult(user.PasswordHash != null);
         }
 
+        /// <inheritdoc />
         public Task SetPasswordHashAsync(TUser user, string? passwordHash, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -245,6 +250,7 @@
 
         #region Lockout
 
+        /// <inheritdoc />
         public Task<int> GetAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -257,6 +263,7 @@
             return Task.FromResult(user.AccessFailedCount);
         }
 
+        /// <inheritdoc />
         public Task<bool> GetLockoutEnabledAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -269,6 +276,7 @@
             return Task.FromResult(user.LockoutEnabled);
         }
 
+        /// <inheritdoc />
         public Task<DateTimeOffset?> GetLockoutEndDateAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -281,6 +289,7 @@
             return Task.FromResult(user.LockoutEnd);
         }
 
+        /// <inheritdoc />
         public Task<int> IncrementAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -294,6 +303,7 @@
             return Task.FromResult(user.AccessFailedCount);
         }
 
+        /// <inheritdoc />
         public Task ResetAccessFailedCountAsync(TUser user, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -308,6 +318,7 @@
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc />
         public Task SetLockoutEnabledAsync(TUser user, bool enabled, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -321,6 +332,7 @@
             return Task.CompletedTask;
         }
 
+        /// <inheritdoc />
         public Task SetLockoutEndDateAsync(TUser user, DateTimeOffset? lockoutEnd, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -342,6 +354,15 @@
             this.Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        /// <inheritdoc />
+        public async Task<IReadOnlyList<TUser>> GetRegisteredAsync(int take = 100, int skip = 0, CancellationToken cancellationToken = default)
+            => await this.UsersSet
+                .OrderBy(e => e.Id)
+                .Skip(skip)
+                .Take(take)
+                .ToArrayAsync(cancellationToken)
+                .ConfigureAwait(false);
 
         /// <summary>
         /// Releases the unmanaged resources used by the role manager and optionally releases the managed resources.

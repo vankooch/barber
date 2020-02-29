@@ -1,6 +1,7 @@
 ﻿namespace Barber.IoT.Authentication
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
@@ -43,6 +44,15 @@
         /// The <see cref="Task"/> that represents the asynchronous operation, containing the user matching the specified <paramref name="normalizedUserName"/> if it exists.
         /// </returns>
         Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get all registered devices, for a table view.
+        /// </summary>
+        /// <param name="take">Entities to fetch</param>
+        /// <param name="skip">Entities to skip</param>
+        /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
+        /// <returns></returns>
+        Task<IReadOnlyList<TUser>> GetRegisteredAsync(int take = 100, int skip = 0, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the user identifier for the specified <paramref name="user"/>.

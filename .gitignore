@@ -153,3 +153,5 @@ app/Barber.Cli/src
 app/Barber.Cli/src/**
 app/Barber.Cli/Templates
 app/Barber.Cli/Templates/**
+barber.iot.db
+

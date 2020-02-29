@@ -19,7 +19,7 @@ namespace Barber.IoT.Authentication.Test
 
             var t = new DeviceStore<Device, BarberIoTContext, string>(contextCreator.CreateDbContext());
 
-            this._deviceManager = new DeviceManager<Device>(t, null, null, null, null);
+            this._deviceManager = new DeviceManager<Device>(t, null, null, null, null, null);
         }
 
         [Fact]

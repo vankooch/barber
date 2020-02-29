@@ -1,0 +1,212 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Barber.IoT.Api</name>
+    </assembly>
+    <members>
+        <member name="P:Barber.IoT.Api.Configuration.CertificateSettingsModel.Path">
+            <summary>
+            Path to certificate.
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.CertificateSettingsModel.Password">
+            <summary>
+            Password of certificate.
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Configuration.CertificateSettingsModel.ReadCertificate">
+            <summary>
+            Read certificate file.
+            </summary>
+        </member>
+        <member name="T:Barber.IoT.Api.Configuration.MqttSettingsModel">
+            <summary>
+            MQTT settings Model
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.CommunicationTimeout">
+            <summary>
+            Set default connection timeout in seconds
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.ConnectionBacklog">
+            <summary>
+            Set 0 to disable connection backlogging
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.EnablePersistentSessions">
+            <summary>
+            Enable support for persistent sessions
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.TcpEndPoint">
+            <summary>
+            Listen Settings
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.EncryptedTcpEndPoint">
+            <summary>
+            Encryption Listen Settings
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.WebSocketEndPoint">
+            <summary>
+            Settings for the Web Socket endpoint.
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.MaxPendingMessagesPerClient">
+            <summary>
+            Set limit for max pending messages per client
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.RetainedApplicationMessages">
+            <summary>
+            The settings for retained messages.
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.EnableDebugLogging">
+            <summary>
+            Enables or disables the MQTTnet internal logging.
+            </summary>
+        </member>
+        <member name="T:Barber.IoT.Api.Configuration.TcpEndPointModel">
+            <summary>
+            Listen Entry Settings Model
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.TcpEndPointModel.Certificate">
+            <summary>
+            Certificate settings.
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.TcpEndPointModel.Enabled">
+            <summary>
+            Enabled / Disable
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.TcpEndPointModel.IPv4">
+            <summary>
+            Listen Address
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.TcpEndPointModel.IPv6">
+            <summary>
+            Listen Address
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Configuration.TcpEndPointModel.Port">
+            <summary>
+            Listen Port
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Configuration.TcpEndPointModel.TryReadIPv4(System.Net.IPAddress@)">
+            <summary>
+            Read IPv4
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Configuration.TcpEndPointModel.TryReadIPv6(System.Net.IPAddress@)">
+            <summary>
+            Read IPv6
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Barber.IoT.Api.Controllers.ApiBaseController">
+            <summary>
+            Main API Base Controller
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.ApiBaseController.#ctor">
+            <summary>
+            Base Constructor
+            </summary>
+        </member>
+        <member name="T:Barber.IoT.Api.Controllers.Devices.ManageController">
+            <summary>
+            Device management controller
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.#ctor(Barber.IoT.Authentication.IDeviceManager{Barber.IoT.Data.Model.Device})">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.Delete(System.String)">
+            <summary>
+            Delete a device from data store
+            </summary>
+            <param name="id">Device id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.GetById(System.String)">
+            <summary>
+            Get stored device information, by given device id
+            </summary>
+            <param name="id">Device id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.GetByName(System.String)">
+            <summary>
+            Get stored device information, by given device name
+            </summary>
+            <param name="name">Device name</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.GetPage(System.Int32,System.Int32)">
+            <summary>
+            List all stored devices. This method has pagination support.
+            </summary>
+            <param name="take">Devices per page, maximum is 1000</param>
+            <param name="skip">Devices to skip</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.LockoutState(System.String,System.Boolean)">
+            <summary>
+            Change lockout state for a given device
+            </summary>
+            <param name="id">Device id</param>
+            <param name="state">Lockout state</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.Post(Barber.IoT.Api.Models.DeviceModel)">
+            <summary>
+            Create a new device
+            </summary>
+            <param name="value">New device data</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.Put(System.String,Barber.IoT.Api.Models.DeviceModel)">
+            <summary>
+            Update a given device
+            </summary>
+            <param name="id">Device id</param>
+            <param name="value">Updated device data</param>
+            <returns></returns>
+        </member>
+        <member name="P:Barber.IoT.Api.Models.DeviceModel.ConcurrencyStamp">
+            <summary>
+            A random value that must change whenever a user is persisted to the store
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Models.DeviceModel.Id">
+            <summary>
+            Gets or sets the primary key for this device.
+            </summary>
+        </member>
+        <member name="P:Barber.IoT.Api.Models.DeviceModel.LockoutEnabled">
+            <summary>
+            Gets or sets a flag indicating if the device could be locked out.
+            </summary>
+            <value>True if the device could be locked out, otherwise false.</value>
+        </member>
+        <member name="P:Barber.IoT.Api.Models.DeviceModel.LockoutEnd">
+            <summary>
+            Gets or sets the date and time, in UTC, when any device lockout ends.
+            </summary>
+            <remarks>
+            A value in the past means the device is not locked out.
+            </remarks>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Barber.IoT.Api.Models.DeviceModel.Name" -->
+    </members>
+</doc>

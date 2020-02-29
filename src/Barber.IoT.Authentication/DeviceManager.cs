@@ -16,6 +16,7 @@
 
         public DeviceManager(
             IDeviceStore<TUser> store,
+            ILookupNormalizer keyNormalizer,
             IOptions<DeviceOptions> identityOptionsAccessor,
             IOptions<PasswordHasherOptions> passwordOptionsAccessor,
             IEnumerable<IDeviceValidator<TUser>> userValidators,
@@ -24,7 +25,7 @@
             this.Store = store ?? throw new ArgumentNullException(nameof(store));
             this.Options = identityOptionsAccessor?.Value ?? new DeviceOptions();
             this.PasswordHasher = new PasswordHasher<TUser>(passwordOptionsAccessor);
-            this.KeyNormalizer = new UpperInvariantLookupNormalizer();
+            this.KeyNormalizer = keyNormalizer ?? new UpperInvariantLookupNormalizer();
 
             if (userValidators != null)
             {
@@ -128,6 +129,10 @@
 
             return this.Store.FindByNameAsync(userName, this.CancellationToken);
         }
+
+        /// <inheritdoc />
+        public Task<IReadOnlyList<TUser>> GetRegisteredAsync(int take = 100, int skip = 0)
+            => this.Store.GetRegisteredAsync(take, skip, this.CancellationToken);
 
         /// <inheritdoc />
         public virtual Task<string> GetUserIdAsync(TUser user)
@@ -462,13 +467,9 @@
 
         #endregion Lock Out
 
-        /// <summary>
-        /// Normalize user or role name for consistent comparisons.
-        /// </summary>
-        /// <param name="name">The name to normalize.</param>
-        /// <returns>A normalized value representing the specified <paramref name="name"/>.</returns>
+        /// <inheritdoc />
         public virtual string NormalizeName(string name)
-            => (this.KeyNormalizer == null) ? name : this.KeyNormalizer.Normalize(name);
+            => (this.KeyNormalizer == null) ? name : this.KeyNormalizer.NormalizeName(name);
 
         /// <summary>
         /// Releases the unmanaged resources used by the role manager and optionally releases the managed resources.
