@@ -126,12 +126,12 @@
         }
 
         /// <inheritdoc />
-        public Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<TUser>> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             this.ThrowIfDisposed();
 
-            return this.UsersSet.FirstOrDefaultAsync(u => u.NormalizedName == normalizedUserName, cancellationToken);
+            return await this.UsersSet.Where(u => u.NormalizedName == normalizedUserName).ToArrayAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />

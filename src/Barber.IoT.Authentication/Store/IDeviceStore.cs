@@ -43,7 +43,7 @@
         /// <returns>
         /// The <see cref="Task"/> that represents the asynchronous operation, containing the user matching the specified <paramref name="normalizedUserName"/> if it exists.
         /// </returns>
-        Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken);
+        Task<IReadOnlyList<TUser>> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get all registered devices, for a table view.

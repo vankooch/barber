@@ -3,12 +3,21 @@
     using System;
     using Barber.IoT.Data.Model;
 
+    /// <summary>
+    /// Device information model
+    /// </summary>
     public class DeviceModel
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public DeviceModel()
         {
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public DeviceModel(Device device)
         {
             _ = device ?? throw new ArgumentNullException(nameof(device));
@@ -44,7 +53,6 @@
         /// </remarks>
         public virtual DateTimeOffset? LockoutEnd { get; }
 
-        /// <summary>
         /// <summary>
         /// Device Name
         /// </summary>

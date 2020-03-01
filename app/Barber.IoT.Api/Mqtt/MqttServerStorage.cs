@@ -6,7 +6,7 @@
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using Barber.IoT.Api.Configuration;
+    using Barber.IoT.MQTTNet.Configuration;
     using Microsoft.Extensions.Logging;
     using MQTTnet;
     using MQTTnet.Server;
@@ -26,6 +26,8 @@
             this._mqttSettings = mqttSettings ?? throw new ArgumentNullException(nameof(mqttSettings));
             this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this._path = string.Empty;
+
+            this.Configure();
         }
 
         public void Configure()

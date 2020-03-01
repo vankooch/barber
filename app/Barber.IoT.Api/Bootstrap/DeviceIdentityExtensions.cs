@@ -12,29 +12,37 @@
 
     public static class DeviceIdentityExtensions
     {
-        public static IServiceCollection AddDeviceIdentityManager<TUser, TContext, TKey>(this IServiceCollection services)
+        public static (PasswordHasherOptions passwordOptions, DeviceOptions deviceOptions) AddDeviceIdentityManager<TUser, TContext, TKey>(this IServiceCollection services)
             where TUser : DeviceModel<TKey>
             where TKey : IEquatable<TKey>
             where TContext : DbContext
         {
+            // Password settings
+            var deviceOptions = new DeviceOptions();
+            deviceOptions.Password.RequireDigit = true;
+            deviceOptions.Password.RequiredLength = 6;
+            deviceOptions.Password.RequireNonAlphanumeric = false;
+            deviceOptions.Password.RequireUppercase = false;
+            deviceOptions.Password.RequireLowercase = false;
+
+            // Lockout settings
+            deviceOptions.Lockout.AllowedForNewUsers = false;
+            deviceOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+            deviceOptions.Lockout.MaxFailedAccessAttempts = 5;
+
+            var passwordOptions = new PasswordHasherOptions
+            {
+                CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3,
+            };
+
             _ = services.Configure<DeviceOptions>(options =>
             {
-                // Password settings
-                options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 6;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-
-                // Lockout settings
-                options.Lockout.AllowedForNewUsers = false;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
-                options.Lockout.MaxFailedAccessAttempts = 5;
+                options = deviceOptions;
             });
 
             _ = services.Configure<PasswordHasherOptions>(options =>
             {
-                options.CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3;
+                options = passwordOptions;
             });
 
             services.TryAddScoped<IDeviceStore<TUser>, DeviceStore<TUser, TContext, TKey>>();
@@ -43,7 +51,7 @@
             services.TryAddScoped<ILookupNormalizer, UpperInvariantLookupNormalizer>();
             services.TryAddScoped<IDeviceManager<TUser>, DeviceManager<TUser>>();
 
-            return services;
+            return (passwordOptions, deviceOptions);
         }
     }
 }

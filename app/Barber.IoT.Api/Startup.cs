@@ -5,10 +5,10 @@
     using System.IO;
     using System.Reflection;
     using Barber.IoT.Api.Bootstrap;
-    using Barber.IoT.Api.Configuration;
-    using Barber.IoT.Api.Mqtt;
     using Barber.IoT.Context;
     using Barber.IoT.Data.Model;
+    using Barber.IoT.MQTTNet;
+    using Barber.IoT.MQTTNet.Configuration;
     using Barber.OpenApi.Extensions.Models;
     using Barber.OpenApi.Extensions.OperationFilter;
     using Microsoft.AspNetCore.Builder;
@@ -36,7 +36,7 @@
         public void Configure(
             IApplicationBuilder app,
             IWebHostEnvironment env,
-            MqttServerService mqttServerService,
+            MqttService<Device> mqttServerService,
             MqttSettingsModel mqttSettings)
         {
             if (env.IsDevelopment())
@@ -114,6 +114,7 @@
 
             // MQTT.Net
             _ = app.UseMqttNetWebSocketEndpoint(mqttServerService, mqttSettings);
+            _ = app.UseMqttServer(mqttServerService);
 
             _ = app.UseAuthorization();
             _ = app.UseAuthentication();
@@ -127,6 +128,9 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var contextBuilder = new DbContextOptionsBuilder<BarberIoTContext>();
+            contextBuilder.UseSqlite(this.Configuration.GetConnectionString("barber-main"));
+
             _ = services.AddCors(c =>
             {
                 c.AddPolicy("WebApp",
@@ -142,7 +146,6 @@
             });
 
             _ = services.AddControllers();
-
             _ = services.AddDbContext<BarberIoTContext>(options =>
             {
                 options.UseSqlite(this.Configuration.GetConnectionString("barber-main"));
@@ -185,10 +188,10 @@
             });
 
             // Barber.IoT
-            _ = services.AddDeviceIdentityManager<Device, BarberIoTContext, string>();
+            var (passwordOptions, deviceOptions) = services.AddDeviceIdentityManager<Device, BarberIoTContext, string>();
 
             // MQTT.Net
-            _ = services.AddMqttNetServer(this.Configuration);
+            _ = services.AddMqttNetServer(this.Configuration, new BarberIoTContext(contextBuilder.Options), passwordOptions, deviceOptions);
         }
     }
 }

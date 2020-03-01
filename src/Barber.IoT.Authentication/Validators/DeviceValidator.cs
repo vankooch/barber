@@ -52,18 +52,18 @@ namespace Barber.IoT.Authentication
             {
                 errors.Add(this.Describer.InvalidUserName(userName));
             }
-            else
-            {
-                var owner = await manager.FindByNameAsync(userName).ConfigureAwait(true);
-                if (owner != null
-                    && !string.Equals(
-                        await manager.GetUserIdAsync(owner).ConfigureAwait(true),
-                        await manager.GetUserIdAsync(user).ConfigureAwait(true),
-                        StringComparison.InvariantCulture))
-                {
-                    errors.Add(this.Describer.DuplicateUserName(userName));
-                }
-            }
+            ////else
+            ////{
+            ////    var owner = await manager.FindByNameAsync(userName).ConfigureAwait(true);
+            ////    if (owner != null
+            ////        && !string.Equals(
+            ////            await manager.GetUserIdAsync(owner).ConfigureAwait(true),
+            ////            await manager.GetUserIdAsync(user).ConfigureAwait(true),
+            ////            StringComparison.InvariantCulture))
+            ////    {
+            ////        errors.Add(this.Describer.DuplicateUserName(userName));
+            ////    }
+            ////}
         }
     }
 }

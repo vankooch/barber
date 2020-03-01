@@ -4,113 +4,6 @@
         <name>Barber.IoT.Api</name>
     </assembly>
     <members>
-        <member name="P:Barber.IoT.Api.Configuration.CertificateSettingsModel.Path">
-            <summary>
-            Path to certificate.
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.CertificateSettingsModel.Password">
-            <summary>
-            Password of certificate.
-            </summary>
-        </member>
-        <member name="M:Barber.IoT.Api.Configuration.CertificateSettingsModel.ReadCertificate">
-            <summary>
-            Read certificate file.
-            </summary>
-        </member>
-        <member name="T:Barber.IoT.Api.Configuration.MqttSettingsModel">
-            <summary>
-            MQTT settings Model
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.CommunicationTimeout">
-            <summary>
-            Set default connection timeout in seconds
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.ConnectionBacklog">
-            <summary>
-            Set 0 to disable connection backlogging
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.EnablePersistentSessions">
-            <summary>
-            Enable support for persistent sessions
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.TcpEndPoint">
-            <summary>
-            Listen Settings
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.EncryptedTcpEndPoint">
-            <summary>
-            Encryption Listen Settings
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.WebSocketEndPoint">
-            <summary>
-            Settings for the Web Socket endpoint.
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.MaxPendingMessagesPerClient">
-            <summary>
-            Set limit for max pending messages per client
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.RetainedApplicationMessages">
-            <summary>
-            The settings for retained messages.
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.MqttSettingsModel.EnableDebugLogging">
-            <summary>
-            Enables or disables the MQTTnet internal logging.
-            </summary>
-        </member>
-        <member name="T:Barber.IoT.Api.Configuration.TcpEndPointModel">
-            <summary>
-            Listen Entry Settings Model
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.TcpEndPointModel.Certificate">
-            <summary>
-            Certificate settings.
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.TcpEndPointModel.Enabled">
-            <summary>
-            Enabled / Disable
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.TcpEndPointModel.IPv4">
-            <summary>
-            Listen Address
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.TcpEndPointModel.IPv6">
-            <summary>
-            Listen Address
-            </summary>
-        </member>
-        <member name="P:Barber.IoT.Api.Configuration.TcpEndPointModel.Port">
-            <summary>
-            Listen Port
-            </summary>
-        </member>
-        <member name="M:Barber.IoT.Api.Configuration.TcpEndPointModel.TryReadIPv4(System.Net.IPAddress@)">
-            <summary>
-            Read IPv4
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Barber.IoT.Api.Configuration.TcpEndPointModel.TryReadIPv6(System.Net.IPAddress@)">
-            <summary>
-            Read IPv6
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:Barber.IoT.Api.Controllers.ApiBaseController">
             <summary>
             Main API Base Controller
@@ -183,6 +76,21 @@
             <param name="value">Updated device data</param>
             <returns></returns>
         </member>
+        <member name="T:Barber.IoT.Api.Models.DeviceModel">
+            <summary>
+            Device information model
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Models.DeviceModel.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Models.DeviceModel.#ctor(Barber.IoT.Data.Model.Device)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
         <member name="P:Barber.IoT.Api.Models.DeviceModel.ConcurrencyStamp">
             <summary>
             A random value that must change whenever a user is persisted to the store
@@ -207,6 +115,10 @@
             A value in the past means the device is not locked out.
             </remarks>
         </member>
-        <!-- Badly formed XML comment ignored for member "P:Barber.IoT.Api.Models.DeviceModel.Name" -->
+        <member name="P:Barber.IoT.Api.Models.DeviceModel.Name">
+            <summary>
+            Device Name
+            </summary>
+        </member>
     </members>
 </doc>

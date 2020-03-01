@@ -2,7 +2,8 @@
 {
     using System.IO;
     using System.Threading.Tasks;
-    using Barber.IoT.Api.Mqtt;
+    using Barber.IoT.Data.Model;
+    using Barber.IoT.MQTTNet;
     using Microsoft.AspNetCore.Mvc;
     using MQTTnet;
     using MQTTnet.Protocol;
@@ -11,15 +12,15 @@
 
     public class MessagesController : ApiBaseController
     {
-        private readonly MqttServerService _mqttServerService;
+        private readonly MqttService<Device> _mqttServerService;
 
-        public MessagesController(MqttServerService mqttServerService)
+        public MessagesController(MqttService<Device> mqttServerService)
             => this._mqttServerService = mqttServerService;
 
         [HttpPost]
         public async Task<ActionResult> PostMessage(MqttApplicationMessage message)
         {
-            await this._mqttServerService.PublishAsync(message);
+            await this._mqttServerService.Server.PublishAsync(message, default);
             return this.Ok();
         }
 

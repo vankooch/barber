@@ -50,6 +50,7 @@
     <ProjectReference Include="..\..\src\Barber.IoT.Authentication\Barber.IoT.Authentication.csproj" />
     <ProjectReference Include="..\..\src\Barber.IoT.Context\Barber.IoT.Context.csproj" />
     <ProjectReference Include="..\..\src\Barber.IoT.Data\Barber.IoT.Data.csproj" />
+    <ProjectReference Include="..\..\src\Barber.IoT.MQTTNet\Barber.IoT.MQTTNet.csproj" />
     <ProjectReference Include="..\..\src\Barber.OpenApi.Extensions\Barber.OpenApi.Extensions.csproj" />
   </ItemGroup>
 

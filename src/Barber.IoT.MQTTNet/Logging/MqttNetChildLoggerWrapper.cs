@@ -1,4 +1,4 @@
-﻿namespace Barber.IoT.Api.Logging
+﻿namespace Barber.IoT.MQTTNet.Logging
 {
     using System;
     using MQTTnet.Diagnostics;

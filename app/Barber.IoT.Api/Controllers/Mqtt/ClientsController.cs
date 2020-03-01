@@ -5,16 +5,17 @@
     using System.Net;
     using System.Threading.Tasks;
     using System.Web;
-    using Barber.IoT.Api.Mqtt;
+    using Barber.IoT.Data.Model;
+    using Barber.IoT.MQTTNet;
     using Microsoft.AspNetCore.Mvc;
     using MQTTnet.Server.Status;
 
     [Route("api/mqtt/[controller]")]
     public class ClientsController : ApiBaseController
     {
-        private readonly MqttServerService _mqttServerService;
+        private readonly MqttService<Device> _mqttServerService;
 
-        public ClientsController(MqttServerService mqttServerService)
+        public ClientsController(MqttService<Device> mqttServerService)
             => this._mqttServerService = mqttServerService;
 
         [HttpDelete("{clientId}")]
@@ -22,7 +23,7 @@
         {
             clientId = HttpUtility.UrlDecode(clientId);
 
-            var client = (await this._mqttServerService.GetClientStatusAsync()).FirstOrDefault(c => c.ClientId == clientId);
+            var client = (await this._mqttServerService.Server.GetClientStatusAsync()).FirstOrDefault(c => c.ClientId == clientId);
             if (client == null)
             {
                 return new StatusCodeResult((int)HttpStatusCode.NotFound);
@@ -37,7 +38,7 @@
         {
             clientId = HttpUtility.UrlDecode(clientId);
 
-            var client = (await this._mqttServerService.GetClientStatusAsync()).FirstOrDefault(c => c.ClientId == clientId);
+            var client = (await this._mqttServerService.Server.GetClientStatusAsync()).FirstOrDefault(c => c.ClientId == clientId);
             if (client == null)
             {
                 return new StatusCodeResult((int)HttpStatusCode.NotFound);
@@ -52,7 +53,7 @@
         {
             clientId = HttpUtility.UrlDecode(clientId);
 
-            var client = (await this._mqttServerService.GetClientStatusAsync()).FirstOrDefault(c => c.ClientId == clientId);
+            var client = (await this._mqttServerService.Server.GetClientStatusAsync()).FirstOrDefault(c => c.ClientId == clientId);
             if (client == null)
             {
                 return new StatusCodeResult((int)HttpStatusCode.NotFound);
@@ -64,7 +65,7 @@
         [HttpGet]
         public async Task<ActionResult<IList<IMqttClientStatus>>> GetClients()
         {
-            return new ObjectResult(await this._mqttServerService.GetClientStatusAsync());
+            return new ObjectResult(await this._mqttServerService.Server.GetClientStatusAsync());
         }
     }
 }

@@ -50,7 +50,7 @@
         /// <returns>
         /// The <see cref="Task"/> that represents the asynchronous operation, containing the user matching the specified <paramref name="userName"/> if it exists.
         /// </returns>
-        Task<TUser> FindByNameAsync(string userName);
+        Task<IReadOnlyList<TUser>> FindByNameAsync(string userName);
 
         /// <summary>
         /// Get all registered devices, for a table view.

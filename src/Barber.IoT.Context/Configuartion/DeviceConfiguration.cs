@@ -16,12 +16,12 @@
             _ = builder.ToTable(BarberIoTContextConfiguartion.TABLE_IOT_DEVICE, BarberIoTContextConfiguartion.SCHEMA_IOT);
 
             _ = builder.HasKey(u => u.Id);
-            _ = builder.HasIndex(u => u.NormalizedName).HasName("NameIndex").IsUnique();
+            _ = builder.HasIndex(u => u.NormalizedName).HasName("NameIndex");
 
             _ = builder.Property(u => u.ConcurrencyStamp).IsConcurrencyToken();
 
-            _ = builder.Property(u => u.Name).HasMaxLength(256);
-            _ = builder.Property(u => u.NormalizedName).HasMaxLength(256);
+            _ = builder.Property(u => u.Name).HasMaxLength(512);
+            _ = builder.Property(u => u.NormalizedName).HasMaxLength(512);
         }
     }
 }

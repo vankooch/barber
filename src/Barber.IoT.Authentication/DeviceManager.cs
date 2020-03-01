@@ -9,7 +9,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Options;
 
-    public class DeviceManager<TUser> : IDeviceManager<TUser>
+    public class DeviceManager<TUser> : IDeviceManager<TUser>, IDisposable
         where TUser : class
     {
         private bool _disposed;
@@ -117,7 +117,7 @@
         }
 
         /// <inheritdoc />
-        public virtual Task<TUser> FindByNameAsync(string userName)
+        public virtual Task<IReadOnlyList<TUser>> FindByNameAsync(string userName)
         {
             this.ThrowIfDisposed();
             if (userName == null)

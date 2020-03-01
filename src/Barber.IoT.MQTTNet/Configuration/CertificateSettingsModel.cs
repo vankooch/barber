@@ -1,4 +1,4 @@
-﻿namespace Barber.IoT.Api.Configuration
+﻿namespace Barber.IoT.MQTTNet.Configuration
 {
     using System.IO;
 

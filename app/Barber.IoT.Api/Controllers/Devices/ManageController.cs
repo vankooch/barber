@@ -52,8 +52,9 @@
         /// <param name="name">Device name</param>
         /// <returns></returns>
         [HttpGet("name/{name}")]
-        public async Task<ActionResult<DeviceModel>> GetByName(string name)
-            => this.Ok(new DeviceModel(await this._deviceManager.FindByNameAsync(name)));
+        public async Task<ActionResult<IEnumerable<DeviceModel>>> GetByName(string name)
+            => this.Ok((await this._deviceManager.FindByNameAsync(name))
+                .Select(e => new DeviceModel(e)));
 
         /// <summary>
         /// List all stored devices. This method has pagination support.

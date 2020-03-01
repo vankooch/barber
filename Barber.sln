@@ -43,6 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{583E6BE6-C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Barber.IoT.Authentication.Test", "test\Barber.IoT.Authentication.Test\Barber.IoT.Authentication.Test.csproj", "{4FADD763-F9A9-4EBA-B839-512C7C7C231E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Barber.IoT.MQTTNet", "src\Barber.IoT.MQTTNet\Barber.IoT.MQTTNet.csproj", "{08DC7389-9C4F-4165-827E-DD013A10F907}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -197,6 +199,18 @@ Global
 		{4FADD763-F9A9-4EBA-B839-512C7C7C231E}.Release|x64.Build.0 = Release|Any CPU
 		{4FADD763-F9A9-4EBA-B839-512C7C7C231E}.Release|x86.ActiveCfg = Release|Any CPU
 		{4FADD763-F9A9-4EBA-B839-512C7C7C231E}.Release|x86.Build.0 = Release|Any CPU
+		{08DC7389-9C4F-4165-827E-DD013A10F907}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08DC7389-9C4F-4165-827E-DD013A10F907}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08DC7389-9C4F-4165-827E-DD013A10F907}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{08DC7389-9C4F-4165-827E-DD013A10F907}.Debug|x64.Build.0 = Debug|Any CPU
+		{08DC7389-9C4F-4165-827E-DD013A10F907}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{08DC7389-9C4F-4165-827E-DD013A10F907}.Debug|x86.Build.0 = Debug|Any CPU
+		{08DC7389-9C4F-4165-827E-DD013A10F907}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08DC7389-9C4F-4165-827E-DD013A10F907}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08DC7389-9C4F-4165-827E-DD013A10F907}.Release|x64.ActiveCfg = Release|Any CPU
+		{08DC7389-9C4F-4165-827E-DD013A10F907}.Release|x64.Build.0 = Release|Any CPU
+		{08DC7389-9C4F-4165-827E-DD013A10F907}.Release|x86.ActiveCfg = Release|Any CPU
+		{08DC7389-9C4F-4165-827E-DD013A10F907}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -214,6 +228,7 @@ Global
 		{3A645A51-1253-4122-9F0D-2C9C97F07E84} = {2AF97DC0-E4BE-4C22-9406-55ED3ED7FCC5}
 		{5A7E98A0-C0A0-4A8E-9ACD-B3EE030D8389} = {E0EB0A12-22DD-40FB-A855-7505AFB79DB9}
 		{4FADD763-F9A9-4EBA-B839-512C7C7C231E} = {583E6BE6-C74A-4D23-932E-4D5F98DF4853}
+		{08DC7389-9C4F-4165-827E-DD013A10F907} = {2AF97DC0-E4BE-4C22-9406-55ED3ED7FCC5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BC7DEB06-43BE-40EA-90C7-FB55FB799E5F}
