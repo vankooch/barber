@@ -18,6 +18,8 @@ namespace Barber.IoT.Context
         {
         }
 
+        public virtual DbSet<DeviceActivity> DeviceActivities { get; private set; }
+
         public virtual DbSet<Device> Devices { get; private set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

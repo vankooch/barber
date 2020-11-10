@@ -17,7 +17,7 @@ namespace Barber.IoT.Authentication.Test
         {
             var contextCreator = this.Container.GetInstance<IBarberIoTContextCreator>();
 
-            var t = new DeviceStore<Device, BarberIoTContext, string>(contextCreator.CreateDbContext());
+            var t = new DeviceStore<Device, DeviceActivity, BarberIoTContext, string>(contextCreator.CreateDbContext());
 
             this._deviceManager = new DeviceManager<Device>(t, null, null, null, null, null);
         }

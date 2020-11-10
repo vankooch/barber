@@ -1,4 +1,4 @@
-﻿namespace Barber.IoT.Api.Controllers.Devices
+﻿namespace Barber.IoT.Api.Controllers.Administration
 {
     using System;
     using System.Collections.Generic;
@@ -7,21 +7,20 @@
     using Barber.IoT.Api.Models;
     using Barber.IoT.Authentication;
     using Barber.IoT.Data.Model;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
     /// <summary>
     /// Device management controller
     /// </summary>
-    [Route("api/devices/[controller]")]
-    public class ManageController : ApiBaseController
+    [Route("api/administration/device")]
+    public class DeviceController : ApiBaseController
     {
         private readonly IDeviceManager<Device> _deviceManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ManageController(
+        public DeviceController(
             IDeviceManager<Device> deviceManager)
             => this._deviceManager = deviceManager;
 
@@ -42,7 +41,7 @@
         /// </summary>
         /// <param name="id">Device id</param>
         /// <returns></returns>
-        [HttpGet("id/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<DeviceModel>> GetById(string id)
             => this.Ok(new DeviceModel(await this._deviceManager.FindByIdAsync(id)));
 
@@ -51,7 +50,7 @@
         /// </summary>
         /// <param name="name">Device name</param>
         /// <returns></returns>
-        [HttpGet("name/{name}")]
+        [HttpGet("search/{name}")]
         public async Task<ActionResult<IEnumerable<DeviceModel>>> GetByName(string name)
             => this.Ok((await this._deviceManager.FindByNameAsync(name))
                 .Select(e => new DeviceModel(e)));
@@ -67,25 +66,6 @@
             => this.Ok((await this._deviceManager
                 .GetRegisteredAsync(take > 1000 ? 1000 : take, skip))
                 .Select(e => new DeviceModel(e)));
-
-        /// <summary>
-        /// Change lockout state for a given device
-        /// </summary>
-        /// <param name="id">Device id</param>
-        /// <param name="state">Lockout state</param>
-        /// <returns></returns>
-        [HttpGet("lockout/{id}/{state}")]
-        public async Task<ActionResult<IdentityResult>> LockoutState(string id, bool state)
-        {
-            var user = await this._deviceManager.FindByIdAsync(id) ?? throw new KeyNotFoundException();
-            var lockoutDate = await this._deviceManager.SetLockoutEndDateAsync(user, state ? DateTime.Now.AddYears(10) : DateTime.Now.AddMinutes(-1));
-            if (!lockoutDate.Succeeded)
-            {
-                return this.Ok(lockoutDate);
-            }
-
-            return this.Ok(await this._deviceManager.SetLockoutEnabledAsync(user, state));
-        }
 
         /// <summary>
         /// Create a new device

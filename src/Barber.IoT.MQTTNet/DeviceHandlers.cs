@@ -6,19 +6,21 @@
     using Barber.IoT.Authentication.EntityFrameworkCore;
     using Barber.IoT.Authentication.Models;
     using Barber.IoT.Authentication.Options;
+    using Barber.IoT.Data.Enums;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
     using MQTTnet.Protocol;
     using MQTTnet.Server;
 
-    public class DeviceHandlers<TUser, TContext> :
+    public class DeviceHandlers<TUser, TActivity, TContext> :
         IDeviceHandlers<TUser>,
         IMqttServerConnectionValidator,
         IMqttServerClientConnectedHandler,
         IMqttServerClientDisconnectedHandler,
         IDisposable
         where TUser : DeviceModel<string>
+        where TActivity : DeviceActivityModel<string>, new()
         where TContext : DbContext
     {
         private bool _disposed;
@@ -32,7 +34,7 @@
             this.Options = identityOptionsAccessor?.Value ?? new DeviceOptions();
             this.PasswordHasher = new PasswordHasher<TUser>(passwordOptionsAccessor);
             this.KeyNormalizer = keyNormalizer ?? new UpperInvariantLookupNormalizer();
-            this.Store = new DeviceStore<TUser, TContext, string>(context);
+            this.Store = new DeviceStore<TUser, TActivity, TContext, string>(context);
         }
 
         /// <inheritdoc />
@@ -48,7 +50,7 @@
         /// Gets or sets the persistence store the manager operates over.
         /// </summary>
         /// <value>The persistence store the manager operates over.</value>
-        protected internal DeviceStore<TUser, TContext, string> Store { get; set; }
+        protected internal DeviceStore<TUser, TActivity, TContext, string> Store { get; set; }
 
         /// <summary>
         /// The cancellation token used to cancel operations.
@@ -96,16 +98,28 @@
                 return;
             }
 
+            async Task CreateActicity(MqttConnectReasonCode code)
+            {
+                context.ReasonCode = code;
+                await this.Store.CreateActivityAsync(new TActivity()
+                {
+                    DeviceId = device.Id,
+                    State = (int)DeviceActivityStateType.ServerConnect,
+                    Code = (int)code,
+                    Payload = context.ClientId,
+                }, this.CancellationToken).ConfigureAwait(false);
+            }
+
             if (device.LockoutEnabled)
             {
-                context.ReasonCode = MqttConnectReasonCode.Banned;
+                await CreateActicity(MqttConnectReasonCode.Banned).ConfigureAwait(false);
 
                 return;
             }
 
             if (device.PasswordHash == null)
             {
-                context.ReasonCode = MqttConnectReasonCode.Success;
+                await CreateActicity(MqttConnectReasonCode.Success).ConfigureAwait(false);
 
                 return;
             }
@@ -119,7 +133,7 @@
 
             if (resultPassword == PasswordVerificationResult.Success)
             {
-                context.ReasonCode = MqttConnectReasonCode.Success;
+                await CreateActicity(MqttConnectReasonCode.Success).ConfigureAwait(false);
 
                 return;
             }
@@ -140,6 +154,7 @@
             await this.Store.UpdateAsync(device, this.CancellationToken).ConfigureAwait(true);
 
             context.ReasonCode = MqttConnectReasonCode.BadUserNameOrPassword;
+            await CreateActicity(MqttConnectReasonCode.BadUserNameOrPassword).ConfigureAwait(false);
 
             return;
         }

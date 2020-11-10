@@ -18,7 +18,7 @@
         public SessionsController(MqttService<Device> mqttServerService)
             => this._mqttServerService = mqttServerService;
 
-        [HttpDelete("{clientId}/pendingApplicationMessages")]
+        [HttpDelete("pending/{clientId}")]
         public async Task<ActionResult> DeletePendingApplicationMessages(string clientId)
         {
             clientId = HttpUtility.UrlDecode(clientId);

@@ -5,6 +5,7 @@
     using System.IO;
     using System.Reflection;
     using Barber.IoT.Api.Bootstrap;
+    using Barber.IoT.Api.Filters;
     using Barber.IoT.Context;
     using Barber.IoT.Data.Model;
     using Barber.IoT.MQTTNet;
@@ -13,6 +14,7 @@
     using Barber.OpenApi.Extensions.OperationFilter;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +29,7 @@
               .AddJsonFile("appsettings.json")
               .AddEnvironmentVariables();
 
-            this.Configuration = configuration;
+            this.Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -53,13 +55,13 @@
             {
                 c.SerializeAsV2 = false;
                 c.RouteTemplate = "api/{documentName}/openapi.json";
-                ////c.PreSerializeFilters.Add(Swagger.TagGroupExtensions.AddGroups);
+                c.PreSerializeFilters.Add(Swagger.TagGroupExtensions.AddGroups);
                 c.PreSerializeFilters.Add((document, request) =>
                 {
                     var server = new OpenApiServer()
                     {
-                        Description = "Cobino API Server",
-                        Url = request.IsHttps ? "https" : "http" + $"://{request.Host.Host}:{request.Host.Port}",
+                        Description = "Barber IoT API Server",
+                        Url = (request.IsHttps ? "https" : "http") + $"://{request.Host.Host}:{request.Host.Port}",
                     };
 
                     document.Servers.Add(server);
@@ -128,8 +130,7 @@
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var contextBuilder = new DbContextOptionsBuilder<BarberIoTContext>();
-            contextBuilder.UseSqlite(this.Configuration.GetConnectionString("barber-main"));
+            var contextBuilder = BarberIoTContextOptionCreator.GetOptionsBuilder(this.Configuration, "barber-main");
 
             _ = services.AddCors(c =>
             {
@@ -146,9 +147,16 @@
             });
 
             _ = services.AddControllers();
+            _ = services
+                 .AddMvc(o =>
+                 {
+                     o.Filters.Add(typeof(GlobalExceptionFilterAttribute));
+                 })
+                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
             _ = services.AddDbContext<BarberIoTContext>(options =>
             {
-                options.UseSqlite(this.Configuration.GetConnectionString("barber-main"));
+                _ = options.AddBarberOptions(this.Configuration.GetConnectionString("barber-main"));
             });
 
             // Swagger
@@ -157,7 +165,7 @@
                 var mainInfo = new OpenApiInfo()
                 {
                     Version = "v1",
-                    Title = "Cobino Web API",
+                    Title = "Barber IoT API",
                     ////Description = this.ReadFile("docs-api.md"),
                     Contact = new OpenApiContact()
                     {
@@ -188,7 +196,7 @@
             });
 
             // Barber.IoT
-            var (passwordOptions, deviceOptions) = services.AddDeviceIdentityManager<Device, BarberIoTContext, string>();
+            var (passwordOptions, deviceOptions) = services.AddDeviceIdentityManager<Device, DeviceActivity, BarberIoTContext, string>();
 
             // MQTT.Net
             _ = services.AddMqttNetServer(this.Configuration, new BarberIoTContext(contextBuilder.Options), passwordOptions, deviceOptions);

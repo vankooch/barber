@@ -4,6 +4,142 @@
         <name>Barber.IoT.Api</name>
     </assembly>
     <members>
+        <member name="T:Barber.IoT.Api.Controllers.Administration.DeviceActivityController">
+            <summary>
+            Device activity management controller
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceActivityController.#ctor(Barber.IoT.Authentication.IDeviceActivityManager{Barber.IoT.Data.Model.DeviceActivity})">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceActivityController.Get(System.String)">
+            <summary>
+            Get device activity history
+            </summary>
+            <param name="id">Device id</param>
+            <returns></returns>
+        </member>
+        <member name="T:Barber.IoT.Api.Controllers.Administration.DeviceController">
+            <summary>
+            Device management controller
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceController.#ctor(Barber.IoT.Authentication.IDeviceManager{Barber.IoT.Data.Model.Device})">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceController.Delete(System.String)">
+            <summary>
+            Delete a device from data store
+            </summary>
+            <param name="id">Device id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceController.GetById(System.String)">
+            <summary>
+            Get stored device information, by given device id
+            </summary>
+            <param name="id">Device id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceController.GetByName(System.String)">
+            <summary>
+            Get stored device information, by given device name
+            </summary>
+            <param name="name">Device name</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceController.GetPage(System.Int32,System.Int32)">
+            <summary>
+            List all stored devices. This method has pagination support.
+            </summary>
+            <param name="take">Devices per page, maximum is 1000</param>
+            <param name="skip">Devices to skip</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceController.Post(Barber.IoT.Api.Models.DeviceModel)">
+            <summary>
+            Create a new device
+            </summary>
+            <param name="value">New device data</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceController.Put(System.String,Barber.IoT.Api.Models.DeviceModel)">
+            <summary>
+            Update a given device
+            </summary>
+            <param name="id">Device id</param>
+            <param name="value">Updated device data</param>
+            <returns></returns>
+        </member>
+        <member name="T:Barber.IoT.Api.Controllers.Administration.DeviceLockoutController">
+            <summary>
+            Device lockout management controller
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceLockoutController.#ctor(Barber.IoT.Authentication.IDeviceManager{Barber.IoT.Data.Model.Device},Microsoft.Extensions.Options.IOptions{Barber.IoT.Authentication.Options.DeviceOptions})">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceLockoutController.GetState(System.String)">
+            <summary>
+            Get device lockout state
+            </summary>
+            <param name="id">Device id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceLockoutController.SetBan(System.String,System.Boolean)">
+            <summary>
+            Ban given user for 99 Years
+            </summary>
+            <param name="id">Device id</param>
+            <param name="state">Lockout state</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DeviceLockoutController.SetState(System.String,System.Boolean)">
+            <summary>
+            Change lockout state for a given device
+            </summary>
+            <param name="id">Device id</param>
+            <param name="state">Lockout state</param>
+            <returns></returns>
+        </member>
+        <member name="T:Barber.IoT.Api.Controllers.Administration.DevicePasswordController">
+            <summary>
+            Device password management controller
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DevicePasswordController.#ctor(Barber.IoT.Authentication.IDeviceManager{Barber.IoT.Data.Model.Device})">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DevicePasswordController.Delete(System.String)">
+            <summary>
+            Delete password
+            </summary>
+            <param name="id">Device id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DevicePasswordController.GetState(System.String)">
+            <summary>
+            Check if device has set a password
+            </summary>
+            <param name="id">Device id</param>
+            <returns></returns>
+        </member>
+        <member name="M:Barber.IoT.Api.Controllers.Administration.DevicePasswordController.SetPassword(System.String,System.String)">
+            <summary>
+            Ban given user for 99 Years
+            </summary>
+            <param name="id">Device id</param>
+            <param name="password">New password</param>
+            <returns></returns>
+        </member>
         <member name="T:Barber.IoT.Api.Controllers.ApiBaseController">
             <summary>
             Main API Base Controller
@@ -14,67 +150,20 @@
             Base Constructor
             </summary>
         </member>
-        <member name="T:Barber.IoT.Api.Controllers.Devices.ManageController">
+        <member name="T:Barber.IoT.Api.Filters.GlobalExceptionFilterAttribute">
             <summary>
-            Device management controller
+            Main Exception Handling on Request
             </summary>
         </member>
-        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.#ctor(Barber.IoT.Authentication.IDeviceManager{Barber.IoT.Data.Model.Device})">
+        <member name="M:Barber.IoT.Api.Filters.GlobalExceptionFilterAttribute.#ctor(Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.AspNetCore.Mvc.ModelBinding.IModelMetadataProvider)">
             <summary>
             Constructor
             </summary>
         </member>
-        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.Delete(System.String)">
+        <member name="M:Barber.IoT.Api.Filters.GlobalExceptionFilterAttribute.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
             <summary>
-            Delete a device from data store
+            Handle Exception
             </summary>
-            <param name="id">Device id</param>
-            <returns></returns>
-        </member>
-        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.GetById(System.String)">
-            <summary>
-            Get stored device information, by given device id
-            </summary>
-            <param name="id">Device id</param>
-            <returns></returns>
-        </member>
-        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.GetByName(System.String)">
-            <summary>
-            Get stored device information, by given device name
-            </summary>
-            <param name="name">Device name</param>
-            <returns></returns>
-        </member>
-        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.GetPage(System.Int32,System.Int32)">
-            <summary>
-            List all stored devices. This method has pagination support.
-            </summary>
-            <param name="take">Devices per page, maximum is 1000</param>
-            <param name="skip">Devices to skip</param>
-            <returns></returns>
-        </member>
-        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.LockoutState(System.String,System.Boolean)">
-            <summary>
-            Change lockout state for a given device
-            </summary>
-            <param name="id">Device id</param>
-            <param name="state">Lockout state</param>
-            <returns></returns>
-        </member>
-        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.Post(Barber.IoT.Api.Models.DeviceModel)">
-            <summary>
-            Create a new device
-            </summary>
-            <param name="value">New device data</param>
-            <returns></returns>
-        </member>
-        <member name="M:Barber.IoT.Api.Controllers.Devices.ManageController.Put(System.String,Barber.IoT.Api.Models.DeviceModel)">
-            <summary>
-            Update a given device
-            </summary>
-            <param name="id">Device id</param>
-            <param name="value">Updated device data</param>
-            <returns></returns>
         </member>
         <member name="T:Barber.IoT.Api.Models.DeviceModel">
             <summary>
@@ -119,6 +208,23 @@
             <summary>
             Device Name
             </summary>
+        </member>
+        <member name="T:Barber.IoT.Api.Swagger.TagGroupExtensions">
+            <summary>
+            Add vendor x-tagGroups
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Swagger.TagGroupExtensions.AddGroups(Microsoft.OpenApi.Models.OpenApiDocument,Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            Add x-tagGroups
+            </summary>
+        </member>
+        <member name="M:Barber.IoT.Api.Swagger.TagGroupExtensions.ContollerToTag(System.String)">
+            <summary>
+            Convert Controller name to Tag by removing the 'Controller' Part
+            </summary>
+            <param name="name">Name</param>
+            <returns></returns>
         </member>
     </members>
 </doc>

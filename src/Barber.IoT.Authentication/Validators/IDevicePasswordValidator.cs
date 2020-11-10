@@ -3,7 +3,8 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Identity;
 
-    public interface IDevicePasswordValidator<TUser> where TUser : class
+    public interface IDevicePasswordValidator<TUser>
+        where TUser : class
     {
         /// <summary>
         /// Validates a password as an asynchronous operation.

@@ -10,11 +10,13 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
-    public class DeviceStore<TUser, TContext, TKey> :
+    public class DeviceStore<TUser, TActivity, TContext, TKey> :
         IDeviceStore<TUser>,
         IDevicePasswordStore<TUser>,
-        IDeviceLockoutStore<TUser>
+        IDeviceLockoutStore<TUser>,
+        IDeviceActivityStore<TActivity>
         where TUser : DeviceModel<TKey>
+        where TActivity : DeviceActivityModel<TKey>
         where TKey : IEquatable<TKey>
         where TContext : DbContext
     {
@@ -37,9 +39,14 @@
         public virtual TContext Context { get; private set; }
 
         /// <summary>
-        /// DbSet of users.
+        /// DbSet of device activities.
         /// </summary>
-        protected DbSet<TUser> UsersSet => this.Context.Set<TUser>();
+        protected DbSet<TActivity> ActivitiesSet => this.Context.Set<TActivity>();
+
+        /// <summary>
+        /// DbSet of devices.
+        /// </summary>
+        protected DbSet<TUser> DeviceSet => this.Context.Set<TUser>();
 
         /// <summary>
         /// Converts the provided <paramref name="id"/> to a strongly typed key object.
@@ -122,7 +129,7 @@
             this.ThrowIfDisposed();
             var id = this.ConvertIdFromString(userId);
 
-            return this.UsersSet.FindAsync(new object[] { id }, cancellationToken).AsTask();
+            return this.DeviceSet.FindAsync(new object[] { id }, cancellationToken).AsTask();
         }
 
         /// <inheritdoc />
@@ -131,7 +138,7 @@
             cancellationToken.ThrowIfCancellationRequested();
             this.ThrowIfDisposed();
 
-            return await this.UsersSet.Where(u => u.NormalizedName == normalizedUserName).ToArrayAsync(cancellationToken).ConfigureAwait(false);
+            return await this.DeviceSet.Where(u => u.NormalizedName == normalizedUserName).ToArrayAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -348,6 +355,34 @@
 
         #endregion Lockout
 
+        #region Activity
+
+        /// <inheritdoc />
+        public async Task<IdentityResult> CreateActivityAsync(TActivity user, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            this.ThrowIfDisposed();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            this.Context.Add(user);
+            await this.SaveChanges(cancellationToken).ConfigureAwait(true);
+            return IdentityResult.Success;
+        }
+
+        /// <inheritdoc />
+        public async Task<IReadOnlyList<TActivity>> FindActivityByDeviceIdAsync(string userId, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            this.ThrowIfDisposed();
+
+            return await this.ActivitiesSet.Where(u => u.DeviceId.Equals(userId)).ToArrayAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        #endregion Activity
+
         /// <inheritdoc />
         public void Dispose()
         {
@@ -357,7 +392,7 @@
 
         /// <inheritdoc />
         public async Task<IReadOnlyList<TUser>> GetRegisteredAsync(int take = 100, int skip = 0, CancellationToken cancellationToken = default)
-            => await this.UsersSet
+            => await this.DeviceSet
                 .OrderBy(e => e.Id)
                 .Skip(skip)
                 .Take(take)

@@ -32,14 +32,6 @@
         }
 
         public DbContextOptionsBuilder<BarberIoTContext> Options(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite(this._configuartion.GetConnectionString("barber-main"));
-            if (optionsBuilder is DbContextOptionsBuilder<BarberIoTContext> match)
-            {
-                return match;
-            }
-
-            return new DbContextOptionsBuilder<BarberIoTContext>();
-        }
+            => BarberIoTContextOptionCreator.GetOptionsBuilder(this._configuartion, "barber-main");
     }
 }

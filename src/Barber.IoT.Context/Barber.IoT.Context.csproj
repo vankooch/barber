@@ -36,4 +36,8 @@
     <ProjectReference Include="..\Barber.IoT.Authentication\Barber.IoT.Authentication.csproj" />
     <ProjectReference Include="..\Barber.IoT.Data\Barber.IoT.Data.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
 </Project>

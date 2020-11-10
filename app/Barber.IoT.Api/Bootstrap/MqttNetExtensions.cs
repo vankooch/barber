@@ -31,7 +31,7 @@
             configuration.Bind("MQTT", mqttSettings);
             services.AddSingleton(mqttSettings);
 
-            var deviceHanders = new DeviceHandlers<Device, BarberIoTContext>(
+            var deviceHanders = new DeviceHandlers<Device, DeviceActivity, BarberIoTContext>(
                 barberIoTContext,
                 new UpperInvariantLookupNormalizer(),
                 new OptionModel<PasswordHasherOptions>(passwordHasherOptions),

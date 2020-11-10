@@ -4,7 +4,6 @@
     using Barber.Cli.Helper;
     using Barber.IoT.Context;
     using McMaster.Extensions.CommandLineUtils;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using SimpleInjector;
     using SimpleInjector.Lifestyles;
@@ -82,8 +81,7 @@
             container.RegisterInstance(config);
 
             // Ef
-            var contextOptions = new DbContextOptionsBuilder<BarberIoTContext>()
-                .UseSqlite(config.GetConnectionString("barber-main"));
+            var contextOptions = BarberIoTContextOptionCreator.GetOptionsBuilder(Configuration, "barber-main");
 
             container.RegisterInstance(contextOptions);
 

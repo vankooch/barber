@@ -4,6 +4,7 @@ using Barber.IoT.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Barber.IoT.Context.Migrations
 {
@@ -14,59 +15,106 @@ namespace Barber.IoT.Context.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.1");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                .HasAnnotation("ProductVersion", "3.1.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Barber.IoT.Data.Model.Device", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnName("id")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnName("access_failed_count")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("integer");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .HasColumnName("concurrency_stamp")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnName("lockout_enabled")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnName("lockout_end")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnName("name")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasColumnType("character varying(512)")
+                        .HasMaxLength(512);
 
                     b.Property<string>("NormalizedName")
                         .IsRequired()
                         .HasColumnName("normalized_name")
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(256);
+                        .HasColumnType("character varying(512)")
+                        .HasMaxLength(512);
 
                     b.Property<string>("PasswordHash")
                         .HasColumnName("password_hash")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnName("security_stamp")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
-                        .IsUnique()
                         .HasName("NameIndex");
 
-                    b.ToTable("device","io_t");
+                    b.ToTable("device","iot");
+                });
+
+            modelBuilder.Entity("Barber.IoT.Data.Model.DeviceActivity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("id")
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("Code")
+                        .HasColumnName("code")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnName("date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasColumnName("device_id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Payload")
+                        .HasColumnName("payload")
+                        .HasColumnType("text");
+
+                    b.Property<int>("State")
+                        .HasColumnName("state")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeviceId")
+                        .HasName("DeviceIdIndex");
+
+                    b.ToTable("device_activity","iot");
+                });
+
+            modelBuilder.Entity("Barber.IoT.Data.Model.DeviceActivity", b =>
+                {
+                    b.HasOne("Barber.IoT.Data.Model.Device", null)
+                        .WithMany("Activites")
+                        .HasForeignKey("DeviceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

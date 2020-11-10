@@ -33,7 +33,7 @@
             return this.StatusCode((int)HttpStatusCode.NoContent);
         }
 
-        [HttpDelete("{clientId}/statistics")]
+        [HttpDelete("statistics/{clientId}")]
         public async Task<ActionResult> DeleteClientStatistics(string clientId)
         {
             clientId = HttpUtility.UrlDecode(clientId);

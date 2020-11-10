@@ -29,7 +29,7 @@ namespace Barber.IoT.Authentication.Models
         /// Gets or sets a flag indicating if the device could be locked out.
         /// </summary>
         /// <value>True if the device could be locked out, otherwise false.</value>
-        public virtual bool LockoutEnabled { get; set; }
+        public virtual bool LockoutEnabled { get; set; } = false;
 
         /// <summary>
         /// Gets or sets the date and time, in UTC, when any device lockout ends.

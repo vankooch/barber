@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Stubble.Compilation" Version="1.6.3" />
-    <PackageReference Include="Stubble.Core" Version="1.6.3" />
+    <PackageReference Include="Stubble.Compilation" Version="1.7.2" />
+    <PackageReference Include="Stubble.Core" Version="1.7.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

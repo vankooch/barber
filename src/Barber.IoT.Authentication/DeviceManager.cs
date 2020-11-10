@@ -62,7 +62,7 @@
         /// <value>
         /// true if the backing user store supports user lock-outs, otherwise false.
         /// </value>
-        public virtual bool SupportsUserLockout
+        public virtual bool SupportsDeviceLockout
         {
             get
             {
@@ -77,7 +77,7 @@
         /// <value>
         /// true if the backing user store supports user lock-outs, otherwise false.
         /// </value>
-        public virtual bool SupportsUserPassword
+        public virtual bool SupportsDevicePassword
         {
             get
             {
@@ -165,9 +165,9 @@
                 return result;
             }
 
-            if (this.Options.Lockout.AllowedForNewUsers && this.SupportsUserLockout)
+            if (this.Options.Lockout.AllowedForNewUsers && this.SupportsDeviceLockout)
             {
-                await this.GetUserLockoutStore().SetLockoutEnabledAsync(user, true, this.CancellationToken).ConfigureAwait(true);
+                await this.GetLockoutStore().SetLockoutEnabledAsync(user, true, this.CancellationToken).ConfigureAwait(true);
             }
 
             await this.UpdateNormalizedUserNameAsync(user).ConfigureAwait(true);
@@ -189,7 +189,7 @@
                 throw new ArgumentNullException(nameof(password));
             }
 
-            if (this.SupportsUserPassword)
+            if (this.SupportsDevicePassword)
             {
                 var passwordStore = this.GetPasswordStore();
                 var result = await this.UpdatePasswordHash(passwordStore, user, password).ConfigureAwait(true);
@@ -290,6 +290,25 @@
         }
 
         /// <inheritdoc />
+        public async Task<IdentityResult> ChangePasswordAsync(TUser user, string newPassword)
+        {
+            this.ThrowIfDisposed();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            var passwordStore = this.GetPasswordStore();
+            var result = await this.UpdatePasswordHash(passwordStore, user, newPassword).ConfigureAwait(true);
+            if (!result.Succeeded)
+            {
+                return result;
+            }
+
+            return await this.UpdateUserAsync(user).ConfigureAwait(true);
+        }
+
+        /// <inheritdoc />
         public async Task<bool> CheckPasswordAsync(TUser user, string password)
         {
             this.ThrowIfDisposed();
@@ -356,7 +375,7 @@
             }
 
             // If this puts the user over the threshold for lockout, lock them out and reset the access failed count
-            var store = this.GetUserLockoutStore();
+            var store = this.GetLockoutStore();
             var count = await store.IncrementAccessFailedCountAsync(user, this.CancellationToken).ConfigureAwait(true);
             if (count < this.Options.Lockout.MaxFailedAccessAttempts)
             {
@@ -382,7 +401,7 @@
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var store = this.GetUserLockoutStore();
+            var store = this.GetLockoutStore();
 
             return await store.GetAccessFailedCountAsync(user, this.CancellationToken).ConfigureAwait(true);
         }
@@ -396,7 +415,7 @@
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var store = this.GetUserLockoutStore();
+            var store = this.GetLockoutStore();
             if (!await store.GetLockoutEnabledAsync(user, this.CancellationToken).ConfigureAwait(true))
             {
                 return false;
@@ -420,7 +439,7 @@
                 return IdentityResult.Success;
             }
 
-            var store = this.GetUserLockoutStore();
+            var store = this.GetLockoutStore();
             await store.ResetAccessFailedCountAsync(user, this.CancellationToken).ConfigureAwait(true);
 
             return await this.UpdateUserAsync(user).ConfigureAwait(true);
@@ -435,7 +454,7 @@
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var store = this.GetUserLockoutStore();
+            var store = this.GetLockoutStore();
             await store.SetLockoutEnabledAsync(user, enabled, this.CancellationToken).ConfigureAwait(true);
 
             return await this.UpdateUserAsync(user).ConfigureAwait(true);
@@ -450,7 +469,7 @@
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var store = this.GetUserLockoutStore();
+            var store = this.GetLockoutStore();
             if (!await store.GetLockoutEnabledAsync(user, this.CancellationToken).ConfigureAwait(true))
             {
                 ////Logger.LogWarning(11, "Lockout for user {userId} failed because lockout is not enabled for this user.", await this.GetUserIdAsync(user));
@@ -616,21 +635,21 @@
             return this.PasswordHasher.VerifyHashedPassword(user, hash, password);
         }
 
-        private IDevicePasswordStore<TUser> GetPasswordStore()
+        private IDeviceLockoutStore<TUser> GetLockoutStore()
         {
-            if (!(this.Store is IDevicePasswordStore<TUser> cast))
+            if (!(this.Store is IDeviceLockoutStore<TUser> cast))
             {
-                throw new NotSupportedException("StoreNotIUserPasswordStore");
+                throw new NotSupportedException("StoreNotIUserLockoutStore");
             }
 
             return cast;
         }
 
-        private IDeviceLockoutStore<TUser> GetUserLockoutStore()
+        private IDevicePasswordStore<TUser> GetPasswordStore()
         {
-            if (!(this.Store is IDeviceLockoutStore<TUser> cast))
+            if (!(this.Store is IDevicePasswordStore<TUser> cast))
             {
-                throw new NotSupportedException("StoreNotIUserLockoutStore");
+                throw new NotSupportedException("StoreNotIUserPasswordStore");
             }
 
             return cast;

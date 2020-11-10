@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Barber.IoT.Authentication.EntityFrameworkCore\Barber.IoT.Authentication.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Barber.IoT.Authentication\Barber.IoT.Authentication.csproj" />
+    <ProjectReference Include="..\Barber.IoT.Data\Barber.IoT.Data.csproj" />
   </ItemGroup>
 
 </Project>

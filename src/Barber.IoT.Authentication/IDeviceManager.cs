@@ -156,6 +156,18 @@
         Task<IdentityResult> ChangePasswordAsync(TUser user, string currentPassword, string newPassword);
 
         /// <summary>
+        /// Changes a user's password without confirming.
+        /// as an asynchronous operation.
+        /// </summary>
+        /// <param name="user">The user whose password should be set.</param>
+        /// <param name="newPassword">The new password to set for the specified <paramref name="user"/>.</param>
+        /// <returns>
+        /// The <see cref="Task"/> that represents the asynchronous operation, containing the <see cref="IdentityResult"/>
+        /// of the operation.
+        /// </returns>
+        Task<IdentityResult> ChangePasswordAsync(TUser user, string newPassword);
+
+        /// <summary>
         /// Returns a flag indicating whether the given <paramref name="password"/> is valid for the
         /// specified <paramref name="user"/>.
         /// </summary>

@@ -12,8 +12,9 @@
 
     public static class DeviceIdentityExtensions
     {
-        public static (PasswordHasherOptions passwordOptions, DeviceOptions deviceOptions) AddDeviceIdentityManager<TUser, TContext, TKey>(this IServiceCollection services)
+        public static (PasswordHasherOptions passwordOptions, DeviceOptions deviceOptions) AddDeviceIdentityManager<TUser, TActivity, TContext, TKey>(this IServiceCollection services)
             where TUser : DeviceModel<TKey>
+            where TActivity : DeviceActivityModel<TKey>
             where TKey : IEquatable<TKey>
             where TContext : DbContext
         {
@@ -40,16 +41,23 @@
                 options = deviceOptions;
             });
 
+            _ = services.Configure<LockoutOptions>(options =>
+            {
+                options = deviceOptions.Lockout;
+            });
+
             _ = services.Configure<PasswordHasherOptions>(options =>
             {
                 options = passwordOptions;
             });
 
-            services.TryAddScoped<IDeviceStore<TUser>, DeviceStore<TUser, TContext, TKey>>();
+            services.TryAddScoped<IDeviceStore<TUser>, DeviceStore<TUser, TActivity, TContext, TKey>>();
+            services.TryAddScoped<IDeviceActivityStore<TActivity>, DeviceStore<TUser, TActivity, TContext, TKey>>();
             services.TryAddScoped<IDeviceValidator<TUser>, DeviceValidator<TUser>>();
             services.TryAddScoped<IDevicePasswordValidator<TUser>, DevicePasswordValidator<TUser>>();
             services.TryAddScoped<ILookupNormalizer, UpperInvariantLookupNormalizer>();
             services.TryAddScoped<IDeviceManager<TUser>, DeviceManager<TUser>>();
+            services.TryAddScoped<IDeviceActivityManager<TActivity>, DeviceActivityManager<TActivity>>();
 
             return (passwordOptions, deviceOptions);
         }
