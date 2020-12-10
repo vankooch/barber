@@ -22,7 +22,7 @@
              new NullableConverter(),
             };
 
-        public static List<SchemaModel> ConvertSchema(this SchemaConvetSettings job, ConverterOrderSettings options)
+        public static List<SchemaModel> ProcessJobConverters(this SchemaConvetSettings job, ConverterOrderSettings options)
         {
             var schemas = job.GetSchemas();
             if (schemas == null

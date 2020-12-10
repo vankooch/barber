@@ -31,7 +31,8 @@
                 return name;
             }
 
-            if (options is not ConverterParameterOptionsSettings<MapSettings> settings)
+            var settings = CommonHelpers.TryGetSettings<IEnumerable<MapSettings>>(options);
+            if (settings == null)
             {
                 return name;
             }
@@ -81,9 +82,7 @@
         }
 
         public object GetSampleOptions()
-            => new ConverterParameterOptionsSettings<MapSettings>()
-            {
-                Map = new MapSettings[]
+            => new MapSettings[]
                 {
                     new MapSettings()
                     {
@@ -115,10 +114,9 @@
                         Match = "string",
                         Value = "string",
                     },
-                },
-            };
+                };
 
-        private static string? GetTypeMapResult(ConverterParameterOptionsSettings<MapSettings> settings, string match)
-            => settings.Map.FirstOrDefault(e => e.Match == match)?.Value ?? null;
+        private static string? GetTypeMapResult(IEnumerable<MapSettings> settings, string match)
+            => settings.FirstOrDefault(e => e.Match == match)?.Value ?? null;
     }
 }

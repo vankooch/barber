@@ -3,11 +3,18 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text.Json;
     using Barber.Core.Models;
 
     public static class CommonHelpers
     {
         private const string PATH_SCHEMA = "#/components/schemas/";
+
+        public static T? TryGetSettings<T>(object options)
+        {
+            var json = JsonSerializer.Serialize(options);
+            return JsonSerializer.Deserialize<T>(json);
+        }
 
         public static string? GetReferenceName(this List<SchemaModel> schemas, string? key)
         {

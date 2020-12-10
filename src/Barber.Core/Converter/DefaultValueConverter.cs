@@ -29,7 +29,8 @@
                 return name;
             }
 
-            if (options is not List<DefaultValueMapSettings> settings)
+            var settings = CommonHelpers.TryGetSettings<List<DefaultValueMapSettings>>(options);
+            if (settings == null)
             {
                 return name;
             }

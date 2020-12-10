@@ -47,7 +47,7 @@
                     return job;
                 }
 
-                job.SetSchema(job.ConvertSchema(converterSet));
+                job.SetSchema(job.ProcessJobConverters(converterSet));
             }
 
             return job;

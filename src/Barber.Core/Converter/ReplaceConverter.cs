@@ -17,7 +17,8 @@
                 return name;
             }
 
-            if (options is not MapSettings settings)
+            var settings = CommonHelpers.TryGetSettings<MapSettings>(options);
+            if (settings == null)
             {
                 return name;
             }

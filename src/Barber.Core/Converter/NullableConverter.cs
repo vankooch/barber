@@ -29,7 +29,8 @@
                 return name;
             }
 
-            if (options is not List<MapSettings> settings)
+            var settings = CommonHelpers.TryGetSettings<List<MapSettings>>(options);
+            if (settings == null)
             {
                 return name;
             }
