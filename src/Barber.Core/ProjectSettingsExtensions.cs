@@ -25,7 +25,7 @@
             SchemaConvetSettings? job = null;
             if (settings?.SchemaJobs?.Count > 0)
             {
-                if (settings.SchemaJobs.Count == 1)
+                if (settings.SchemaJobs.Count == 1 || string.IsNullOrWhiteSpace(jobName))
                 {
                     job = settings.SchemaJobs[0];
                 }
@@ -40,14 +40,22 @@
                 }
 
                 job.SetSchema(schemas.ToList());
-
-                var converterSet = settings.Presets.FirstOrDefault(e => e.Name == job.Preset);
-                if (converterSet == null)
+                if (job.Preset == null
+                    || job.Preset.Count == 0)
                 {
                     return job;
                 }
 
-                job.SetSchema(job.ProcessJobConverters(converterSet));
+                foreach (var item in job.Preset)
+                {
+                    var converterSet = settings.Presets.FirstOrDefault(e => e.Name == item);
+                    if (converterSet == null)
+                    {
+                        continue;
+                    }
+
+                    job.SetSchema(job.ProcessJobConverters(converterSet));
+                }
             }
 
             return job;

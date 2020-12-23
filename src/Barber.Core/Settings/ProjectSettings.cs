@@ -74,7 +74,7 @@
                     new SchemaConvetSettings()
                     {
                         Name = "SampleConvert",
-                        Preset = "Samples",
+                        Preset = new List<string>() { "Samples" },
                         IsSingleFile = true,
                     },
                 },

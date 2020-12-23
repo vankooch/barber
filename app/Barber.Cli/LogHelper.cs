@@ -7,39 +7,6 @@
     {
         private const int LINE_WIDTH = 80;
 
-        public static void AlignCenter(string text)
-        {
-            if (text.Length > Console.WindowWidth)
-            {
-                Console.WriteLine(text);
-                return;
-            }
-
-            decimal size = Console.WindowWidth - 1 - text.Length;
-            var rightSize = (int)Math.Round(size / 2);
-            var leftSize = (int)(size - rightSize);
-            var leftMargin = new string(' ', leftSize);
-            var rightMargin = new string(' ', rightSize);
-
-            Console.Write(leftMargin);
-            Console.Write(text);
-            Console.WriteLine(rightMargin);
-        }
-
-        public static void DivisionLine(char character, bool color = true)
-        {
-            var text = new string(character, Console.WindowWidth - 1);
-            if (color)
-            {
-                Console.BackgroundColor = ConsoleColor.DarkCyan;
-                Console.ForegroundColor = ConsoleColor.White;
-            }
-
-            Console.Write(text);
-            Console.ResetColor();
-            Console.Write(Environment.NewLine);
-        }
-
         public static void Error(string message)
         {
             Console.ResetColor();
@@ -78,7 +45,7 @@
 
             Console.ResetColor();
             var count = message.HasValue ? message.Value.ToString() + "[#]" : string.Empty;
-            var format = $" - {sw.Elapsed.TotalSeconds.ToString("0.00")}[sec] {count}";
+            var format = $" - {sw.Elapsed.TotalSeconds:0.00}[sec] {count}";
             Console.Write(format);
             Console.Write(Environment.NewLine);
         }

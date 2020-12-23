@@ -19,9 +19,11 @@
 
         public string? Name { get; set; }
 
-        public string Preset { get; set; } = string.Empty;
+        public List<string> Preset { get; set; } = new List<string>();
 
         public List<string> Schemas { get; set; } = new List<string>();
+
+        public List<string> Imports { get; set; } = new List<string>();
 
         public string Template { get; set; } = "interface-single.mustache";
 

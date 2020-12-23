@@ -50,7 +50,7 @@
             propertyAction = (schema, property) =>
             {
                 property = schemas.ReferenceNameConvert(property);
-                property.Type = options.PropertyTypeConverter.RunConverters(property.Type, schema, property) ?? property.Schema.Type;
+                property.Type = options.PropertyTypeConverter.RunConverters(property.Type, schema, property) ?? string.Empty;
                 property.DefaultValue = options.PropertyDefaultValueConverter.RunConverters(property.DefaultValue, schema, property);
             };
 
@@ -69,7 +69,7 @@
               || job == null
               )
             {
-                return job;
+                return job ?? new SchemaConvetSettings();
             }
 
             var template = CommonHelpers.UpdatePath(job.Template);
@@ -81,7 +81,7 @@
             var render = new MustacheRenderer();
             if (job.IsSingleFile)
             {
-                var content = await render.Render(template, new { Schemas = schemas });
+                var content = await render.Render(template, new { Schemas = schemas, JobImports = job.Imports });
                 result.Add(new FileModel()
                 {
                     Key = job.Name ?? "SingleFile",
@@ -95,7 +95,7 @@
                     result.Add(new FileModel()
                     {
                         Key = item.Key,
-                        Content = await render.Render(template, item),
+                        Content = await render.Render(template, new { Schema = item, JobImports = job.Imports }),
                     });
                 }
             }
@@ -121,10 +121,10 @@
 
             for (var i = 0; i < files.Count; i++)
             {
-                var path = job.Destination;
+                var path = job.Destination ?? string.Empty;
                 if (job.IsSingleFile)
                 {
-                    path = Path.Combine(path, job.Filename);
+                    path = Path.Combine(path, job.Filename ?? string.Empty);
                 }
                 else
                 {
@@ -141,6 +141,13 @@
                 if (!string.IsNullOrWhiteSpace(files[i].Content)
                     && !string.IsNullOrWhiteSpace(path))
                 {
+                    // Check if path exits
+                    var directory = Path.GetDirectoryName(path);
+                    if (!Directory.Exists(directory))
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+
                     File.WriteAllText(path, files[i].Content);
                 }
             }
@@ -161,6 +168,7 @@
                 return schemas ?? new List<SchemaModel>();
             }
 
+            var newSchemas = new List<SchemaModel>();
             foreach (var schema in schemas)
             {
                 if (job?.Schemas?.Count > 0
@@ -183,9 +191,11 @@
                         propertyAction(schema, property);
                     }
                 }
+
+                newSchemas.Add(schema);
             }
 
-            return schemas;
+            return newSchemas;
         }
 
         private static string? RunConverters(

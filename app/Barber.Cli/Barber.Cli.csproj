@@ -18,7 +18,7 @@
     <NeutralLanguage>en</NeutralLanguage>
     <Description>Barber is cli-tool for generating files based on mustache templates. In addition it can read and process OpenAPI 3 specifications and generate code based on templates.</Description>
     <PackageIcon>barber.png</PackageIcon>
-    <Version>2.6.0</Version>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

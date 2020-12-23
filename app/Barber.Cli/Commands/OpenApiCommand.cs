@@ -131,6 +131,7 @@
 
                 // Convert
                 var job = project.RunSchemaConverts(schemas, stepName.Value());
+                schemas = job.GetSchemas() ?? schemas;
 
                 // List
                 schemas.ListProperties();
