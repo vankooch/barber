@@ -96,7 +96,7 @@
                 },
                 new DefaultValueMapSettings()
                 {
-                    Match = "data-time",
+                    Match = "date-time",
                     Value = "new Date()",
                     NullableValue = "null",
                 },
