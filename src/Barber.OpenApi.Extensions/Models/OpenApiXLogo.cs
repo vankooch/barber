@@ -19,7 +19,7 @@
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="url">Group Name</param>
+        /// <param name="url">Uri to image</param>
         public OpenApiXLogo(string url) => this.Url = url;
 
         /// <summary>

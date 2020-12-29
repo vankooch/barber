@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <None Include="barber.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
