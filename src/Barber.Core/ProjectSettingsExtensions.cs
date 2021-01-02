@@ -9,6 +9,46 @@
 
     public static class ProjectSettingsExtensions
     {
+        public static ConverterOrderSettings? GetPreset(this ProjectSettings? settings, string? name)
+        {
+            if (settings == null || string.IsNullOrWhiteSpace(name))
+            {
+                return null;
+            }
+
+            var converterSet = settings.Presets.FirstOrDefault(e => e.Name == name);
+            if (converterSet == null)
+            {
+                return null;
+            }
+
+            if (!string.IsNullOrWhiteSpace(converterSet.Extends))
+            {
+                var extends = settings.Presets.FirstOrDefault(e => e.Name == converterSet.Extends);
+                if (extends != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(extends.Extends))
+                    {
+                        extends = settings.GetPreset(extends.Name)!;
+                    }
+
+                    var result = new ConverterOrderSettings()
+                    {
+                        Name = converterSet.Name,
+                        Extends = converterSet.Extends,
+                        PropertyDefaultValueConverter = extends.PropertyDefaultValueConverter.Concat(converterSet.PropertyDefaultValueConverter).ToList(),
+                        PropertyNameConverter = extends.PropertyNameConverter.Concat(converterSet.PropertyNameConverter).ToList(),
+                        PropertyTypeConverter = extends.PropertyTypeConverter.Concat(converterSet.PropertyTypeConverter).ToList(),
+                        SchemaNameConverter = extends.SchemaNameConverter.Concat(converterSet.SchemaNameConverter).ToList(),
+                    };
+
+                    return result;
+                }
+            }
+
+            return converterSet;
+        }
+
         public static ProjectSettings? ReadProjectSettings(string file = "barber.json")
         {
             var json = Converter.CommonHelpers.ReadFile(file);
@@ -17,48 +57,37 @@
                 return null;
             }
 
-            return JsonSerializer.Deserialize<ProjectSettings>(json);
+            var options = new JsonSerializerOptions
+            {
+                ReadCommentHandling = JsonCommentHandling.Skip,
+            };
+
+            return JsonSerializer.Deserialize<ProjectSettings>(json, options);
         }
 
-        public static SchemaConvetSettings? RunSchemaConverts(this ProjectSettings? settings, List<SchemaModel> schemas, string? jobName = null)
+        public static ProjectSettings? RunSchemaConverts(this ProjectSettings? settings, List<SchemaModel> schemas)
         {
-            SchemaConvetSettings? job = null;
             if (settings?.SchemaJobs?.Count > 0)
             {
-                if (settings.SchemaJobs.Count == 1 || string.IsNullOrWhiteSpace(jobName))
+                for (var i = 0; i < settings.SchemaJobs.Count; i++)
                 {
-                    job = settings.SchemaJobs[0];
-                }
-                else
-                {
-                    job = settings.SchemaJobs.FirstOrDefault(e => e.Name == jobName);
-                }
+                    var job = settings.SchemaJobs[i];
+                    job.SetSchema(schemas.ToList());
 
-                if (job == null)
-                {
-                    return null;
-                }
-
-                job.SetSchema(schemas.ToList());
-                if (job.Preset == null
-                    || job.Preset.Count == 0)
-                {
-                    return job;
-                }
-
-                foreach (var item in job.Preset)
-                {
-                    var converterSet = settings.Presets.FirstOrDefault(e => e.Name == item);
-                    if (converterSet == null)
+                    for (var j = 0; j < job.Preset.Count; j++)
                     {
-                        continue;
-                    }
+                        var converterSet = settings.GetPreset(job.Preset[j]);
+                        if (converterSet == null)
+                        {
+                            continue;
+                        }
 
-                    job.SetSchema(job.ProcessJobConverters(converterSet));
+                        job.SetSchema(job.ProcessJobConverters(converterSet));
+                    }
                 }
             }
 
-            return job;
+            return settings;
         }
 
         public static void WriteProjectSettings(this ProjectSettings? me, string file = "barber.json")

@@ -11,9 +11,12 @@
     /// - array
     /// - boolean
     /// - date-time
+    /// - uuid
     /// - int
     /// - int64
     /// - string
+    /// - object
+    /// - enum
     /// </summary>
     public class TypeConverter : IConverter
     {
@@ -24,7 +27,6 @@
         public string? Convert(string? name, object? options, SchemaModel schemaModel, PropertyModel? propteryModel)
         {
             if (options == null
-                || name == null
                 || propteryModel == null
                 || propteryModel.Schema == null)
             {
@@ -40,42 +42,73 @@
             string? result = null;
             switch (propteryModel.Schema.Type)
             {
-                case "array":
-                    result = GetTypeMapResult(settings, "array");
+                case TypeNames.ARRAY:
+                    result = GetTypeMapResult(settings, TypeNames.ARRAY);
                     if (!string.IsNullOrWhiteSpace(propteryModel.TypeReference))
                     {
                         result = result?.Replace("TYPE", propteryModel.TypeReference);
                     }
+                    else
+                    {
+                        result = result?.Replace("TYPE", string.Empty);
+                    }
 
                     break;
 
-                case "integer" when propteryModel.Schema.Format == "int64":
-                    result = GetTypeMapResult(settings, "int64");
+                case TypeNames.INTEGER when propteryModel.Schema.Format == TypeNames.INT64:
+                    result = GetTypeMapResult(settings, TypeNames.INT64);
                     break;
 
-                case "integer":
-                    result = GetTypeMapResult(settings, "int");
+                case TypeNames.INTEGER when !string.IsNullOrWhiteSpace(propteryModel.TypeReference):
+                    result = GetTypeMapResult(settings, TypeNames.ENUM);
                     break;
 
-                case "boolean":
-                    result = GetTypeMapResult(settings, "boolean");
+                case TypeNames.INTEGER:
+                    result = GetTypeMapResult(settings, TypeNames.INT);
                     break;
 
-                case "string" when propteryModel.Schema.Format == "date-time":
-                    result = GetTypeMapResult(settings, "date-time");
+                case TypeNames.BOOL:
+                    result = GetTypeMapResult(settings, TypeNames.BOOL);
                     break;
 
-                case "string":
-                    result = GetTypeMapResult(settings, "string");
+                case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.DATETIME:
+                    result = GetTypeMapResult(settings, TypeNames.DATETIME);
                     break;
 
-                case "object":
-                    result = propteryModel.TypeReference;
+                case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.UUID:
+                    result = GetTypeMapResult(settings, TypeNames.UUID);
+                    break;
+
+                case TypeNames.STRING when !string.IsNullOrWhiteSpace(propteryModel.TypeReference):
+                    result = GetTypeMapResult(settings, TypeNames.ENUM);
+                    result = result?.Replace("TYPE", propteryModel.TypeReference);
+
+                    break;
+
+                case TypeNames.STRING:
+                    result = GetTypeMapResult(settings, TypeNames.STRING);
+
+                    break;
+
+                case TypeNames.OBJECT:
+                    result = GetTypeMapResult(settings, TypeNames.OBJECT);
+                    result = result?.Replace("TYPE", propteryModel.TypeReference);
 
                     break;
 
                 default:
                     break;
+            }
+
+            if (result == null)
+            {
+                result = GetTypeMapResult(settings, "*");
+            }
+
+            // Try match exact
+            if (result == null && !string.IsNullOrWhiteSpace(propteryModel.TypeReference))
+            {
+                result = GetTypeMapResult(settings, propteryModel.TypeReference);
             }
 
             return result ?? name;
@@ -86,33 +119,48 @@
                 {
                     new MapSettings()
                     {
-                        Match = "array",
+                        Match = TypeNames.ARRAY,
                         Value = "TYPE[]",
                     },
                     new MapSettings()
                     {
-                        Match = "boolean",
-                        Value = "boolean",
+                        Match = TypeNames.BOOL,
+                        Value = TypeNames.BOOL,
                     },
                     new MapSettings()
                     {
-                        Match = "data-time",
+                        Match = TypeNames.DATETIME,
                         Value = "string | Date",
                     },
                     new MapSettings()
                     {
-                        Match = "int",
+                        Match = TypeNames.UUID,
+                        Value = TypeNames.STRING,
+                    },
+                    new MapSettings()
+                    {
+                        Match = TypeNames.INT,
                         Value = "number",
                     },
                     new MapSettings()
                     {
-                        Match = "int64",
+                        Match = TypeNames.INT64,
                         Value = "number",
                     },
                     new MapSettings()
                     {
-                        Match = "string",
-                        Value = "string",
+                        Match = TypeNames.STRING,
+                        Value = TypeNames.STRING,
+                    },
+                    new MapSettings()
+                    {
+                        Match = TypeNames.ENUM,
+                        Value = "TYPE",
+                    },
+                    new MapSettings()
+                    {
+                        Match = TypeNames.OBJECT,
+                        Value = "TYPE",
                     },
                 };
 

@@ -48,10 +48,6 @@
                "URL / Path to OpenAPI File",
                CommandOptionType.SingleValue);
 
-            var stepName = config.Option("-s | --step",
-               "Run only given schema job",
-               CommandOptionType.SingleValue);
-
             var schemaOnly = config.Option("--schema",
                "Only list schema",
                CommandOptionType.NoValue);
@@ -74,9 +70,6 @@
                 // Read OpenAPI file
                 var document = await DocumentExtensions.ReadDocument(urlOption.Value() ?? project.Api, "en-US", cancellationToken);
                 var schemas = document.ReadSchemas();
-
-                // Convert
-                var job = project.RunSchemaConverts(schemas, stepName.Value());
 
                 // List steps
                 if (schemaOnly.HasValue())
@@ -130,14 +123,35 @@
                 var schemas = document.ReadSchemas();
 
                 // Convert
-                var job = project.RunSchemaConverts(schemas, stepName.Value());
-                schemas = job.GetSchemas() ?? schemas;
+                project = project.RunSchemaConverts(schemas);
 
-                // List
-                schemas.ListProperties();
+                // Find step
+                if (stepName.HasValue())
+                {
+                    var jobName = stepName.Value();
+                    var job = project?.SchemaJobs.FirstOrDefault(e => e.Name == jobName.Trim());
+                    if (job == null)
+                    {
+                        System.Console.WriteLine($"Could not find step: '{jobName}' to process");
+                        return 1;
+                    }
 
-                job = await job.RenderFileContent();
-                job.WriteFiles();
+                    // List
+                    schemas = job.GetSchemas() ?? schemas;
+                    schemas.ListProperties();
+
+                    job = await job.RenderFileContent(project);
+                    job.WriteFiles();
+                }
+                else
+                {
+                    for (var i = 0; i < project?.SchemaJobs.Count; i++)
+                    {
+                        var job = project.SchemaJobs[i];
+                        job = await job.RenderFileContent(project);
+                        job.WriteFiles();
+                    }
+                }
 
                 return 0;
             });

@@ -2,7 +2,7 @@
   "profiles": {
     "Barber.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "openapi -p C:\\Users\\Kiarash\\Documents\\GitHub\\barber\\app\\Barber.Cli\\barber.json"
+      "commandLineArgs": "openapi -p C:\\Projects\\krsm-cobino\\app\\Cobino.Web\\barber.json -s interfaces"
     }
   }
 }

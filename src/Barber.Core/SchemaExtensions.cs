@@ -33,6 +33,7 @@
                 return schemas ?? new List<SchemaModel>();
             }
 
+            var typeMatcher = new TypeInternConverter();
             Action<SchemaModel> schemaAction = (schema) =>
             {
                 schema.Name = options.SchemaNameConverter.RunConverters(schema.Name, schema, null) ?? schema.Key;
@@ -41,6 +42,7 @@
             Action<SchemaModel, PropertyModel> propertyAction = (schema, property) =>
             {
                 property.Name = options.PropertyNameConverter.RunConverters(property.Name, schema, property) ?? property.Key;
+                property.TypeMatched = typeMatcher.Convert(property.Type, property);
             };
 
             // First process names
@@ -60,7 +62,7 @@
             return schemas;
         }
 
-        public static async Task<SchemaConvetSettings> RenderFileContent(this SchemaConvetSettings job)
+        public static async Task<SchemaConvetSettings> RenderFileContent(this SchemaConvetSettings job, ProjectSettings? project)
         {
             var result = new List<FileModel>();
             var schemas = job.GetSchemas();
@@ -79,9 +81,15 @@
             }
 
             var render = new MustacheRenderer();
+            var data = new TemplateDataModel()
+            {
+                Step = job,
+            };
             if (job.IsSingleFile)
             {
-                var content = await render.Render(template, new { Schemas = schemas, JobImports = job.Imports });
+                data.Schemas = schemas;
+                data.GetReferencedSchemas(project);
+                var content = await render.Render(template, data);
                 result.Add(new FileModel()
                 {
                     Key = job.Name ?? "SingleFile",
@@ -92,10 +100,12 @@
             {
                 foreach (var item in schemas)
                 {
+                    data.Schema = item;
+                    data.GetReferencedSchemas(project);
                     result.Add(new FileModel()
                     {
                         Key = item.Key,
-                        Content = await render.Render(template, new { Schema = item, JobImports = job.Imports }),
+                        Content = await render.Render(template, data),
                     });
                 }
             }
@@ -179,20 +189,35 @@
                     continue;
                 }
 
-                // Action
-                schemaAction(schema);
-
-                if (schema.Properties != null
-                    && schema.Properties.Count > 0)
+                if (job?.SchemasSkip?.Count > 0
+                    && job
+                    .SchemasSkip
+                    .Any(e => !string.IsNullOrWhiteSpace(e) && e.Trim() == schema.Key))
                 {
-                    foreach (var property in schema.Properties)
+                    continue;
+                }
+
+                // Action
+                var local = new SchemaModel()
+                {
+                    Key = schema.Key,
+                    Name = schema.Name,
+                    Properties = schema.Properties,
+                    Schema = schema.Schema,
+                };
+                schemaAction(local);
+
+                if (local.Properties != null
+                    && local.Properties.Count > 0)
+                {
+                    foreach (var property in local.Properties)
                     {
                         // Action
-                        propertyAction(schema, property);
+                        propertyAction(local, property);
                     }
                 }
 
-                newSchemas.Add(schema);
+                newSchemas.Add(local);
             }
 
             return newSchemas;

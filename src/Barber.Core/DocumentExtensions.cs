@@ -7,9 +7,7 @@
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
-    using Barber.Core.Converter;
     using Barber.Core.Models;
-    using Barber.Core.Settings;
     using Microsoft.OpenApi.Models;
     using Microsoft.OpenApi.Readers;
 

@@ -23,7 +23,9 @@
 
         public List<string> Schemas { get; set; } = new List<string>();
 
-        public List<string> Imports { get; set; } = new List<string>();
+        public List<string> SchemasSkip { get; set; } = new List<string>();
+
+        public List<string>? Extra { get; set; }
 
         public string Template { get; set; } = "interface-single.mustache";
 

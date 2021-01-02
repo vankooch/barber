@@ -11,9 +11,12 @@
     /// - array
     /// - boolean
     /// - date-time
+    /// - uuid
     /// - int
     /// - int64
     /// - string
+    /// - object
+    /// - enum
     /// - *
     /// </summary>
     public class NullableConverter : IConverter
@@ -43,32 +46,63 @@
             MapSettings? result = null;
             switch (propteryModel.Schema.Type)
             {
-                case "array":
-                    result = settings.FirstOrDefault(e => e.Match == "array");
+                case TypeNames.ARRAY:
+                    result = settings.FirstOrDefault(e => e.Match == TypeNames.ARRAY);
                     break;
 
-                case "integer" when propteryModel.Schema.Format == "int64":
-                    result = settings.FirstOrDefault(e => e.Match == "int64");
+                case TypeNames.INTEGER when propteryModel.Schema.Format == TypeNames.INT64:
+                    result = settings.FirstOrDefault(e => e.Match == TypeNames.INT64);
                     break;
 
-                case "integer":
-                    result = settings.FirstOrDefault(e => e.Match == "int");
+                case TypeNames.INTEGER when !string.IsNullOrWhiteSpace(propteryModel.TypeReference):
+                    result = settings.FirstOrDefault(e => e.Match == TypeNames.ENUM);
                     break;
 
-                case "boolean":
-                    result = settings.FirstOrDefault(e => e.Match == "boolean");
+                case TypeNames.INTEGER:
+                    result = settings.FirstOrDefault(e => e.Match == TypeNames.INT);
                     break;
 
-                case "string" when propteryModel.Schema.Format == "date-time":
-                    result = settings.FirstOrDefault(e => e.Match == "date-time");
+                case TypeNames.BOOL:
+                    result = settings.FirstOrDefault(e => e.Match == TypeNames.BOOL);
                     break;
 
-                case "string":
-                    result = settings.FirstOrDefault(e => e.Match == "string");
+                case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.DATETIME:
+                    result = settings.FirstOrDefault(e => e.Match == TypeNames.DATETIME);
+                    break;
+
+                case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.UUID:
+                    result = settings.FirstOrDefault(e => e.Match == TypeNames.UUID);
+                    break;
+
+                case TypeNames.STRING when !string.IsNullOrWhiteSpace(propteryModel.TypeReference):
+                    result = settings.FirstOrDefault(e => e.Match == TypeNames.ENUM);
+                    break;
+
+                case TypeNames.STRING:
+                    result = settings.FirstOrDefault(e => e.Match == TypeNames.STRING);
+                    break;
+
+                case TypeNames.OBJECT:
+                    var match = settings.FirstOrDefault(e => e.Match == propteryModel.TypeReference);
+                    if (match == null)
+                    {
+                        result = settings.FirstOrDefault(e => e.Match == TypeNames.OBJECT);
+                    }
+                    else
+                    {
+                        result = match;
+                    }
+
                     break;
 
                 default:
                     break;
+            }
+
+            // Try match exact
+            if (result == null)
+            {
+                result = settings.FirstOrDefault(e => e.Match == propteryModel.TypeReference);
             }
 
             if (result == null)

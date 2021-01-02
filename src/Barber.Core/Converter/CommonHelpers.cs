@@ -90,6 +90,12 @@
                     break;
 
                 default:
+                    if (!string.IsNullOrWhiteSpace(propteryModel.TypeReference))
+                    {
+                        propteryModel.TypeReference = propteryModel.TypeReference?.Replace(PATH_SCHEMA, string.Empty);
+                        propteryModel.TypeReference = schemas.GetReferenceName(propteryModel.TypeReference);
+                    }
+
                     break;
             }
 

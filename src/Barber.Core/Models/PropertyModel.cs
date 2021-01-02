@@ -20,6 +20,8 @@
 
         public string Type { get; set; } = string.Empty;
 
+        public string TypeMatched { get; set; } = string.Empty;
+
         public string? TypeReference { get; set; }
     }
 }
