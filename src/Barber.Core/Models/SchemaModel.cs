@@ -17,15 +17,20 @@
         public OpenApiSchema? Schema { get; set; }
 
         #region Helper
-        public bool HasDateTime => this.HasHelper("date-time");
 
-        public bool HasEnum => this.HasHelper("enum");
+        public bool HasDateTime => this.HasHelper(TypeNames.DATETIME);
 
-        public bool HasInt64 => this.HasHelper("int64");
+        public bool HasDate => this.HasHelper(TypeNames.DATE);
 
-        public bool HasObject => this.HasHelper("object");
+        public bool HasEnum => this.HasHelper(TypeNames.ENUM);
 
-        public bool HasUUID => this.HasHelper("uuid");
+        public bool HasInt64 => this.HasHelper(TypeNames.INT64);
+
+        public bool HasIntDouble => this.HasHelper(TypeNames.DOUBLE);
+
+        public bool HasObject => this.HasHelper(TypeNames.OBJECT);
+
+        public bool HasUUID => this.HasHelper(TypeNames.UUID);
 
         #endregion Helper
 

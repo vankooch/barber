@@ -2,7 +2,7 @@
   "profiles": {
     "Barber.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "openapi -p C:\\Projects\\krsm-cobino\\app\\Cobino.Web\\barber.json -s interfaces"
+      "commandLineArgs": "openapi -p C:\\Projects\\krsm-cobino\\app\\Cobino.Web\\barber-vue.json -s states-class"
     }
   }
 }

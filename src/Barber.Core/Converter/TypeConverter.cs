@@ -10,10 +10,13 @@
     /// Known types:
     /// - array
     /// - boolean
+    /// - date
     /// - date-time
     /// - uuid
     /// - int
     /// - int64
+    /// - double
+    /// - number
     /// - string
     /// - object
     /// - enum
@@ -67,12 +70,29 @@
                     result = GetTypeMapResult(settings, TypeNames.INT);
                     break;
 
+                case TypeNames.NUMBER when propteryModel.Schema.Format == TypeNames.DOUBLE:
+                    result = GetTypeMapResult(settings, TypeNames.DOUBLE);
+                    break;
+
+                case TypeNames.NUMBER:
+                    result = GetTypeMapResult(settings, TypeNames.NUMBER);
+                    if (result == null)
+                    {
+                        result = GetTypeMapResult(settings, TypeNames.INT);
+                    }
+
+                    break;
+
                 case TypeNames.BOOL:
                     result = GetTypeMapResult(settings, TypeNames.BOOL);
                     break;
 
                 case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.DATETIME:
                     result = GetTypeMapResult(settings, TypeNames.DATETIME);
+                    break;
+
+                case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.DATE:
+                    result = GetTypeMapResult(settings, TypeNames.DATE);
                     break;
 
                 case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.UUID:
@@ -129,6 +149,11 @@
                     },
                     new MapSettings()
                     {
+                        Match = TypeNames.DATE,
+                        Value = "string | Date",
+                    },
+                    new MapSettings()
+                    {
                         Match = TypeNames.DATETIME,
                         Value = "string | Date",
                     },
@@ -145,6 +170,16 @@
                     new MapSettings()
                     {
                         Match = TypeNames.INT64,
+                        Value = "number",
+                    },
+                    new MapSettings()
+                    {
+                        Match = TypeNames.DOUBLE,
+                        Value = "number",
+                    },
+                    new MapSettings()
+                    {
+                        Match = TypeNames.NUMBER,
                         Value = "number",
                     },
                     new MapSettings()

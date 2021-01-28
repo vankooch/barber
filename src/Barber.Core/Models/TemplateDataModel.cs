@@ -20,15 +20,19 @@
 
         #region Helper
 
-        public bool HasDateTime => this.HasHelper("date-time");
+        public bool HasDateTime => this.HasHelper(TypeNames.DATETIME);
 
-        public bool HasEnum => this.HasHelper("enum");
+        public bool HasDate => this.HasHelper(TypeNames.DATE);
 
-        public bool HasInt64 => this.HasHelper("int64");
+        public bool HasEnum => this.HasHelper(TypeNames.ENUM);
 
-        public bool HasObject => this.HasHelper("object");
+        public bool HasInt64 => this.HasHelper(TypeNames.INT64);
 
-        public bool HasUUID => this.HasHelper("uuid");
+        public bool HasIntDouble => this.HasHelper(TypeNames.DOUBLE);
+
+        public bool HasObject => this.HasHelper(TypeNames.OBJECT);
+
+        public bool HasUUID => this.HasHelper(TypeNames.UUID);
 
         #endregion Helper
 
@@ -56,26 +60,7 @@
             var refKeys = this.GetReferencedSchemasKeys();
             if (refKeys?.Count > 0 && project?.SchemaJobs?.Count > 0)
             {
-                for (var i = 0; i < refKeys.Count; i++)
-                {
-                    var key = refKeys[i];
-                    for (var j = 0; j < project.SchemaJobs.Count; j++)
-                    {
-                        if (project.SchemaJobs[j].Schemas.Any(e => e == key))
-                        {
-                            var schemas = project.SchemaJobs[j].GetSchemas();
-                            var match = schemas?.FirstOrDefault(e => e.Key == key);
-
-                            list.Add(new ReferencedSchemasItemModel()
-                            {
-                                Key = key,
-                                File = project.SchemaJobs[j].Filename,
-                                Name = match?.Name ?? string.Empty,
-                            });
-                        }
-                    }
-                }
-
+                list = this.AddMatchs(project, refKeys);
                 this._referencedSchemas = list
                     .GroupBy(e => e.File)
                     .Select(e => new ReferencedSchemasModel()
@@ -89,6 +74,45 @@
             }
 
             return this._referencedSchemas;
+        }
+
+        private List<ReferencedSchemasItemModel> AddMatchs(ProjectSettings? project, List<string>? refKeys)
+        {
+            var result = new List<ReferencedSchemasItemModel>();
+            if (refKeys?.Count > 0 && project?.SchemaJobs?.Count > 0)
+            {
+                var nextRun = new List<string>();
+                for (var i = 0; i < refKeys.Count; i++)
+                {
+                    var key = refKeys[i];
+                    for (var j = 0; j < project.SchemaJobs.Count; j++)
+                    {
+                        var schemas = project.SchemaJobs[j].GetSchemas();
+                        var match = schemas?.FirstOrDefault(e => e.Name == key);
+                        if (match != null)
+                        {
+                            result.Add(new ReferencedSchemasItemModel()
+                            {
+                                Key = key,
+                                File = project.SchemaJobs[j].Filename ?? string.Empty,
+                                Name = match.Name,
+                            });
+
+                            if (match.Name != match.Key && match.Key != key)
+                            {
+                                nextRun.Add(match.Key);
+                            }
+                        }
+                    }
+                }
+
+                if (nextRun.Count > 0)
+                {
+                    result.AddRange(this.AddMatchs(project, nextRun));
+                }
+            }
+
+            return result;
         }
 
         private bool HasHelper(string match)

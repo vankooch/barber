@@ -40,6 +40,7 @@
                         PropertyNameConverter = extends.PropertyNameConverter.Concat(converterSet.PropertyNameConverter).ToList(),
                         PropertyTypeConverter = extends.PropertyTypeConverter.Concat(converterSet.PropertyTypeConverter).ToList(),
                         SchemaNameConverter = extends.SchemaNameConverter.Concat(converterSet.SchemaNameConverter).ToList(),
+                        Skips = extends.Skips.Concat(converterSet.Skips).ToList(),
                     };
 
                     return result;

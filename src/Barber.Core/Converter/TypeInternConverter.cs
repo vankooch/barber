@@ -7,10 +7,13 @@
     /// Known types:
     /// - array
     /// - boolean
+    /// - date
     /// - date-time
     /// - uuid
     /// - int
     /// - int64
+    /// - double
+    /// - number
     /// - string
     /// - object
     /// - enum
@@ -48,12 +51,24 @@
                     result = TypeNames.INT;
                     break;
 
+                case TypeNames.NUMBER when propteryModel.Schema.Format == TypeNames.DOUBLE:
+                    result = TypeNames.DOUBLE;
+                    break;
+
+                case TypeNames.NUMBER:
+                    result = TypeNames.NUMBER;
+                    break;
+
                 case TypeNames.BOOL:
                     result = TypeNames.BOOL;
                     break;
 
                 case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.DATETIME:
                     result = TypeNames.DATETIME;
+                    break;
+
+                case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.DATE:
+                    result = TypeNames.DATE;
                     break;
 
                 case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.UUID:

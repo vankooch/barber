@@ -159,15 +159,15 @@
 
         private static void ListProperties(this IList<SchemaModel> schemas)
         {
-            var table = new ConsoleTable("#", "Schema Key", "Schema Name", "Property Key", "Property Name", "Type", "Default Value");
+            var table = new ConsoleTable("#", "Schema Key", "Schema Name", "Property Key", "Property Name", "Type", "Default Value", "Matched");
             var count = 0;
             foreach (var item in schemas.OrderBy(e => e.Key))
             {
                 count++;
-                table.AddRow(count, item.Key, item.Name, string.Empty, string.Empty, string.Empty, string.Empty);
+                table.AddRow(count, item.Key, item.Name, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
                 foreach (var prop in item.Properties)
                 {
-                    table.AddRow(count, item.Key, item.Name, prop.Key, prop.Name, prop.Type, prop.DefaultValue);
+                    table.AddRow(count, item.Key, item.Name, prop.Key, prop.Name, prop.Type, prop.DefaultValue, prop.TypeMatched);
                 }
             }
 

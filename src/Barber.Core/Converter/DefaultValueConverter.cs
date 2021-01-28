@@ -10,10 +10,13 @@
     /// Known types:
     /// - array
     /// - boolean
+    /// - date
     /// - date-time
     /// - uuid
     /// - int
     /// - int64
+    /// - double
+    /// - number
     /// - string
     /// - object
     /// - enum
@@ -57,12 +60,29 @@
                     result = settings.FirstOrDefault(e => e.Match == TypeNames.INT);
                     break;
 
+                case TypeNames.NUMBER when propteryModel.Schema.Format == TypeNames.DOUBLE:
+                    result = settings.FirstOrDefault(e => e.Match == TypeNames.DOUBLE);
+                    break;
+
+                case TypeNames.NUMBER:
+                    result = settings.FirstOrDefault(e => e.Match == TypeNames.NUMBER);
+                    if (result == null)
+                    {
+                        result = settings.FirstOrDefault(e => e.Match == TypeNames.INT);
+                    }
+
+                    break;
+
                 case TypeNames.BOOL:
                     result = settings.FirstOrDefault(e => e.Match == TypeNames.BOOL);
                     break;
 
                 case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.DATETIME:
                     result = settings.FirstOrDefault(e => e.Match == TypeNames.DATETIME);
+                    break;
+
+                case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.DATE:
+                    result = settings.FirstOrDefault(e => e.Match == TypeNames.DATE);
                     break;
 
                 case TypeNames.STRING when propteryModel.Schema.Format == TypeNames.UUID:
@@ -128,6 +148,12 @@
                     Value = "false",
                     NullableValue = "undefined",
                 },
+                  new DefaultValueMapSettings()
+                {
+                    Match = TypeNames.DATE,
+                    Value = "new Date()",
+                    NullableValue = "null",
+                },
                 new DefaultValueMapSettings()
                 {
                     Match = TypeNames.DATETIME,
@@ -143,6 +169,18 @@
                 new DefaultValueMapSettings()
                 {
                     Match = TypeNames.INT64,
+                    Value = "0",
+                    NullableValue = "null",
+                },
+                new DefaultValueMapSettings()
+                {
+                    Match = TypeNames.DOUBLE,
+                    Value = "0",
+                    NullableValue = "null",
+                },
+                new DefaultValueMapSettings()
+                {
+                    Match = TypeNames.NUMBER,
                     Value = "0",
                     NullableValue = "null",
                 },

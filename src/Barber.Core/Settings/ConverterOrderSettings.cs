@@ -4,9 +4,9 @@
 
     public class ConverterOrderSettings
     {
-        public string Name { get; set; } = string.Empty;
-
         public string? Extends { get; set; }
+
+        public string Name { get; set; } = string.Empty;
 
         public List<ConverterParameterSettings> PropertyDefaultValueConverter { get; set; } = new List<ConverterParameterSettings>();
 
@@ -15,5 +15,7 @@
         public List<ConverterParameterSettings> PropertyTypeConverter { get; set; } = new List<ConverterParameterSettings>();
 
         public List<ConverterParameterSettings> SchemaNameConverter { get; set; } = new List<ConverterParameterSettings>();
+
+        public List<BlockPropertiesModel> Skips { get; set; } = new List<BlockPropertiesModel>();
     }
 }

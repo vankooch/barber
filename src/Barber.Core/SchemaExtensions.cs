@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text.Json;
     using System.Threading.Tasks;
     using Barber.Core.Converter;
     using Barber.Core.Models;
@@ -80,7 +81,12 @@
                 throw new ArgumentNullException($"Could not find template file in: {job.Template}");
             }
 
-            var render = new MustacheRenderer();
+            IRenderer render = new MustacheRenderer();
+            if (job.TemplateType == "scriban")
+            {
+                render = new ScribanRenderer();
+            }
+
             var data = new TemplateDataModel()
             {
                 Step = job,
@@ -145,7 +151,17 @@
                         continue;
                     }
 
-                    path = Path.Combine(path, schema.Name);
+                    if (!string.IsNullOrWhiteSpace(job.Filename))
+                    {
+                        if (job.Filename[0] == '.')
+                        {
+                            path = Path.Combine(path, schema.Name + job.Filename);
+                        }
+                        else
+                        {
+                            path = Path.Combine(path, job.Filename);
+                        }
+                    }
                 }
 
                 if (!string.IsNullOrWhiteSpace(files[i].Content)
@@ -218,6 +234,35 @@
                 }
 
                 newSchemas.Add(local);
+            }
+
+            if (options.Skips.Any())
+            {
+                for (var i = 0; i < options.Skips.Count; i++)
+                {
+                    var skip = options.Skips[i];
+                    if (skip.Schema != "*")
+                    {
+                        var match = newSchemas.FirstOrDefault(e => e.Key == skip.Schema);
+                        if (match != null)
+                        {
+                            match.Properties = match
+                                .Properties
+                                .Where(e => !skip.Properties.Contains(e.Key))
+                                .ToList();
+                        }
+                    }
+                    else
+                    {
+                        for (var j = 0; j < newSchemas.Count; j++)
+                        {
+                            newSchemas[j].Properties = newSchemas[j]
+                                 .Properties
+                                 .Where(e => !skip.Properties.Contains(e.Key))
+                                 .ToList();
+                        }
+                    }
+                }
             }
 
             return newSchemas;

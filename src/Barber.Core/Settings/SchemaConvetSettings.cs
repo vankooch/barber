@@ -29,6 +29,8 @@
 
         public string Template { get; set; } = "interface-single.mustache";
 
+        public string TemplateType { get; set; } = "mustache";
+
         public List<FileModel>? GetFiles() => this._files ?? null;
 
         public List<SchemaModel>? GetSchemas() => this._schemas ?? null;
