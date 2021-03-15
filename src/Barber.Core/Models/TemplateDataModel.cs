@@ -8,21 +8,21 @@
     {
         private List<ReferencedSchemasModel> _referencedSchemas = new List<ReferencedSchemasModel>();
 
+        public List<string>? Extra => this.Step.Extra;
+
+        public List<ReferencedSchemasModel> ReferencedSchemas => this._referencedSchemas;
+
         public SchemaModel Schema { get; set; } = new SchemaModel();
 
         public List<SchemaModel> Schemas { get; set; } = new List<SchemaModel>();
 
         public SchemaConvetSettings Step { get; set; } = new SchemaConvetSettings();
 
-        public List<ReferencedSchemasModel> ReferencedSchemas => this._referencedSchemas;
-
-        public List<string>? Extra => this.Step.Extra;
-
         #region Helper
 
-        public bool HasDateTime => this.HasHelper(TypeNames.DATETIME);
-
         public bool HasDate => this.HasHelper(TypeNames.DATE);
+
+        public bool HasDateTime => this.HasHelper(TypeNames.DATETIME);
 
         public bool HasEnum => this.HasHelper(TypeNames.ENUM);
 
@@ -36,6 +36,39 @@
 
         #endregion Helper
 
+        public List<ReferencedSchemasModel> GetReferencedSchemas(ProjectSettings? project)
+        {
+            var list = new List<ReferencedSchemasItemModel>();
+            var refKeys = this.GetReferencedSchemasKeys();
+            if (refKeys?.Count > 0 && project?.SchemaJobs?.Count > 0)
+            {
+                list = this.AddMatchs(project, refKeys);
+                this._referencedSchemas = list
+                    .GroupBy(e => e.File)
+                    .Select(e =>
+                    {
+                        var imports = new List<ReferencedSchemasItemModel>();
+                        foreach (var item in e)
+                        {
+                            if (!imports.Any(f => f.Name == item.Name && f.Key == item.Key))
+                            {
+                                imports.Add(new ReferencedSchemasItemModel(item.Key, item.Name));
+                            }
+                        }
+
+                        return new ReferencedSchemasModel()
+                        {
+                            FileFull = e.Key,
+                            Imports = imports.OrderBy(e => e.Name).ToList(),
+                        };
+                    })
+                    .OrderBy(e => e.File)
+                    .ToList();
+            }
+
+            return this._referencedSchemas;
+        }
+
         public List<string> GetReferencedSchemasKeys()
         {
             if (this.Schemas.Count > 0)
@@ -44,7 +77,7 @@
 
                 return this.Schemas
                     .SelectMany(e => e.ReferencedSchemas)
-                    ////.Where(e => !localKeys.Contains(e))
+                    .Where(e => !localKeys.Contains(e))
                     .Distinct()
                     .ToList();
             }
@@ -58,42 +91,11 @@
             }
         }
 
-        public List<ReferencedSchemasModel> GetReferencedSchemas(ProjectSettings? project)
-        {
-            var list = new List<ReferencedSchemasItemModel>();
-            var refKeys = this.GetReferencedSchemasKeys();
-            if (refKeys?.Count > 0 && project?.SchemaJobs?.Count > 0)
-            {
-                foreach (var item in refKeys)
-                {
-                    System.Console.WriteLine(item);
-                }
-
-                list = this.AddMatchs(project, refKeys);
-                this._referencedSchemas = list
-                    .GroupBy(e => e.File)
-                    .Select(e => new ReferencedSchemasModel()
-                    {
-                        FileFull = e.Key,
-                        Imports = e
-                            .Select(f => new ReferencedSchemasItemModel(f.Key, f.Name))
-                            .OrderBy(e => e.Name)
-                            .ToList(),
-                    })
-                    .OrderBy(e => e.File)
-                    .ToList();
-            }
-
-            return this._referencedSchemas;
-        }
-
         private List<ReferencedSchemasItemModel> AddMatchs(ProjectSettings? project, List<string>? refKeys)
         {
             var result = new List<ReferencedSchemasItemModel>();
-
             if (refKeys?.Count > 0 && project?.SchemaJobs?.Count > 0)
             {
-                ////var nextRun = new List<string>();
                 for (var i = 0; i < refKeys.Count; i++)
                 {
                     var key = refKeys[i];
@@ -102,31 +104,7 @@
                     {
                         result.Add(match);
                     }
-
-                    ////for (var j = 0; j < project.SchemaJobs.Count; j++)
-                    ////{
-                    ////    var schemas = project.SchemaJobs[j].GetSchemas();
-                    ////    if (match != null)
-                    ////    {
-                    ////        result.Add(new ReferencedSchemasItemModel()
-                    ////        {
-                    ////            Key = key,
-                    ////            File = project.SchemaJobs[j].Filename ?? string.Empty,
-                    ////            Name = match.Name,
-                    ////        });
-
-                    ////        if (match.Name != match.Key && match.Key != key)
-                    ////        {
-                    ////            nextRun.Add(match.Key);
-                    ////        }
-                    ////    }
-                    ////}
                 }
-
-                ////if (nextRun.Count > 0)
-                ////{
-                ////    ////result.AddRange(this.AddMatchs(project, nextRun));
-                ////}
             }
 
             return result;
