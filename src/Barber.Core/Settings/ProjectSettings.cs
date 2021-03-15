@@ -48,6 +48,14 @@
                                 Option = new DefaultValueConverter().GetSampleOptions(),
                             },
                         },
+                        PropertyDefaultValueTypeConverter = new List<ConverterParameterSettings>()
+                        {
+                            new ConverterParameterSettings()
+                            {
+                                Name = nameof(DefaultValueTypeConverter),
+                                Option = new DefaultValueTypeConverter().GetSampleOptions(),
+                            },
+                        },
                         SchemaNameConverter = new List<ConverterParameterSettings>()
                         {
                             new ConverterParameterSettings()

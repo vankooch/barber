@@ -41,11 +41,18 @@
 
         private List<string> GetReferencedSchemas()
         {
+            var defaultValueTypes = this
+                .Properties
+                .Where(e => !string.IsNullOrWhiteSpace(e.DefaultValueType))
+                .Select(e => e.DefaultValueType!);
+
             return this
                 .Properties
                 .Where(e => !string.IsNullOrWhiteSpace(e.TypeReference))
                 .Select(e => e.TypeReference!)
+                .Concat(defaultValueTypes)
                 .Distinct()
+                .OrderBy(e => e)
                 .ToList();
         }
     }

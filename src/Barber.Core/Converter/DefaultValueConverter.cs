@@ -148,7 +148,7 @@
                     Value = "false",
                     NullableValue = "undefined",
                 },
-                  new DefaultValueMapSettings()
+                new DefaultValueMapSettings()
                 {
                     Match = TypeNames.DATE,
                     Value = "new Date()",

@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Text.Json;
     using System.Threading.Tasks;
     using Barber.Core.Converter;
     using Barber.Core.Models;
@@ -20,6 +19,7 @@
              new ReplaceConverter(),
              new TypeConverter(),
              new DefaultValueConverter(),
+             new DefaultValueTypeConverter(),
              new NullableConverter(),
             };
 
@@ -53,6 +53,7 @@
             propertyAction = (schema, property) =>
             {
                 property = schemas.ReferenceNameConvert(property);
+                property.DefaultValueType = options.PropertyDefaultValueTypeConverter.RunConverters(property.DefaultValueType, schema, property);
                 property.Type = options.PropertyTypeConverter.RunConverters(property.Type, schema, property) ?? string.Empty;
                 property.DefaultValue = options.PropertyDefaultValueConverter.RunConverters(property.DefaultValue, schema, property);
             };

@@ -6,6 +6,8 @@
     {
         public string? DefaultValue { get; set; }
 
+        public string? DefaultValueType { get; set; }
+
         public string? Description { get; set; }
 
         public bool IsNullable { get; set; } = false;

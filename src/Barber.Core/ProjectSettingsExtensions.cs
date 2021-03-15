@@ -37,6 +37,7 @@
                         Name = converterSet.Name,
                         Extends = converterSet.Extends,
                         PropertyDefaultValueConverter = extends.PropertyDefaultValueConverter.Concat(converterSet.PropertyDefaultValueConverter).ToList(),
+                        PropertyDefaultValueTypeConverter = extends.PropertyDefaultValueTypeConverter.Concat(converterSet.PropertyDefaultValueTypeConverter).ToList(),
                         PropertyNameConverter = extends.PropertyNameConverter.Concat(converterSet.PropertyNameConverter).ToList(),
                         PropertyTypeConverter = extends.PropertyTypeConverter.Concat(converterSet.PropertyTypeConverter).ToList(),
                         SchemaNameConverter = extends.SchemaNameConverter.Concat(converterSet.SchemaNameConverter).ToList(),
